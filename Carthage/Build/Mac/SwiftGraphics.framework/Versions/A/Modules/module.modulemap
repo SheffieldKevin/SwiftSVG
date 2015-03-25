@@ -1,0 +1,10 @@
+framework module SwiftGraphics {
+  umbrella header "SwiftGraphics.h"
+
+  export *
+  module * { export * }
+}
+
+module SwiftGraphics.Swift {
+    header "SwiftGraphics-Swift.h"
+}

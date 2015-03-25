@@ -1,0 +1,10 @@
+framework module SwiftGraphicsPlayground {
+  umbrella header "SwiftGraphicsPlayground.h"
+
+  export *
+  module * { export * }
+}
+
+module SwiftGraphicsPlayground.Swift {
+    header "SwiftGraphicsPlayground-Swift.h"
+}

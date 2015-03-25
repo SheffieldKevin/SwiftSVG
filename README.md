@@ -1,2 +1,0 @@
-# SwiftSVG
-Description Forthcoming

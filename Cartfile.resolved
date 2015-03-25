@@ -1,0 +1,3 @@
+github "schwa/SwiftGraphics" "0.0.4"
+github "schwa/SwiftParsing" "0.0.2"
+github "schwa/SwiftUtilities" "0.0.3"

@@ -1,0 +1,10 @@
+framework module SwiftParsing {
+  umbrella header "SwiftParsing.h"
+
+  export *
+  module * { export * }
+}
+
+module SwiftParsing.Swift {
+    header "SwiftParsing-Swift.h"
+}

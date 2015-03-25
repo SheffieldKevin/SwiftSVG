@@ -1,0 +1,137 @@
+//
+//  SVGView.swift
+//  SwiftSVGTestNT
+//
+//  Created by Jonathan Wight on 2/25/15.
+//  Copyright (c) 2015 No. All rights reserved.
+//
+
+import Cocoa
+
+import SwiftGraphics
+
+class SVGView: NSView {
+
+    @IBOutlet var horizontalConstraint:NSLayoutConstraint?
+    @IBOutlet var verticalConstraint:NSLayoutConstraint?
+
+    var renderer: SVGRenderer = SVGRenderer()
+
+    var svgDocument:SVGDocument? = nil {
+        didSet {
+            if let svgDocument = svgDocument {
+                horizontalConstraint?.constant = svgDocument.viewBox.width
+                verticalConstraint?.constant = svgDocument.viewBox.width
+            }
+            needsDisplay = true
+            needsLayout = true
+        }
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder:coder)
+        addGestureRecognizer(NSClickGestureRecognizer(target: self, action: Selector("tap:")))
+    }
+
+    override func layout() {
+        super.layout()
+    }
+
+    override func drawRect(dirtyRect: NSRect) {
+        let context = NSGraphicsContext.currentContext()!.CGContext
+
+        // Drawing code here.
+
+//        println(CIFilter.filterNamesInCategory(kCICategoryGenerator))
+
+
+        let filter = CIFilter(name: "CICheckerboardGenerator")
+        println(filter.inputKeys())
+
+        filter.setDefaults()
+        filter.setValue(CIVector(CGPoint: CGPointZero), forKey: "inputCenter")
+        filter.setValue(20, forKey: "inputWidth")
+        filter.setValue(CIColor(CGColor: CGColor.whiteColor()), forKey: "inputColor0")
+        filter.setValue(CIColor(CGColor: CGColor.color(white: 0.8, alpha: 1)), forKey: "inputColor1")
+
+
+//        println(filter.outputKeys())
+
+        println(bounds)
+        let ciImage = filter.valueForKey("outputImage") as? CIImage
+        let ciContext = CIContext(CGContext: context, options: nil)
+        let image = ciContext.createCGImage(ciImage, fromRect: bounds)
+        CGContextDrawImage(context, bounds, image)
+
+
+
+
+        if let svgDocument = svgDocument {
+            context.with() {
+                CGContextScaleCTM(context, 1, -1)
+                CGContextTranslateCTM(context, 0, -bounds.size.height)
+                renderer.renderDocument(svgDocument, context: context)
+            }
+        }
+
+        CGContextStrokeRect(context, bounds)
+    }
+
+    func tap(gestureRecognizer:NSClickGestureRecognizer) {
+        let location = gestureRecognizer.locationInView(self)
+        if let element = elementForPoint(location) {
+            elementSelected?(svgElement:element)
+        }
+    }
+
+    var elementSelected: ((svgElement:SVGElement) -> Void)?
+
+
+    func elementForPoint(point:CGPoint) -> SVGElement? {
+
+        if let svgDocument = svgDocument {
+            let context = CGContext.bitmapContext(self.bounds)
+
+            var index:UInt32 = 0
+
+            var elementsByIndex: [UInt32:SVGElement] = [:]
+            let renderer = SVGRenderer()
+            renderer.callbacks.styleForElement = {
+                (svgElement:SVGElement) -> Style? in
+
+                elementsByIndex[index] = svgElement
+
+                let red = CGFloat((index & 0xFF0000) >> 16) / 255
+                let green = CGFloat((index & 0x00FF00) >> 8) / 255
+                let blue = CGFloat((index & 0x0000FF) >> 0) / 255
+
+                // TODO: HACK
+                let color = NSColor(red: red, green: green, blue: blue, alpha: 1.0).CGColor
+
+                let style = Style(elements: [.fillColor(color)])
+                index = index + 1
+                return style
+            }
+            renderer.renderDocument(svgDocument, context: context)
+//            println("Max index: \(index)")
+
+            var data = CGBitmapContextGetData(context)
+            data = data.advancedBy(Int(point.y) * CGBitmapContextGetBytesPerRow(context))
+
+            var pixels = UnsafePointer <UInt32> (data).advancedBy(Int(point.x))
+            let argb = pixels.memory
+
+            let blue  = (argb & 0xFF000000) >> 24
+            let green = (argb & 0x00FF0000) >> 16
+            let red   = (argb & 0x0000FF00) >> 8
+            let alpha = (argb & 0x000000FF) >> 0
+
+
+            let searchIndex = red << 16 | green << 8 | blue
+
+            return elementsByIndex[searchIndex]
+
+        }
+        return nil
+    }
+}
