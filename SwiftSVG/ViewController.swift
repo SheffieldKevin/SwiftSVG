@@ -12,6 +12,7 @@ class ViewController: NSViewController {
 
     @IBOutlet var svgView: SVGView!
     @IBOutlet var treeController: NSTreeController!
+    var summaryViewController:SummaryViewController!
     @objc dynamic var root: [ObjectAdaptor]!
     @objc dynamic var selectionIndexPaths: [NSIndexPath]! {
         didSet {
@@ -24,7 +25,7 @@ class ViewController: NSViewController {
         }
     }
 
-    var selectedElements:Set <SVGElement> = Set <SVGElement> ()
+    @objc dynamic var selectedElements:Set <SVGElement> = Set <SVGElement> ()
 
     var svgDocument: SVGDocument! = nil {
         didSet {
@@ -32,6 +33,7 @@ class ViewController: NSViewController {
             if let svgDocument = svgDocument {
                 root = [ObjectAdaptor(object:svgDocument, template:treeNodeTemplate())]
             }
+            summaryViewController.svgDocument = svgDocument
         }
     }
 
@@ -125,4 +127,45 @@ class ViewController: NSViewController {
         }
         return template
     }
+
+    override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) {
+        // TODO: Yeah this is shit
+
+        summaryViewController = segue.destinationController as! SummaryViewController
+    }
+
+    @IBAction func flatten(sender:AnyObject?) {
+
+        var singleChildGroups:[SVGGroup] = []
+        SVGElement.walker.walk(svgDocument) {
+            (element:SVGElement, depth: Int) -> Void in
+            if let group = element as? SVGGroup where group.children.count == 1 {
+                singleChildGroups.append(group)
+            }
+        }
+
+        // TODO: Search for references to remove group
+        for group in singleChildGroups {
+
+            let child = group.children[0]
+            // TODO: concatinate style and transform
+            child.style = group.style
+            child.transform = group.transform
+
+            group.parent?.replace(group, with: group.children[0])
+        }
+
+        // TODO: Total hack. Work out a better way to transmit state updates
+
+//        root = [ObjectAdaptor(object:svgDocument, template:treeNodeTemplate())]
+//        svgView.needsDisplay = true
+
+        willChangeValueForKey("svgDocument")
+        didChangeValueForKey("svgDocument")
+
+        summaryViewController.deepThought()
+
+    }
+
+
 }

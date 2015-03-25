@@ -55,6 +55,22 @@ extension SVGElement: Hashable {
 
 class SVGContainer: SVGElement, GroupNode {
     var children:[SVGElement] = []
+
+    func replace(oldElement:SVGElement, with newElement:SVGElement) {
+
+        if let index = find(children, oldElement) {
+            oldElement.parent = nil
+            children[index] = newElement
+            newElement.parent = self
+        }
+        else {
+            // TODO
+            fatalError("BOOM")
+        }
+        
+
+
+    }
 }
 
 class SVGDocument: SVGContainer {

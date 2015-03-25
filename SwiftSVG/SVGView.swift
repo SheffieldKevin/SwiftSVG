@@ -41,12 +41,7 @@ class SVGView: NSView {
         let context = NSGraphicsContext.currentContext()!.CGContext
 
         // Drawing code here.
-
-//        println(CIFilter.filterNamesInCategory(kCICategoryGenerator))
-
-
         let filter = CIFilter(name: "CICheckerboardGenerator")
-        println(filter.inputKeys())
 
         filter.setDefaults()
         filter.setValue(CIVector(CGPoint: CGPointZero), forKey: "inputCenter")
@@ -54,10 +49,8 @@ class SVGView: NSView {
         filter.setValue(CIColor(CGColor: CGColor.whiteColor()), forKey: "inputColor0")
         filter.setValue(CIColor(CGColor: CGColor.color(white: 0.8, alpha: 1)), forKey: "inputColor1")
 
-
 //        println(filter.outputKeys())
 
-        println(bounds)
         let ciImage = filter.valueForKey("outputImage") as? CIImage
         let ciContext = CIContext(CGContext: context, options: nil)
         let image = ciContext.createCGImage(ciImage, fromRect: bounds)

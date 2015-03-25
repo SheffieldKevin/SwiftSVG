@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ObjectAdaptor: NSObject {
+class ObjectAdaptor: NSObject, NSCopying {
 
     struct Template {
         var childrenGetter:(AnyObject -> [AnyObject])!
@@ -24,6 +24,12 @@ class ObjectAdaptor: NSObject {
     init(object:AnyObject, template:Template) {
         self.object = object
         self.template = template
+    }
+
+    func copyWithZone(zone: NSZone) -> AnyObject {
+        var copy = ObjectAdaptor(object: object, template: template)
+        return copy
+
     }
 
     var children:[ObjectAdaptor] {

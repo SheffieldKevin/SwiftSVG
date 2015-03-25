@@ -6,9 +6,22 @@
 //  Copyright (c) 2015 No. All rights reserved.
 //
 
-import Foundation
+import SwiftUtilities
 
 extension SVGElement {
+
+    static var walker: Walker <SVGElement> {
+        let walker = Walker() {
+            (node:SVGElement) -> [SVGElement]? in
+            if let node = node as? SVGContainer {
+                return node.children
+            }
+            else {
+                return nil
+            }
+        }
+        return walker
+    }
 
     var indexPath: NSIndexPath {
         get {
