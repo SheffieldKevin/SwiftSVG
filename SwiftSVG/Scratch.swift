@@ -7,6 +7,77 @@
 //
 
 import Foundation
+import SwiftGraphics
+
+func + (lhs:SwiftGraphics.Style, rhs:SwiftGraphics.Style) -> SwiftGraphics.Style {
+    var accumulator = lhs
+    accumulator.add(rhs.asStyleElements())
+    return accumulator
+}
+
+extension SwiftGraphics.Style {
+
+    init() {
+        self.init(elements:[])
+    }
+
+    var isEmpty:Bool {
+        get {
+            return asStyleElements().count == 0
+        }
+    }
+
+    func asStyleElements() -> [StyleElement] {
+
+        var elements:[StyleElement] = []
+
+        if let fillColor = fillColor {
+            elements.append(.fillColor(fillColor))
+        }
+
+        if let strokeColor = strokeColor {
+            elements.append(.fillColor(strokeColor))
+        }
+
+        if let lineWidth = lineWidth {
+            elements.append(.lineWidth(lineWidth))
+        }
+
+        if let lineCap = lineCap {
+            elements.append(.lineCap(lineCap))
+        }
+
+        if let lineJoin = lineJoin {
+            elements.append(.lineJoin(lineJoin))
+        }
+
+        if let miterLimit = miterLimit {
+            elements.append(.miterLimit(miterLimit))
+        }
+
+        if let lineDash = lineDash {
+            elements.append(.lineDash(lineDash))
+        }
+
+        if let lineDashPhase = lineDashPhase {
+            elements.append(.lineDashPhase(lineDashPhase))
+        }
+
+        if let flatness = flatness {
+            elements.append(.flatness(flatness))
+        }
+
+        if let alpha = alpha {
+            elements.append(.alpha(alpha))
+        }
+
+        if let blendMode = blendMode {
+            elements.append(.blendMode(blendMode))
+        }
+
+        return elements
+    }
+}
 
 extension Array {
     func get(index:Int, defaultValue:T) -> T {

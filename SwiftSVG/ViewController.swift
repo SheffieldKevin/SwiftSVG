@@ -8,6 +8,8 @@
 
 import Cocoa
 
+import SwiftGraphics
+
 class ViewController: NSViewController {
 
     @IBOutlet var svgView: SVGView!
@@ -136,23 +138,40 @@ class ViewController: NSViewController {
 
     @IBAction func flatten(sender:AnyObject?) {
 
-        var singleChildGroups:[SVGGroup] = []
+        // TODO: Search for references to remove group
+
+        // Don't modify tree as we're walking it - so keep a list of groups to flatten
+        var parents:[SVGGroup] = []
+
+        // Find group elements with exactly 1 child
         SVGElement.walker.walk(svgDocument) {
             (element:SVGElement, depth: Int) -> Void in
             if let group = element as? SVGGroup where group.children.count == 1 {
-                singleChildGroups.append(group)
+                parents.append(group)
             }
         }
 
-        // TODO: Search for references to remove group
-        for group in singleChildGroups {
+        // Now process the found groups
+        for parent in parents {
 
-            let child = group.children[0]
-            // TODO: concatinate style and transform
-            child.style = group.style
-            child.transform = group.transform
+            let child = parent.children[0]
 
-            group.parent?.replace(group, with: group.children[0])
+            // Concat the parent style with the child style
+            let style = (parent.style ?? Style()) + (child.style ?? Style())
+            if style.isEmpty == false {
+                child.style = style
+            }
+
+            // Concat the parent transform with the child transform
+            let transform = (parent.transform ?? IdentityTransform()) + (child.transform ?? IdentityTransform())
+            if transform.isIdentity == false {
+                child.transform = transform
+            }
+
+            // Replace the parent with the child
+            if let grandParent = parent.parent {
+                grandParent.replace(parent, with: child)
+            }
         }
 
         // TODO: Total hack. Work out a better way to transmit state updates
@@ -166,6 +185,4 @@ class ViewController: NSViewController {
         summaryViewController.deepThought()
 
     }
-
-
 }

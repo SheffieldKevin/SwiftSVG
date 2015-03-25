@@ -10,6 +10,7 @@ import Foundation
 import QuartzCore
 
 protocol Transform {
+    var isIdentity:Bool { get }
 }
 
 protocol Transform2D: Transform {
@@ -22,13 +23,46 @@ protocol Transform3D: Transform {
 
 // MARK: -
 
-struct CompoundTransform {
+struct IdentityTransform: Transform {
+    var isIdentity:Bool {
+        get {
+            return true
+        }
+    }
+}
+
+extension IdentityTransform: Transform2D {
+    func asCGAffineTransform() -> CGAffineTransform! {
+        return CGAffineTransformIdentity
+    }
+}
+
+// MARK: -
+
+struct CompoundTransform: Transform {
     let transforms:[Transform]
 
     init(transforms:[Transform]) {
-        assert(transforms.count > 0)
         // TODO: Check that all transforms are also Transform2D? Or use another init?
-        self.transforms = transforms
+
+
+
+        // TODO: Strip out identity transforms
+        self.transforms = transforms.filter() {
+            return $0.isIdentity == false
+        }
+    }
+
+    var isIdentity:Bool {
+        get {
+            if transforms.count == 0 {
+                return true
+            }
+            else {
+                // TODO: LIE
+                return false
+            }
+        }
     }
 }
 
@@ -76,13 +110,20 @@ extension CompoundTransform: Printable {
 
 // MARK: -
 
-struct MatrixTransform2D {
+struct MatrixTransform2D: Transform {
     let a:CGFloat
     let b:CGFloat
     let c:CGFloat
     let d:CGFloat
     let tx:CGFloat
     let ty:CGFloat
+
+    var isIdentity:Bool {
+        get {
+            // TODO: LIE
+            return false
+        }
+    }
 }
 
 extension MatrixTransform2D: Transform2D {
@@ -101,7 +142,7 @@ extension MatrixTransform2D: Printable {
 
 // MARK: Translate
 
-struct Translate {
+struct Translate: Transform {
     let tx:CGFloat
     let ty:CGFloat
     let tz:CGFloat
@@ -110,6 +151,13 @@ struct Translate {
         self.tx = tx
         self.ty = ty
         self.tz = tz
+    }
+
+    var isIdentity:Bool {
+        get {
+            // TODO: LIE
+            return false
+        }
     }
 }
 
@@ -135,7 +183,7 @@ extension Translate: Printable {
 
 // MARK: Scale
 
-struct Scale {
+struct Scale: Transform {
     let sx:CGFloat
     let sy:CGFloat
     let sz:CGFloat
@@ -150,6 +198,13 @@ struct Scale {
         sx = scale
         sy = scale
         sz = scale
+    }
+
+    var isIdentity:Bool {
+        get {
+            // TODO: LIE
+            return false
+        }
     }
 }
 
@@ -175,10 +230,17 @@ extension Scale: Printable {
 
 // MARK: -
 
-struct Rotate {
+struct Rotate: Transform {
     let angle:CGFloat
     // AXIS, TRANSLATION
+
+    var isIdentity:Bool {
+        get {
+            // TODO: LIE
+            return false
+        }
     }
+}
 
 extension Rotate: Transform2D {
     func asCGAffineTransform() -> CGAffineTransform! {
@@ -196,10 +258,17 @@ extension Rotate: Printable {
 
 // MARK: -
 
-struct Skew {
+struct Skew: Transform {
     let angle:CGFloat
     // AXIS
+
+    var isIdentity:Bool {
+        get {
+            // TODO: LIE
+            return false
+        }
     }
+}
 
 extension Skew: Transform2D {
     func asCGAffineTransform() -> CGAffineTransform! {
