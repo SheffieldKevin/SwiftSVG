@@ -70,7 +70,7 @@ let transforms = oneOrMore((transform + OPT_COMMA).makeFlattened())
 // MARK: -
 
 
-func svgTransformAttributeStringToCGAffineTransform(string:String) -> CGAffineTransform? {
+func svgTransformAttributeStringToTransform(string:String) -> Transform2D? {
     let result = transforms.parse(string)
     switch result {
         case .Ok(let value):
@@ -81,8 +81,7 @@ func svgTransformAttributeStringToCGAffineTransform(string:String) -> CGAffineTr
                 }
 
                 let compound = CompoundTransform(transforms: transforms)
-                let affineTransform = compound.asCGAffineTransform()
-                return affineTransform
+                return compound
             }
                 return nil
 //            }

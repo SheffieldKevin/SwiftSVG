@@ -150,9 +150,9 @@ class SVGProcessor {
         return style
     }
 
-    func processTransform(xmlElement:NSXMLElement, state:State) -> CGAffineTransform? {
+    func processTransform(xmlElement:NSXMLElement, state:State) -> Transform2D? {
         if let value = xmlElement["transform"]?.stringValue {
-            let transform = svgTransformAttributeStringToCGAffineTransform(value)
+            let transform = svgTransformAttributeStringToTransform(value)
             xmlElement["transform"] = nil
             return transform
         }

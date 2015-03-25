@@ -48,7 +48,7 @@ class SVGRenderer {
         }
 
         if let transform = svgElement.transform {
-            CGContextConcatCTM(context, transform)
+            CGContextConcatCTM(context, transform.asCGAffineTransform())
         }
 
         switch svgElement {

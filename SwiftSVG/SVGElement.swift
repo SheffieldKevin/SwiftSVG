@@ -26,7 +26,7 @@ class SVGElement: Node {
     typealias ParentType = SVGContainer
     weak var parent:SVGContainer? = nil
     var style:SwiftGraphics.Style? = nil
-    var transform:CGAffineTransform? = nil
+    var transform:Transform2D? = nil
     var uuid = NSUUID() // TODO: This is silly.
     var id:String? = nil
     var xmlElement:NSXMLElement? = nil
