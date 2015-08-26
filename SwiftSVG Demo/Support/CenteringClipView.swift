@@ -10,7 +10,7 @@ import Cocoa
 
 class CenteringClipView: NSClipView {
 
-    var centersDocumentView:Bool = true
+    var centersDocumentView: Bool = true
 
 
     override func constrainBoundsRect(proposedBounds: NSRect) -> NSRect {
@@ -37,7 +37,7 @@ class CenteringClipView: NSClipView {
     }
 }
 
-private func centeredCoordinateUnitWithProposedContentViewBoundsDimensionAndDocumentViewFrameDimension(proposedContentViewBoundsDimension:CGFloat, documentViewFrameDimension:CGFloat ) -> CGFloat {
+private func centeredCoordinateUnitWithProposedContentViewBoundsDimensionAndDocumentViewFrameDimension(proposedContentViewBoundsDimension: CGFloat, documentViewFrameDimension: CGFloat ) -> CGFloat {
     return floor((proposedContentViewBoundsDimension - documentViewFrameDimension) / -2.0)
 }
 

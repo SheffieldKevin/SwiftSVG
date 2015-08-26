@@ -14,7 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         let url = NSBundle.mainBundle().URLForResource("Ghostscript_Tiger", withExtension: "svg")
         (NSDocumentController.sharedDocumentController() ).openDocumentWithContentsOfURL(url!, display: true) {
-            (document:NSDocument?, flag:Bool, error:NSError?) in
+            (document: NSDocument?, flag: Bool, error: NSError?) in
         }
 
     }

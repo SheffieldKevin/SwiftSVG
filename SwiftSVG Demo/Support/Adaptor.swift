@@ -11,17 +11,17 @@ import Foundation
 class ObjectAdaptor: NSObject, NSCopying {
 
     struct Template {
-        var childrenGetter:(AnyObject -> [AnyObject]?)!
-        var getters:[String:AnyObject -> AnyObject?] = [:]
+        var childrenGetter: (AnyObject -> [AnyObject]?)!
+        var getters: [String: AnyObject -> AnyObject?] = [: ]
 
         init() {
         }
     }
 
-    let object:AnyObject
-    let template:Template
+    let object: AnyObject
+    let template: Template
 
-    init(object:AnyObject, template:Template) {
+    init(object: AnyObject, template: Template) {
         self.object = object
         self.template = template
     }
@@ -32,13 +32,13 @@ class ObjectAdaptor: NSObject, NSCopying {
 
     }
 
-    var children:[ObjectAdaptor]? {
+    var children: [ObjectAdaptor]? {
         get {
             guard let children = template.childrenGetter(object) else {
                 return nil
             }
             return children.map() {
-                return ObjectAdaptor(object:$0, template:self.template)
+                return ObjectAdaptor(object: $0, template: self.template)
             }
         }
     }

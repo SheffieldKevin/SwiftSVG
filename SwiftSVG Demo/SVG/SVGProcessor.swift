@@ -14,9 +14,9 @@ import SwiftParsing
 public class SVGProcessor {
 
     public class State {
-        var document:SVGDocument?
-        var elementsByID:[String:SVGElement] = [:]
-        var events:[Event] = []
+        var document: SVGDocument?
+        var elementsByID: [String: SVGElement] = [: ]
+        var events: [Event] = []
     }
 
     public enum Error: ErrorType {
@@ -27,10 +27,10 @@ public class SVGProcessor {
     public init() {
     }
 
-    public func processXMLDocument(xmlDocument:NSXMLDocument) throws -> SVGDocument? {
+    public func processXMLDocument(xmlDocument: NSXMLDocument) throws -> SVGDocument? {
         let rootElement = xmlDocument.rootElement()!
         let state = State()
-        let document = try self.processSVGElement(rootElement, state:state) as? SVGDocument
+        let document = try self.processSVGElement(rootElement, state: state) as? SVGDocument
         if state.events.count > 0 {
             for event in state.events {
                 print(event)
@@ -39,7 +39,7 @@ public class SVGProcessor {
         return document
     }
 
-    public func processSVGDocument(xmlElement:NSXMLElement, state:State) throws -> SVGDocument {
+    public func processSVGDocument(xmlElement: NSXMLElement, state: State) throws -> SVGDocument {
         let document = SVGDocument()
         state.document = document
 
@@ -48,7 +48,7 @@ public class SVGProcessor {
             switch version {
                 case "1.1":
                     document.profile = .full
-                    document.version = SVGDocument.Version(majorVersion:1, minorVersion:1)
+                    document.version = SVGDocument.Version(majorVersion: 1, minorVersion: 1)
                 default:
                     break
             }
@@ -61,12 +61,12 @@ public class SVGProcessor {
             let VALUE_LIST = RangeOf(min: 4, max: 4, subelement: (cgFloatValue + OPT_COMMA).makeStripped().makeFlattened())
 
             // TODO: ! can and will crash with bad data.
-            let values:[CGFloat] = (try! VALUE_LIST.parse(viewbox).value as? [Any])!.map() {
+            let values: [CGFloat] = (try! VALUE_LIST.parse(viewbox).value as? [Any])!.map() {
                 return $0 as! CGFloat
             }
 
             let (x, y, width, height) = (values[0], values[1], values[2], values[3])
-            document.viewBox = CGRect(x:x, y:y, width:width, height:height)
+            document.viewBox = CGRect(x: x, y: y, width: width, height: height)
 
             xmlElement["viewBox"] = nil
         }
@@ -74,7 +74,7 @@ public class SVGProcessor {
         // Children
         if let nodes = xmlElement.children as? [NSXMLElement] {
             for node in nodes {
-                if let svgElement = try self.processSVGElement(node, state:state) {
+                if let svgElement = try self.processSVGElement(node, state: state) {
                     svgElement.parent = document
                     document.children.append(svgElement)
                 }
@@ -85,9 +85,9 @@ public class SVGProcessor {
         return document
     }
 
-    public func processSVGElement(xmlElement:NSXMLElement, state:State) throws -> SVGElement? {
+    public func processSVGElement(xmlElement: NSXMLElement, state: State) throws -> SVGElement? {
 
-        var svgElement:SVGElement? = nil
+        var svgElement: SVGElement? = nil
 
         guard let name = xmlElement.name else {
             throw Error.corruptXML
@@ -95,11 +95,11 @@ public class SVGProcessor {
 
         switch name {
             case "svg":
-                svgElement = try processSVGDocument(xmlElement, state:state)
+                svgElement = try processSVGDocument(xmlElement, state: state)
             case "g":
-                svgElement = try processSVGGroup(xmlElement, state:state)
+                svgElement = try processSVGGroup(xmlElement, state: state)
             case "path":
-                svgElement = try processSVGPath(xmlElement, state:state)
+                svgElement = try processSVGPath(xmlElement, state: state)
             case "title":
                 state.document!.title = xmlElement.stringValue as String?
             case "desc":
@@ -110,8 +110,8 @@ public class SVGProcessor {
         }
 
         if let svgElement = svgElement {
-            svgElement.style = try processStyle(xmlElement, state:state)
-            svgElement.transform = try processTransform(xmlElement, state:state)
+            svgElement.style = try processStyle(xmlElement, state: state)
+            svgElement.transform = try processTransform(xmlElement, state: state)
 
             if let id = xmlElement["id"]?.stringValue {
                 svgElement.id = id
@@ -132,11 +132,11 @@ public class SVGProcessor {
         return svgElement
     }
 
-    public func processSVGGroup(xmlElement:NSXMLElement, state:State) throws -> SVGGroup {
+    public func processSVGGroup(xmlElement: NSXMLElement, state: State) throws -> SVGGroup {
         let group = SVGGroup()
         let nodes = xmlElement.children! as! [NSXMLElement]
         for node in nodes {
-            if let svgElement = try self.processSVGElement(node, state:state) {
+            if let svgElement = try self.processSVGElement(node, state: state) {
                 svgElement.parent = group
                 group.children.append(svgElement)
             }
@@ -145,20 +145,20 @@ public class SVGProcessor {
         return group
     }
 
-    public func processSVGPath(xmlElement:NSXMLElement, state:State) throws -> SVGPath? {
+    public func processSVGPath(xmlElement: NSXMLElement, state: State) throws -> SVGPath? {
         guard let string = xmlElement["d"]?.stringValue else {
             throw Error.expectedSVGElementNotFound
         }
 
         let path = CGPathFromSVGPath(string)
         xmlElement["d"] = nil
-        return SVGPath(path:path)
+        return SVGPath(path: path)
     }
 
-    public func processStyle(xmlElement:NSXMLElement, state:State) throws -> SwiftGraphics.Style? {
-        var styleElements:[StyleElement] = []
+    public func processStyle(xmlElement: NSXMLElement, state: State) throws -> SwiftGraphics.Style? {
+        var styleElements: [StyleElement] = []
 
-        // http://www.w3.org/TR/SVG/styling.html
+        // http: //www.w3.org/TR/SVG/styling.html
 
         // Fill
         if let value = xmlElement["fill"]?.stringValue {
@@ -201,7 +201,7 @@ public class SVGProcessor {
         }
     }
 
-    public func processTransform(xmlElement:NSXMLElement, state:State) throws -> Transform2D? {
+    public func processTransform(xmlElement: NSXMLElement, state: State) throws -> Transform2D? {
         guard let value = xmlElement["transform"]?.stringValue else {
             return nil
         }
@@ -211,7 +211,7 @@ public class SVGProcessor {
     }
 
 
-    func stringToColor(string:String) throws -> CGColor? {
+    func stringToColor(string: String) throws -> CGColor? {
 
         if string == "none" {
             return nil

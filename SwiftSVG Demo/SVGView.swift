@@ -13,12 +13,12 @@ import SwiftSVG
 
 class SVGView: NSView {
 
-    @IBOutlet var horizontalConstraint:NSLayoutConstraint?
-    @IBOutlet var verticalConstraint:NSLayoutConstraint?
+    @IBOutlet var horizontalConstraint: NSLayoutConstraint?
+    @IBOutlet var verticalConstraint: NSLayoutConstraint?
 
     var renderer: SVGRenderer = SVGRenderer()
 
-    var svgDocument:SVGDocument? = nil {
+    var svgDocument: SVGDocument? = nil {
         didSet {
             if let svgDocument = svgDocument {
                 horizontalConstraint?.constant = svgDocument.viewBox.width
@@ -30,8 +30,8 @@ class SVGView: NSView {
     }
 
     required init?(coder: NSCoder) {
-        super.init(coder:coder)
-        addGestureRecognizer(NSClickGestureRecognizer(target: self, action: Selector("tap:")))
+        super.init(coder: coder)
+        addGestureRecognizer(NSClickGestureRecognizer(target: self, action: Selector("tap: ")))
     }
 
     override func layout() {
@@ -63,28 +63,28 @@ class SVGView: NSView {
         CGContextStrokeRect(context, bounds)
     }
 
-    func tap(gestureRecognizer:NSClickGestureRecognizer) {
+    func tap(gestureRecognizer: NSClickGestureRecognizer) {
         let location = gestureRecognizer.locationInView(self)
         if let element = try? elementForPoint(location) {
-            elementSelected?(svgElement:element!)
+            elementSelected?(svgElement: element!)
         }
     }
 
-    var elementSelected: ((svgElement:SVGElement) -> Void)?
+    var elementSelected: ((svgElement: SVGElement) -> Void)?
 
-    func elementForPoint(point:CGPoint) throws -> SVGElement? {
+    func elementForPoint(point: CGPoint) throws -> SVGElement? {
 
         guard let svgDocument = svgDocument else {
             return nil
         }
         let context = CGContext.bitmapContext(self.bounds)
 
-        var index:UInt32 = 0
+        var index: UInt32 = 0
 
-        var elementsByIndex: [UInt32:SVGElement] = [:]
+        var elementsByIndex: [UInt32: SVGElement] = [: ]
         let renderer = SVGRenderer()
         renderer.callbacks.styleForElement = {
-            (svgElement:SVGElement) -> Style? in
+            (svgElement: SVGElement) -> Style? in
 
             elementsByIndex[index] = svgElement
 

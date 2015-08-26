@@ -9,7 +9,7 @@
 import Foundation
 import SwiftGraphics
 
-func + (lhs:SwiftGraphics.Style, rhs:SwiftGraphics.Style) -> SwiftGraphics.Style {
+func + (lhs: SwiftGraphics.Style, rhs: SwiftGraphics.Style) -> SwiftGraphics.Style {
     var accumulator = lhs
     accumulator.add(rhs.asStyleElements())
     return accumulator
@@ -18,10 +18,10 @@ func + (lhs:SwiftGraphics.Style, rhs:SwiftGraphics.Style) -> SwiftGraphics.Style
 extension SwiftGraphics.Style {
 
     init() {
-        self.init(elements:[])
+        self.init(elements: [])
     }
 
-    var isEmpty:Bool {
+    var isEmpty: Bool {
         get {
             return asStyleElements().count == 0
         }
@@ -29,7 +29,7 @@ extension SwiftGraphics.Style {
 
     func asStyleElements() -> [StyleElement] {
 
-        var elements:[StyleElement] = []
+        var elements: [StyleElement] = []
 
         if let fillColor = fillColor {
             elements.append(.fillColor(fillColor))
@@ -80,7 +80,7 @@ extension SwiftGraphics.Style {
 }
 
 extension Array {
-    func get(index:Int, defaultValue:Element) -> Element {
+    func get(index: Int, defaultValue: Element) -> Element {
         if index < count {
             return self[index]
         }
@@ -92,7 +92,7 @@ extension Array {
 
 extension NSXMLElement {
 
-    subscript(name:String) -> NSXMLNode? {
+    subscript(name: String) -> NSXMLNode? {
         get {
             return attributeForName(name)
         }
@@ -116,8 +116,8 @@ struct Event: ErrorType {
         case error
     }
 
-    let severity:Severity
-    let message:String
+    let severity: Severity
+    let message: String
 }
 
 extension Event: CustomStringConvertible {

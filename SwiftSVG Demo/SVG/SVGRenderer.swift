@@ -13,9 +13,9 @@ import SwiftGraphics
 public class SVGRenderer {
 
     public struct Callbacks {
-        public var prerenderElement: ((svgElement:SVGElement, context:CGContext) throws -> Bool)? = nil
-        public var postrenderElement: ((svgElement:SVGElement, context:CGContext) throws -> Void)? = nil
-        public var styleForElement: ((svgElement:SVGElement) throws -> Style?)? = nil
+        public var prerenderElement: ((svgElement: SVGElement, context: CGContext) throws -> Bool)? = nil
+        public var postrenderElement: ((svgElement: SVGElement, context: CGContext) throws -> Void)? = nil
+        public var styleForElement: ((svgElement: SVGElement) throws -> Style?)? = nil
     }
 
     public var callbacks = Callbacks()
@@ -23,21 +23,21 @@ public class SVGRenderer {
     public init() {
     }
 
-    public func prerenderElement(svgElement:SVGElement, context:CGContext) throws -> Bool {
+    public func prerenderElement(svgElement: SVGElement, context: CGContext) throws -> Bool {
         if let prerenderElement = callbacks.prerenderElement {
             return try prerenderElement(svgElement: svgElement, context: context)
         }
         return true
     }
 
-    public func styleForElement(svgElement:SVGElement) throws -> Style? {
+    public func styleForElement(svgElement: SVGElement) throws -> Style? {
         if let style = try callbacks.styleForElement?(svgElement: svgElement) {
             return style
         }
         return svgElement.style
     }
 
-    public func renderElement(svgElement:SVGElement, context:CGContext) throws {
+    public func renderElement(svgElement: SVGElement, context: CGContext) throws {
 
         if try prerenderElement(svgElement, context: context) == false {
             return
@@ -54,12 +54,12 @@ public class SVGRenderer {
 
         switch svgElement {
             case let svgDocument as SVGDocument:
-                try renderDocument(svgDocument, context:context)
+                try renderDocument(svgDocument, context: context)
             case let svgGroup as SVGGroup:
-                try renderGroup(svgGroup, context:context)
+                try renderGroup(svgGroup, context: context)
             case let pathable as CGPathable:
                 let path = pathable.cgpath
-                let mode = CGPathDrawingMode(strokeColor:context.strokeColor, fillColor:context.fillColor)
+                let mode = CGPathDrawingMode(strokeColor: context.strokeColor, fillColor: context.fillColor)
                 CGContextAddPath(context, path)
                 CGContextDrawPath(context, mode)
             default:
@@ -67,7 +67,7 @@ public class SVGRenderer {
         }
     }
 
-    public func pathForElement(svgElement:SVGElement) throws -> CGPath {
+    public func pathForElement(svgElement: SVGElement) throws -> CGPath {
         switch svgElement {
             case let svgDocument as SVGDocument:
                 let path = CGPathCreateMutable()
@@ -88,15 +88,15 @@ public class SVGRenderer {
         }
     }
 
-    public func renderDocument(svgDocument:SVGDocument, context:CGContext) throws {
+    public func renderDocument(svgDocument: SVGDocument, context: CGContext) throws {
         for child in svgDocument.children {
-            try renderElement(child, context:context)
+            try renderElement(child, context: context)
         }
     }
 
-    public func renderGroup(svgGroup:SVGGroup, context:CGContext) throws {
+    public func renderGroup(svgGroup: SVGGroup, context: CGContext) throws {
         for child in svgGroup.children {
-            try renderElement(child, context:context)
+            try renderElement(child, context: context)
         }
     }
 

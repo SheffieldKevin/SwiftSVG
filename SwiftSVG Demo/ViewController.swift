@@ -15,12 +15,12 @@ class ViewController: NSViewController {
 
     @IBOutlet var svgView: SVGView!
     @IBOutlet var treeController: NSTreeController!
-    var summaryViewController:SummaryViewController!
+    var summaryViewController: SummaryViewController!
     @objc dynamic var root: [ObjectAdaptor]!
     @objc dynamic var selectionIndexPaths: [NSIndexPath]! {
         didSet {
             let selectedObjects = treeController.selectedObjects as! [ObjectAdaptor]
-            let selectedElements:[SVGElement] = selectedObjects.map() {
+            let selectedElements: [SVGElement] = selectedObjects.map() {
                 return $0.object as! SVGElement
             }
             self.selectedElements = Set <SVGElement> (selectedElements)
@@ -28,13 +28,13 @@ class ViewController: NSViewController {
         }
     }
 
-    var selectedElements:Set <SVGElement> = Set <SVGElement> ()
+    var selectedElements: Set <SVGElement> = Set <SVGElement> ()
 
     var svgDocument: SVGDocument! = nil {
         didSet {
             svgView?.svgDocument = svgDocument
             if let svgDocument = svgDocument {
-                root = [ObjectAdaptor(object:svgDocument, template:ViewController.treeNodeTemplate())]
+                root = [ObjectAdaptor(object: svgDocument, template: ViewController.treeNodeTemplate())]
             }
             summaryViewController.svgDocument = svgDocument
         }
@@ -44,12 +44,12 @@ class ViewController: NSViewController {
         super.viewDidLoad()
 
         svgView.elementSelected = {
-            (svgElement:SVGElement) -> Void in
+            (svgElement: SVGElement) -> Void in
             self.treeController.setSelectionIndexPaths([svgElement.indexPath])
         }
 
         svgView.renderer.callbacks.prerenderElement = {
-            (svgElement:SVGElement, context:CGContext) -> Bool in
+            (svgElement: SVGElement, context: CGContext) -> Bool in
             if self.selectedElements.contains(svgElement) {
 
                 if let transform = svgElement.transform {
@@ -83,11 +83,11 @@ class ViewController: NSViewController {
         }
         template.getters["styled"] = {
             (element) in
-            return (element as? SVGElement)?.style != nil ? true : false
+            return (element as? SVGElement)?.style != nil ? true: false
         }
         template.getters["transformed"] = {
             (element) in
-            return (element as? SVGElement)?.transform != nil ? true : false
+            return (element as? SVGElement)?.transform != nil ? true: false
         }
         template.getters["fillColor"] = {
             (element) in
@@ -132,13 +132,13 @@ class ViewController: NSViewController {
         summaryViewController = segue.destinationController as! SummaryViewController
     }
 
-    @IBAction func flatten(sender:AnyObject?) {
+    @IBAction func flatten(sender: AnyObject?) {
 
         svgDocument.flatten()
 
         // TODO: Total hack. Should not need to rebuild entire world.
 
-        root = [ObjectAdaptor(object:svgDocument, template:ViewController.treeNodeTemplate())]
+        root = [ObjectAdaptor(object: svgDocument, template: ViewController.treeNodeTemplate())]
         svgView.needsDisplay = true
 
         willChangeValueForKey("svgDocument")

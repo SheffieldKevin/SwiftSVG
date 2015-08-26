@@ -13,7 +13,7 @@ import SwiftSVG
 
 class SummaryViewController: NSViewController {
 
-    @objc dynamic var elementCounts:[String:Int]?
+    @objc dynamic var elementCounts: [String: Int]?
 
     var svgDocument: SVGDocument! {
         didSet {
@@ -30,14 +30,14 @@ class SummaryViewController: NSViewController {
 
     func deepThought() throws {
 
-        var elementCounts:[String:Int] = [
-            "total":0,
-            "path":0,
-            "group":0,
+        var elementCounts: [String: Int] = [
+            "total": 0,
+            "path": 0,
+            "group": 0,
         ]
 
         SVGElement.walker.walk(svgDocument) {
-            (node:SVGElement, depth: Int) -> Void in
+            (node: SVGElement, depth: Int) -> Void in
             elementCounts["total"]! += 1
             switch node {
                 case node as SVGPath:

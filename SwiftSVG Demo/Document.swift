@@ -12,7 +12,7 @@ import SwiftSVG
 
 class Document: NSDocument {
 
-    var svgDocument:SVGDocument? = nil
+    var svgDocument: SVGDocument? = nil
 
     override init() {
         super.init()

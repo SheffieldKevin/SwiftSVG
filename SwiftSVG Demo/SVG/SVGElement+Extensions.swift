@@ -12,7 +12,7 @@ public extension SVGElement {
 
     static var walker: Walker <SVGElement> {
         let walker = Walker() {
-            (node:SVGElement) -> [SVGElement]? in
+            (node: SVGElement) -> [SVGElement]? in
             guard let node = node as? SVGContainer else {
                 return nil
             }

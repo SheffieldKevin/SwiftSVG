@@ -11,7 +11,7 @@ import Foundation
 import SwiftParsing
 
 let converter = {
-    (value:Any) -> Any? in
+    (value: Any) -> Any? in
     if let value = value as? [Any], let type = value[0] as? String, let parameters = value[1] as? [Any] {
         switch type {
             case "matrix":
@@ -24,17 +24,17 @@ let converter = {
                 return MatrixTransform2D(a: a, b: b, c: c, d: d, tx: e, ty: f)
             case "translate":
                 let x = parameters[0] as! CGFloat
-                let y = parameters.get(1, defaultValue:CGFloat(0)) as! CGFloat
-                return Translate(tx:x, ty:y)
+                let y = parameters.get(1, defaultValue: CGFloat(0)) as! CGFloat
+                return Translate(tx: x, ty: y)
             case "scale":
                 let x = parameters[0] as! CGFloat
-                let y = parameters.get(1, defaultValue:x) as! CGFloat
-                return Scale(sx:x, sy:y)
+                let y = parameters.get(1, defaultValue: x) as! CGFloat
+                return Scale(sx: x, sy: y)
             case "rotate":
                 let angle = parameters[0] as! CGFloat
-                let cx = parameters.get(1, defaultValue:CGFloat(0)) as? CGFloat
-                let cy = parameters.get(2, defaultValue:CGFloat(0)) as? CGFloat
-                return Rotate(angle:angle)
+                let cx = parameters.get(1, defaultValue: CGFloat(0)) as? CGFloat
+                let cy = parameters.get(2, defaultValue: CGFloat(0)) as? CGFloat
+                return Rotate(angle: angle)
             default:
                 break
         }
@@ -70,7 +70,7 @@ let transforms = oneOrMore((transform + OPT_COMMA).makeFlattened())
 // MARK: -
 
 
-public func svgTransformAttributeStringToTransform(string:String) throws -> Transform2D? {
+public func svgTransformAttributeStringToTransform(string: String) throws -> Transform2D? {
     let result = try transforms.parse(string)
     switch result {
         case .Ok(let value):
@@ -78,7 +78,7 @@ public func svgTransformAttributeStringToTransform(string:String) throws -> Tran
                 return nil
             }
 
-            let transforms:[Transform] = value.map() {
+            let transforms: [Transform] = value.map() {
                 return $0 as! Transform
             }
 

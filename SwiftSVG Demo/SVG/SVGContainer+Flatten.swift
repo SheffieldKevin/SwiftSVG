@@ -17,11 +17,11 @@ public extension SVGContainer {
         // TODO: Search for references to remove group
 
         // Don't modify tree as we're walking it - so keep a list of groups to flatten
-        var parents:[SVGGroup] = []
+        var parents: [SVGGroup] = []
 
         // Find group elements with exactly 1 child
         SVGElement.walker.walk(self) {
-            (element:SVGElement, depth: Int) -> Void in
+            (element: SVGElement, depth: Int) -> Void in
             if let group = element as? SVGGroup where group.children.count == 1 {
                 parents.append(group)
             }
