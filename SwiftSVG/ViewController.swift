@@ -33,7 +33,7 @@ class ViewController: NSViewController {
         didSet {
             svgView?.svgDocument = svgDocument
             if let svgDocument = svgDocument {
-                root = [ObjectAdaptor(object:svgDocument, template:treeNodeTemplate())]
+                root = [ObjectAdaptor(object:svgDocument, template:ViewController.treeNodeTemplate())]
             }
             summaryViewController.svgDocument = svgDocument
         }
@@ -45,7 +45,6 @@ class ViewController: NSViewController {
         svgView.elementSelected = {
             (svgElement:SVGElement) -> Void in
             self.treeController.setSelectionIndexPaths([svgElement.indexPath])
-
         }
 
         svgView.renderer.callbacks.prerenderElement = {
@@ -68,7 +67,7 @@ class ViewController: NSViewController {
         }
     }
 
-    func treeNodeTemplate() -> ObjectAdaptor.Template {
+    static func treeNodeTemplate() -> ObjectAdaptor.Template {
         var template = ObjectAdaptor.Template()
         template.childrenGetter = {
             (element:AnyObject) -> [AnyObject] in
@@ -124,7 +123,7 @@ class ViewController: NSViewController {
                 case is SVGPath:
                     return "Path"
                 default:
-                    assert(false)
+                    preconditionFailure()
             }
         }
         return template
