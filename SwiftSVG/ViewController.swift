@@ -139,10 +139,10 @@ class ViewController: NSViewController {
 
         svgDocument.flatten()
 
-        // TODO: Total hack. Work out a better way to transmit state updates
+        // TODO: Total hack. Should not need to rebuild entire world.
 
-//        root = [ObjectAdaptor(object:svgDocument, template:treeNodeTemplate())]
-//        svgView.needsDisplay = true
+        root = [ObjectAdaptor(object:svgDocument, template:ViewController.treeNodeTemplate())]
+        svgView.needsDisplay = true
 
         willChangeValueForKey("svgDocument")
         didChangeValueForKey("svgDocument")
