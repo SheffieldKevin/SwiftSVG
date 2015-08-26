@@ -74,7 +74,7 @@ extension CompoundTransform: Transform2D {
             return ($0 as! Transform2D).asCGAffineTransform()
         }
 
-        var transform:CGAffineTransform = affineTransforms[0]
+        let transform:CGAffineTransform = affineTransforms[0]
         let result:CGAffineTransform = affineTransforms[1..<affineTransforms.count].reduce(transform) {
             (lhs:CGAffineTransform, rhs:CGAffineTransform) -> CGAffineTransform in
             return CGAffineTransformConcat(lhs, rhs)
@@ -99,10 +99,10 @@ func + (lhs:CompoundTransform, rhs:CompoundTransform) -> CompoundTransform {
     return CompoundTransform(transforms: lhs.transforms + rhs.transforms)
 }
 
-extension CompoundTransform: Printable {
+extension CompoundTransform: CustomStringConvertible {
     var description: String {
         get {
-            let transformStrings:[String] = transforms.map() { return toString($0) }
+            let transformStrings:[String] = transforms.map() { return String($0) }
             return "CompoundTransform(\(transformStrings))"
         }
     }
@@ -132,7 +132,7 @@ extension MatrixTransform2D: Transform2D {
     }
 }
 
-extension MatrixTransform2D: Printable {
+extension MatrixTransform2D: CustomStringConvertible {
     var description: String {
         get {
             return "Matrix(\(a), \(b), \(c) \(d), \(tx), \(ty))"
@@ -173,7 +173,7 @@ extension Translate: Transform3D {
     }
 }
 
-extension Translate: Printable {
+extension Translate: CustomStringConvertible {
     var description: String {
         get {
             return "Translate(\(tx), \(ty), \(tz))"
@@ -220,7 +220,7 @@ extension Scale: Transform3D {
     }
 }
 
-extension Scale: Printable {
+extension Scale: CustomStringConvertible {
     var description: String {
         get {
             return "Scale(\(sx), \(sy), \(sz))"
@@ -248,7 +248,7 @@ extension Rotate: Transform2D {
     }
 }
 
-extension Rotate: Printable {
+extension Rotate: CustomStringConvertible {
     var description: String {
         get {
             return "Rotate(\(angle))"
@@ -277,7 +277,7 @@ extension Skew: Transform2D {
     }
 }
 
-extension Skew: Printable {
+extension Skew: CustomStringConvertible {
     var description: String {
         get {
             return "Skew(\(angle))"

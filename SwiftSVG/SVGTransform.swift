@@ -70,8 +70,8 @@ let transforms = oneOrMore((transform + OPT_COMMA).makeFlattened())
 // MARK: -
 
 
-func svgTransformAttributeStringToTransform(string:String) -> Transform2D? {
-    let result = transforms.parse(string)
+func svgTransformAttributeStringToTransform(string:String) throws -> Transform2D? {
+    let result = try transforms.parse(string)
     switch result {
         case .Ok(let value):
             if let value = value as? [Any] {

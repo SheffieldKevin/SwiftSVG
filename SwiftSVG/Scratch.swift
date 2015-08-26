@@ -80,7 +80,7 @@ extension SwiftGraphics.Style {
 }
 
 extension Array {
-    func get(index:Int, defaultValue:T) -> T {
+    func get(index:Int, defaultValue:Element) -> Element {
         if index < count {
             return self[index]
         }
@@ -119,7 +119,7 @@ struct Event {
     let message:String
 }
 
-extension Event: Printable {
+extension Event: CustomStringConvertible {
     var description: String {
         get {
             switch severity {

@@ -19,15 +19,15 @@ class ViewController: NSViewController {
     @objc dynamic var selectionIndexPaths: [NSIndexPath]! {
         didSet {
             let selectedObjects = treeController.selectedObjects as! [ObjectAdaptor]
-            let selectedElements:[SVGElement] = selectedObjects.map() {
-                return $0.object as! SVGElement
-            }
-            self.selectedElements = Set <SVGElement> (selectedElements)
+//            let selectedElements:[SVGElement] = selectedObjects.map() {
+//                return $0.object as! SVGElement
+//            }
+//            self.selectedElements = NSMutableSet(array: selectedElements)
             svgView.needsDisplay = true
         }
     }
 
-    @objc dynamic var selectedElements:Set <SVGElement> = Set <SVGElement> ()
+//    @objc dynamic var selectedElements:NSMutableSet = NSMutableSet()
 
     var svgDocument: SVGDocument! = nil {
         didSet {
@@ -50,7 +50,8 @@ class ViewController: NSViewController {
 
         svgView.renderer.callbacks.prerenderElement = {
             (svgElement:SVGElement, context:CGContext) -> Bool in
-            if self.selectedElements.contains(svgElement) {
+//            if self.selectedElements.contains(svgElement) {
+            if false {
 
                 if let transform = svgElement.transform {
                     CGContextConcatCTM(context, transform.asCGAffineTransform())
@@ -117,11 +118,11 @@ class ViewController: NSViewController {
         }
         template.getters["name"] = {
             switch $0 {
-                case let document as SVGDocument:
+                case is SVGDocument:
                     return "Document"
-                case let group as SVGGroup:
+                case is SVGGroup:
                     return "Group"
-                case let path as SVGPath:
+                case is SVGPath:
                     return "Path"
                 default:
                     assert(false)

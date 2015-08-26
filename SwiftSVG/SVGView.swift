@@ -41,29 +41,29 @@ class SVGView: NSView {
         let context = NSGraphicsContext.currentContext()!.CGContext
 
         // Drawing code here.
-        let filter = CIFilter(name: "CICheckerboardGenerator")
+//        let filter = CIFilter(name: "CICheckerboardGenerator")!
 
-        filter.setDefaults()
-        filter.setValue(CIVector(CGPoint: CGPointZero), forKey: "inputCenter")
-        filter.setValue(20, forKey: "inputWidth")
-        filter.setValue(CIColor(CGColor: CGColor.whiteColor()), forKey: "inputColor0")
-        filter.setValue(CIColor(CGColor: CGColor.color(white: 0.8, alpha: 1)), forKey: "inputColor1")
+//        filter.setDefaults()
+//        filter.setValue(CIVector(CGPoint: CGPointZero), forKey: "inputCenter")
+//        filter.setValue(20, forKey: "inputWidth")
+//        filter.setValue(CIColor(CGColor: CGColor.whiteColor()), forKey: "inputColor0")
+//        filter.setValue(CIColor(CGColor: CGColor.color(white: 0.8, alpha: 1)), forKey: "inputColor1")
 
 //        println(filter.outputKeys())
 
-        let ciImage = filter.valueForKey("outputImage") as? CIImage
-        let ciContext = CIContext(CGContext: context, options: nil)
-        let image = ciContext.createCGImage(ciImage, fromRect: bounds)
-        CGContextDrawImage(context, bounds, image)
-
-
-
-
+//        let ciImage = filter.valueForKey("outputImage") as! CIImage
+//        let ciContext = CIContext(CGContext: context, options: nil)
+//        let image = ciContext.createCGImage(ciImage, fromRect: bounds)
+//        CGContextDrawImage(context, bounds, image)
+//
+//
+//
+//
         if let svgDocument = svgDocument {
             context.with() {
                 CGContextScaleCTM(context, 1, -1)
                 CGContextTranslateCTM(context, 0, -bounds.size.height)
-                renderer.renderDocument(svgDocument, context: context)
+                try! renderer.renderDocument(svgDocument, context: context)
             }
         }
 
@@ -72,15 +72,15 @@ class SVGView: NSView {
 
     func tap(gestureRecognizer:NSClickGestureRecognizer) {
         let location = gestureRecognizer.locationInView(self)
-        if let element = elementForPoint(location) {
-            elementSelected?(svgElement:element)
+        if let element = try? elementForPoint(location) {
+            elementSelected?(svgElement:element!)
         }
     }
 
     var elementSelected: ((svgElement:SVGElement) -> Void)?
 
 
-    func elementForPoint(point:CGPoint) -> SVGElement? {
+    func elementForPoint(point:CGPoint) throws -> SVGElement? {
 
         if let svgDocument = svgDocument {
             let context = CGContext.bitmapContext(self.bounds)
@@ -105,13 +105,13 @@ class SVGView: NSView {
                 index = index + 1
                 return style
             }
-            renderer.renderDocument(svgDocument, context: context)
+            try renderer.renderDocument(svgDocument, context: context)
 //            println("Max index: \(index)")
 
             var data = CGBitmapContextGetData(context)
             data = data.advancedBy(Int(point.y) * CGBitmapContextGetBytesPerRow(context))
 
-            var pixels = UnsafePointer <UInt32> (data).advancedBy(Int(point.x))
+            let pixels = UnsafePointer <UInt32> (data).advancedBy(Int(point.x))
             let argb = pixels.memory
 
             let blue  = (argb & 0xFF000000) >> 24

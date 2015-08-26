@@ -23,13 +23,13 @@ class CenteringClipView: NSClipView {
 
         // If proposed clip view bounds width is greater than document view frame width, center it horizontally.
         if proposedBounds.size.width >= documentViewFrameRect.size.width {
-            constrainedClipViewBoundsRect.origin.x = centeredCoordinateUnitWithProposedContentViewBoundsDimensionAndDocumentViewFrameDimension(proposedBounds.size.width, documentViewFrameRect.size.width)
+            constrainedClipViewBoundsRect.origin.x = centeredCoordinateUnitWithProposedContentViewBoundsDimensionAndDocumentViewFrameDimension(proposedBounds.size.width, documentViewFrameDimension: documentViewFrameRect.size.width)
         }
 
         if proposedBounds.size.height >= documentViewFrameRect.size.height {
 
             // Adjust the proposed origin.y
-            constrainedClipViewBoundsRect.origin.y = centeredCoordinateUnitWithProposedContentViewBoundsDimensionAndDocumentViewFrameDimension(proposedBounds.size.height, documentViewFrameRect.size.height);
+            constrainedClipViewBoundsRect.origin.y = centeredCoordinateUnitWithProposedContentViewBoundsDimensionAndDocumentViewFrameDimension(proposedBounds.size.height, documentViewFrameDimension: documentViewFrameRect.size.height);
         }
 
 

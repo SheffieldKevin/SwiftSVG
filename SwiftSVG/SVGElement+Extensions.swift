@@ -27,7 +27,7 @@ extension SVGElement {
         get {
 
             if let parent = parent {
-                let index = find(parent.children, self)!
+                let index = parent.children.indexOf(self)!
                 return parent.indexPath.indexPathByAddingIndex(index)
             }
             else {

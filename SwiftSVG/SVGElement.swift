@@ -33,8 +33,8 @@ class SVGElement: Node {
 
     func dump(depth:Int = 0) {
         let padding = ("" as NSString).stringByPaddingToLength(depth, withString: " ", startingAtIndex: 0)
-        let description = toString(self)
-        println("\(padding)\(description)")
+        let description = String(self)
+        print("\(padding)\(description)")
     }
 }
 
@@ -58,7 +58,7 @@ class SVGContainer: SVGElement, GroupNode {
 
     func replace(oldElement:SVGElement, with newElement:SVGElement) {
 
-        if let index = find(children, oldElement) {
+        if let index = children.indexOf(oldElement) {
             oldElement.parent = nil
             children[index] = newElement
             newElement.parent = self
@@ -93,18 +93,18 @@ class SVGDocument: SVGContainer {
     var documentDescription:String?
 
     override func dump(depth:Int = 0) {
-        super.dump(depth: depth)
+        super.dump(depth)
         for child in children {
-            child.dump(depth: depth + 1)
+            child.dump(depth + 1)
         }
     }
 }
 
 class SVGGroup: SVGContainer {
     override func dump(depth:Int = 0) {
-        super.dump(depth: depth)
+        super.dump(depth)
         for child in children {
-            child.dump(depth: depth + 1)
+            child.dump(depth + 1)
         }
     }
 }

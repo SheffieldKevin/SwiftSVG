@@ -27,7 +27,7 @@ class ObjectAdaptor: NSObject, NSCopying {
     }
 
     func copyWithZone(zone: NSZone) -> AnyObject {
-        var copy = ObjectAdaptor(object: object, template: template)
+        let copy = ObjectAdaptor(object: object, template: template)
         return copy
 
     }

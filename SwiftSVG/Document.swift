@@ -29,7 +29,7 @@ class Document: NSDocument {
     }
 
     override func makeWindowControllers() {
-        let storyboard = NSStoryboard(name: "Main", bundle: nil)!
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
         let windowController = storyboard.instantiateControllerWithIdentifier("Document Window Controller") as! NSWindowController
         if let controller = windowController.contentViewController as? ViewController {
             controller.svgDocument = svgDocument
@@ -37,15 +37,18 @@ class Document: NSDocument {
         self.addWindowController(windowController)
     }
 
-    override func readFromData(data: NSData, ofType typeName: String, error outError: NSErrorPointer) -> Bool {
+    override func readFromData(data: NSData, ofType typeName: String) throws {
 
-        let xmlDocument = NSXMLDocument(data: data, options: 0, error: outError)
+        let xmlDocument: NSXMLDocument?
+        do {
+            xmlDocument = try NSXMLDocument(data: data, options: 0)
+        } catch _ {
+            xmlDocument = nil
+        }
 
         let processor = SVGProcessor()
 
         svgDocument = processor.processXMLDocument(xmlDocument!)
-
-        return true
     }
 
 

@@ -28,7 +28,7 @@ class SVGProcessor {
         let document = self.processSVGElement(rootElement, state:state) as? SVGDocument
         if state.events.count > 0 {
             for event in state.events {
-                println(event)
+                print(event)
             }
         }
 
@@ -57,7 +57,7 @@ class SVGProcessor {
             let VALUE_LIST = RangeOf(min: 4, max: 4, subelement: (cgFloatValue + OPT_COMMA).makeStripped().makeFlattened())
 
             // TODO: ! can and will crash with bad data.
-            let values:[CGFloat] = (VALUE_LIST.parse(viewbox).value as? [Any])!.map() {
+            let values:[CGFloat] = (try! VALUE_LIST.parse(viewbox).value as? [Any])!.map() {
                 return $0 as! CGFloat
             }
 
@@ -146,13 +146,13 @@ class SVGProcessor {
     }
 
     func processStyle(xmlElement:NSXMLElement, state:State) -> SwiftGraphics.Style? {
-        let style = processSVGStyle(xmlElement, state)
+        let style = processSVGStyle(xmlElement, state: state)
         return style
     }
 
     func processTransform(xmlElement:NSXMLElement, state:State) -> Transform2D? {
         if let value = xmlElement["transform"]?.stringValue {
-            let transform = svgTransformAttributeStringToTransform(value)
+            let transform = try! svgTransformAttributeStringToTransform(value)
             xmlElement["transform"] = nil
             return transform
         }
