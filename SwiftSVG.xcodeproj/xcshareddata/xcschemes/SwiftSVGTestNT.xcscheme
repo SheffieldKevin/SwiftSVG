@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "45E6ADA31A9EAB0200386CFE"
-               BuildableName = "SwiftSVG.app"
+               BuildableName = "SwiftSVG Demo.app"
                BlueprintName = "SwiftSVG Demo"
                ReferencedContainer = "container:SwiftSVG.xcodeproj">
             </BuildableReference>
@@ -57,7 +57,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "45E6ADA31A9EAB0200386CFE"
-            BuildableName = "SwiftSVG.app"
+            BuildableName = "SwiftSVG Demo.app"
             BlueprintName = "SwiftSVG Demo"
             ReferencedContainer = "container:SwiftSVG.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "45E6ADA31A9EAB0200386CFE"
-            BuildableName = "SwiftSVG.app"
+            BuildableName = "SwiftSVG Demo.app"
             BlueprintName = "SwiftSVG Demo"
             ReferencedContainer = "container:SwiftSVG.xcodeproj">
          </BuildableReference>
@@ -99,7 +99,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "45E6ADA31A9EAB0200386CFE"
-            BuildableName = "SwiftSVG.app"
+            BuildableName = "SwiftSVG Demo.app"
             BlueprintName = "SwiftSVG Demo"
             ReferencedContainer = "container:SwiftSVG.xcodeproj">
          </BuildableReference>

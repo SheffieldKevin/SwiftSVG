@@ -134,7 +134,7 @@ class ViewController: NSViewController {
 
     @IBAction func flatten(sender: AnyObject?) {
 
-        svgDocument.flatten()
+        svgDocument.optimise()
 
         // TODO: Total hack. Should not need to rebuild entire world.
 
