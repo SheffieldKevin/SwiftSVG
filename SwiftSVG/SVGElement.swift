@@ -58,15 +58,13 @@ class SVGContainer: SVGElement, GroupNode {
 
     func replace(oldElement:SVGElement, with newElement:SVGElement) throws {
 
-        if let index = children.indexOf(oldElement) {
-            oldElement.parent = nil
-            children[index] = newElement
-            newElement.parent = self
-        }
-        else {
-            // TODO
+        guard let index = children.indexOf(oldElement) else {
             fatalError("BOOM")
         }
+
+        oldElement.parent = nil
+        children[index] = newElement
+        newElement.parent = self
     }
 }
 

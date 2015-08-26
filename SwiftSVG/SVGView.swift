@@ -73,49 +73,48 @@ class SVGView: NSView {
 
     func elementForPoint(point:CGPoint) throws -> SVGElement? {
 
-        if let svgDocument = svgDocument {
-            let context = CGContext.bitmapContext(self.bounds)
+        guard let svgDocument = svgDocument else {
+            return nil
+        }
+        let context = CGContext.bitmapContext(self.bounds)
 
-            var index:UInt32 = 0
+        var index:UInt32 = 0
 
-            var elementsByIndex: [UInt32:SVGElement] = [:]
-            let renderer = SVGRenderer()
-            renderer.callbacks.styleForElement = {
-                (svgElement:SVGElement) -> Style? in
+        var elementsByIndex: [UInt32:SVGElement] = [:]
+        let renderer = SVGRenderer()
+        renderer.callbacks.styleForElement = {
+            (svgElement:SVGElement) -> Style? in
 
-                elementsByIndex[index] = svgElement
+            elementsByIndex[index] = svgElement
 
-                let red = CGFloat((index & 0xFF0000) >> 16) / 255
-                let green = CGFloat((index & 0x00FF00) >> 8) / 255
-                let blue = CGFloat((index & 0x0000FF) >> 0) / 255
+            let red = CGFloat((index & 0xFF0000) >> 16) / 255
+            let green = CGFloat((index & 0x00FF00) >> 8) / 255
+            let blue = CGFloat((index & 0x0000FF) >> 0) / 255
 
-                // TODO: HACK
-                let color = NSColor(red: red, green: green, blue: blue, alpha: 1.0).CGColor
+            // TODO: HACK
+            let color = NSColor(red: red, green: green, blue: blue, alpha: 1.0).CGColor
 
-                let style = Style(elements: [.fillColor(color)])
-                index = index + 1
-                return style
-            }
-            try renderer.renderDocument(svgDocument, context: context)
+            let style = Style(elements: [.fillColor(color)])
+            index = index + 1
+            return style
+        }
+        try renderer.renderDocument(svgDocument, context: context)
 //            println("Max index: \(index)")
 
-            var data = CGBitmapContextGetData(context)
-            data = data.advancedBy(Int(point.y) * CGBitmapContextGetBytesPerRow(context))
+        var data = CGBitmapContextGetData(context)
+        data = data.advancedBy(Int(point.y) * CGBitmapContextGetBytesPerRow(context))
 
-            let pixels = UnsafePointer <UInt32> (data).advancedBy(Int(point.x))
-            let argb = pixels.memory
+        let pixels = UnsafePointer <UInt32> (data).advancedBy(Int(point.x))
+        let argb = pixels.memory
 
-            let blue  = (argb & 0xFF000000) >> 24
-            let green = (argb & 0x00FF0000) >> 16
-            let red   = (argb & 0x0000FF00) >> 8
+        let blue  = (argb & 0xFF000000) >> 24
+        let green = (argb & 0x00FF0000) >> 16
+        let red   = (argb & 0x0000FF00) >> 8
 //            let alpha = (argb & 0x000000FF) >> 0
 
 
-            let searchIndex = red << 16 | green << 8 | blue
+        let searchIndex = red << 16 | green << 8 | blue
 
-            return elementsByIndex[searchIndex]
-
-        }
-        return nil
+        return elementsByIndex[searchIndex]
     }
 }

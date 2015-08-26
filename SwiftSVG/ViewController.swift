@@ -70,52 +70,48 @@ class ViewController: NSViewController {
     static func treeNodeTemplate() -> ObjectAdaptor.Template {
         var template = ObjectAdaptor.Template()
         template.childrenGetter = {
-            (element:AnyObject) -> [AnyObject] in
-            if let document = element as? SVGDocument {
-                return document.children
+            (element) in
+            guard let element = element as? SVGContainer else {
+                return nil
             }
-            else if let group = element as? SVGGroup {
-                return group.children
-            }
-            else {
-                return []
-            }
+            return element.children
         }
         template.getters["id"] = {
-            return ($0 as? SVGElement)?.id
+            (element) in
+            return (element as? SVGElement)?.id
         }
         template.getters["styled"] = {
-            return ($0 as? SVGElement)?.style != nil ? true : false
+            (element) in
+            return (element as? SVGElement)?.style != nil ? true : false
         }
         template.getters["transformed"] = {
-            return ($0 as? SVGElement)?.transform != nil ? true : false
+            (element) in
+            return (element as? SVGElement)?.transform != nil ? true : false
         }
         template.getters["fillColor"] = {
-            if let cgColor = ($0 as? SVGElement)?.style?.fillColor {
-                return NSColor(CGColor: cgColor)
-            }
-            else {
+            (element) in
+            guard let cgColor = (element as? SVGElement)?.style?.fillColor else {
                 return nil
             }
+            return NSColor(CGColor: cgColor)
         }
         template.getters["strokeColor"] = {
-            if let cgColor = ($0 as? SVGElement)?.style?.strokeColor {
-                return NSColor(CGColor: cgColor)
-            }
-            else {
+            (element) in
+            guard let cgColor = (element as? SVGElement)?.style?.strokeColor else {
                 return nil
             }
+            return NSColor(CGColor: cgColor)
         }
         template.getters["strokeWidth"] = {
-            if let lineWidth = ($0 as? SVGElement)?.style?.lineWidth {
-                return lineWidth
-            }
-            else {
+            (element) in
+            guard let lineWidth = (element as? SVGElement)?.style?.lineWidth else {
                 return nil
             }
+            return lineWidth
         }
         template.getters["name"] = {
-            switch $0 {
+            (element) in
+            switch element {
                 case is SVGDocument:
                     return "Document"
                 case is SVGGroup:

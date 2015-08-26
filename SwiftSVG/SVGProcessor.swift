@@ -149,12 +149,12 @@ class SVGProcessor {
     }
 
     func processTransform(xmlElement:NSXMLElement, state:State) throws -> Transform2D? {
-        if let value = xmlElement["transform"]?.stringValue {
-            let transform = try svgTransformAttributeStringToTransform(value)
-            xmlElement["transform"] = nil
-            return transform
+        guard let value = xmlElement["transform"]?.stringValue else {
+            return nil
         }
-    return nil
+        let transform = try svgTransformAttributeStringToTransform(value)
+        xmlElement["transform"] = nil
+        return transform
     }
 }
 

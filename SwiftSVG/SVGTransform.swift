@@ -74,16 +74,16 @@ func svgTransformAttributeStringToTransform(string:String) throws -> Transform2D
     let result = try transforms.parse(string)
     switch result {
         case .Ok(let value):
-            if let value = value as? [Any] {
-
-                let transforms:[Transform] = value.map() {
-                    return $0 as! Transform
-                }
-
-                let compound = CompoundTransform(transforms: transforms)
-                return compound
+            guard let value = value as? [Any] else {
+                return nil
             }
-            return nil
+
+            let transforms:[Transform] = value.map() {
+                return $0 as! Transform
+            }
+
+            let compound = CompoundTransform(transforms: transforms)
+            return compound
         default:
             break
     }

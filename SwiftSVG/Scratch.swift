@@ -98,7 +98,8 @@ extension NSXMLElement {
         }
         set {
             if let newValue = newValue {
-                fatalError("OOPS")
+                assert(name == newValue.name)
+                addAttribute(newValue)
             }
             else {
                 removeAttributeForName(name)

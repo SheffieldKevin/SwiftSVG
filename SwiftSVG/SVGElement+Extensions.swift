@@ -13,26 +13,21 @@ extension SVGElement {
     static var walker: Walker <SVGElement> {
         let walker = Walker() {
             (node:SVGElement) -> [SVGElement]? in
-            if let node = node as? SVGContainer {
-                return node.children
-            }
-            else {
+            guard let node = node as? SVGContainer else {
                 return nil
             }
+            return node.children
         }
         return walker
     }
 
     var indexPath: NSIndexPath {
         get {
-
-            if let parent = parent {
-                let index = parent.children.indexOf(self)!
-                return parent.indexPath.indexPathByAddingIndex(index)
-            }
-            else {
+            guard let parent = parent else {
                 return NSIndexPath(index: 0)
             }
+            let index = parent.children.indexOf(self)!
+            return parent.indexPath.indexPathByAddingIndex(index)
         }
     }
 
