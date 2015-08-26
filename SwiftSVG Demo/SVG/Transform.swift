@@ -25,9 +25,7 @@ public protocol Transform3D: Transform {
 
 public struct IdentityTransform: Transform {
     public var isIdentity:Bool {
-        get {
-            return true
-        }
+        return true
     }
 }
 
@@ -54,14 +52,12 @@ public struct CompoundTransform: Transform {
     }
 
     public var isIdentity:Bool {
-        get {
-            if transforms.count == 0 {
-                return true
-            }
-            else {
-                // TODO: LIE
-                return false
-            }
+        if transforms.count == 0 {
+            return true
+        }
+        else {
+            // TODO: LIE
+            return false
         }
     }
 }
@@ -101,10 +97,8 @@ public func + (lhs:CompoundTransform, rhs:CompoundTransform) -> CompoundTransfor
 
 extension CompoundTransform: CustomStringConvertible {
     public var description: String {
-        get {
-            let transformStrings:[String] = transforms.map() { return String($0) }
-            return "CompoundTransform(\(transformStrings))"
-        }
+        let transformStrings:[String] = transforms.map() { return String($0) }
+        return "CompoundTransform(\(transformStrings))"
     }
 }
 
@@ -169,9 +163,7 @@ extension Translate: Transform3D {
 
 extension Translate: CustomStringConvertible {
     public var description: String {
-        get {
-            return "Translate(\(tx), \(ty), \(tz))"
-        }
+        return "Translate(\(tx), \(ty), \(tz))"
     }
 }
 
@@ -238,9 +230,7 @@ extension Rotate: Transform2D {
 
 extension Rotate: CustomStringConvertible {
     public var description: String {
-        get {
-            return "Rotate(\(angle))"
-        }
+        return "Rotate(\(angle))"
     }
 }
 
@@ -265,9 +255,7 @@ extension Skew: Transform2D {
 
 extension Skew: CustomStringConvertible {
     public var description: String {
-        get {
-            return "Skew(\(angle))"
-        }
+        return "Skew(\(angle))"
     }
 }
 

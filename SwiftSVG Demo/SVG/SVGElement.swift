@@ -27,11 +27,11 @@ public protocol GroupNode: Node {
 public class SVGElement: Node {
     public typealias ParentType = SVGContainer
     public weak var parent:SVGContainer? = nil
-    public var style:SwiftGraphics.Style? = nil
-    public var transform:Transform2D? = nil
-    public var uuid = NSUUID() // TODO: This is silly.
-    public var id:String? = nil
-    public var xmlElement:NSXMLElement? = nil
+    public internal(set) var style:SwiftGraphics.Style? = nil
+    public internal(set) var transform:Transform2D? = nil
+    public let uuid = NSUUID() // TODO: This is silly.
+    public internal(set) var id:String? = nil
+    public internal(set) var xmlElement:NSXMLElement? = nil
 
     public func dump(depth:Int = 0) {
         let padding = ("" as NSString).stringByPaddingToLength(depth, withString: " ", startingAtIndex: 0)
