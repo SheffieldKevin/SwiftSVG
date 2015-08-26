@@ -13,12 +13,9 @@ import SwiftGraphics
 public class SVGRenderer {
 
     public struct Callbacks {
-        public var prerenderElement: ((svgElement:SVGElement, context:CGContext) throws -> Bool)?
-        public var postrenderElement: ((svgElement:SVGElement, context:CGContext) throws -> Void)?
-        public var styleForElement: ((svgElement:SVGElement) throws -> Style?)?
-
-        public init() {
-        }
+        public var prerenderElement: ((svgElement:SVGElement, context:CGContext) throws -> Bool)? = nil
+        public var postrenderElement: ((svgElement:SVGElement, context:CGContext) throws -> Void)? = nil
+        public var styleForElement: ((svgElement:SVGElement) throws -> Style?)? = nil
     }
 
     public var callbacks = Callbacks()
@@ -52,6 +49,7 @@ public class SVGRenderer {
 
         if let transform = svgElement.transform {
             CGContextConcatCTM(context, transform.asCGAffineTransform())
+            // TODO: Why are not cleanign this up at end of function?
         }
 
         switch svgElement {

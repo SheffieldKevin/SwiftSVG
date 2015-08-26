@@ -43,8 +43,6 @@ public struct CompoundTransform: Transform {
     public init(transforms:[Transform]) {
         // TODO: Check that all transforms are also Transform2D? Or use another init?
 
-
-
         // TODO: Strip out identity transforms
         self.transforms = transforms.filter() {
             return $0.isIdentity == false

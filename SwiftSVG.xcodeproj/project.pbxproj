@@ -28,7 +28,7 @@
 		45C2033C1B8E0E9400966AC6 /* SVGElement+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459B56BF1AB40722002E781F /* SVGElement+Extensions.swift */; settings = {ASSET_TAGS = (); }; };
 		45C2033D1B8E0E9400966AC6 /* SVGProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D36F441A9EE3530005C3C9 /* SVGProcessor.swift */; settings = {ASSET_TAGS = (); }; };
 		45C2033E1B8E0E9400966AC6 /* SVGRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D36F481A9EF43F0005C3C9 /* SVGRenderer.swift */; settings = {ASSET_TAGS = (); }; };
-		45C2033F1B8E0E9400966AC6 /* SVGTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4522FA8A1AB4BA7E00DFEBA5 /* SVGTransform.swift */; settings = {ASSET_TAGS = (); }; };
+		45C2033F1B8E0E9400966AC6 /* TransformParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4522FA8A1AB4BA7E00DFEBA5 /* TransformParser.swift */; settings = {ASSET_TAGS = (); }; };
 		45C203401B8E0E9400966AC6 /* Transform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4513B7001AB745C1005649B9 /* Transform.swift */; settings = {ASSET_TAGS = (); }; };
 		45C203411B8E0E9400966AC6 /* SVGContainer+Flatten.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C203261B8DA2E000966AC6 /* SVGContainer+Flatten.swift */; settings = {ASSET_TAGS = (); }; };
 		45C203421B8E0EBA00966AC6 /* SwiftGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 451958181AC22BEE00659E64 /* SwiftGraphics.framework */; };
@@ -75,7 +75,7 @@
 		451958181AC22BEE00659E64 /* SwiftGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftGraphics.framework; path = Carthage/Build/Mac/SwiftGraphics.framework; sourceTree = "<group>"; };
 		451958191AC22BEE00659E64 /* SwiftParsing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftParsing.framework; path = Carthage/Build/Mac/SwiftParsing.framework; sourceTree = "<group>"; };
 		4519581A1AC22BEE00659E64 /* SwiftUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUtilities.framework; path = Carthage/Build/Mac/SwiftUtilities.framework; sourceTree = "<group>"; };
-		4522FA8A1AB4BA7E00DFEBA5 /* SVGTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SVGTransform.swift; path = "SwiftSVG Demo/SVG/SVGTransform.swift"; sourceTree = SOURCE_ROOT; };
+		4522FA8A1AB4BA7E00DFEBA5 /* TransformParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransformParser.swift; path = "SwiftSVG Demo/SVG/TransformParser.swift"; sourceTree = SOURCE_ROOT; };
 		454734B11AB7A30300D877FD /* SVGValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGValue.swift; sourceTree = "<group>"; };
 		454799841ABF3CEB000B19B8 /* Apple_Swift_Logo.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Apple_Swift_Logo.svg; sourceTree = "<group>"; };
 		454799851ABF3CEB000B19B8 /* Ghostscript_Tiger.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Ghostscript_Tiger.svg; sourceTree = "<group>"; };
@@ -190,7 +190,7 @@
 				459B56BF1AB40722002E781F /* SVGElement+Extensions.swift */,
 				45D36F441A9EE3530005C3C9 /* SVGProcessor.swift */,
 				45D36F481A9EF43F0005C3C9 /* SVGRenderer.swift */,
-				4522FA8A1AB4BA7E00DFEBA5 /* SVGTransform.swift */,
+				4522FA8A1AB4BA7E00DFEBA5 /* TransformParser.swift */,
 				4513B7001AB745C1005649B9 /* Transform.swift */,
 				45C203261B8DA2E000966AC6 /* SVGContainer+Flatten.swift */,
 				45C203311B8E0E8200966AC6 /* SwiftSVG.h */,
@@ -366,7 +366,7 @@
 				45C2033D1B8E0E9400966AC6 /* SVGProcessor.swift in Sources */,
 				45C2033B1B8E0E9400966AC6 /* SVGElement.swift in Sources */,
 				45C2033C1B8E0E9400966AC6 /* SVGElement+Extensions.swift in Sources */,
-				45C2033F1B8E0E9400966AC6 /* SVGTransform.swift in Sources */,
+				45C2033F1B8E0E9400966AC6 /* TransformParser.swift in Sources */,
 				45C203401B8E0E9400966AC6 /* Transform.swift in Sources */,
 				45C2033E1B8E0E9400966AC6 /* SVGRenderer.swift in Sources */,
 			);
