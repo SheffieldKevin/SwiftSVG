@@ -41,24 +41,16 @@ class SVGView: NSView {
         let context = NSGraphicsContext.currentContext()!.CGContext
 
         // Drawing code here.
-//        let filter = CIFilter(name: "CICheckerboardGenerator")!
+        let filter = CheckerboardGenerator()
+        filter.inputCenter = CIVector(CGPoint: CGPointZero)
+        filter.inputWidth = 20
+        filter.inputColor0 = CIColor(CGColor: CGColor.whiteColor())
+        filter.inputColor1 = CIColor(CGColor: CGColor.color(white: 0.8, alpha: 1))
+        let ciImage = filter.outputImage!
+        let ciContext = CIContext(CGContext: context, options: nil)
+        let image = ciContext.createCGImage(ciImage, fromRect: bounds)
+        CGContextDrawImage(context, bounds, image)
 
-//        filter.setDefaults()
-//        filter.setValue(CIVector(CGPoint: CGPointZero), forKey: "inputCenter")
-//        filter.setValue(20, forKey: "inputWidth")
-//        filter.setValue(CIColor(CGColor: CGColor.whiteColor()), forKey: "inputColor0")
-//        filter.setValue(CIColor(CGColor: CGColor.color(white: 0.8, alpha: 1)), forKey: "inputColor1")
-
-//        println(filter.outputKeys())
-
-//        let ciImage = filter.valueForKey("outputImage") as! CIImage
-//        let ciContext = CIContext(CGContext: context, options: nil)
-//        let image = ciContext.createCGImage(ciImage, fromRect: bounds)
-//        CGContextDrawImage(context, bounds, image)
-//
-//
-//
-//
         if let svgDocument = svgDocument {
             context.with() {
                 CGContextScaleCTM(context, 1, -1)
@@ -116,7 +108,7 @@ class SVGView: NSView {
             let blue  = (argb & 0xFF000000) >> 24
             let green = (argb & 0x00FF0000) >> 16
             let red   = (argb & 0x0000FF00) >> 8
-            let alpha = (argb & 0x000000FF) >> 0
+//            let alpha = (argb & 0x000000FF) >> 0
 
 
             let searchIndex = red << 16 | green << 8 | blue
