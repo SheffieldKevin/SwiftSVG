@@ -19,7 +19,6 @@ class Unit {
 }
 
 class BaseUnit: Unit {
-
 }
 
 func ==(lhs: Unit, rhs: Unit) -> Bool {
@@ -46,9 +45,6 @@ struct Value {
     }
 }
 
-enum Error {
-}
-
 struct UnitTable {
     var units:[Unit] = []
 
@@ -70,8 +66,6 @@ struct UnitTable {
 
 struct ValueConverter {
     func convert(value:Value, unit:Unit) -> Value? {
-
-
         return nil
     }
 }

@@ -108,7 +108,7 @@ extension NSXMLElement {
     }
 }
 
-struct Event {
+struct Event: ErrorType {
     enum Severity {
         case debug
         case info

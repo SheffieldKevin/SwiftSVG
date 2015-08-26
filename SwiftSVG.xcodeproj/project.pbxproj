@@ -20,7 +20,6 @@
 		454799891ABF3CEB000B19B8 /* Ghostscript_Tiger.svg in Resources */ = {isa = PBXBuildFile; fileRef = 454799851ABF3CEB000B19B8 /* Ghostscript_Tiger.svg */; };
 		4547998A1ABF3CEB000B19B8 /* JW_Bezier_1.svg in Resources */ = {isa = PBXBuildFile; fileRef = 454799861ABF3CEB000B19B8 /* JW_Bezier_1.svg */; };
 		4547998B1ABF3CEB000B19B8 /* SwiftOutline.svg in Resources */ = {isa = PBXBuildFile; fileRef = 454799871ABF3CEB000B19B8 /* SwiftOutline.svg */; };
-		454799941ABF3D30000B19B8 /* SVGStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454799931ABF3D30000B19B8 /* SVGStyle.swift */; };
 		455449281AB3C89C009F1F92 /* CenteringClipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455449271AB3C89C009F1F92 /* CenteringClipView.swift */; };
 		459B56B71AB3F211002E781F /* Adaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459B56B61AB3F211002E781F /* Adaptor.swift */; };
 		459B56C01AB40722002E781F /* SVGElement+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459B56BF1AB40722002E781F /* SVGElement+Extensions.swift */; };
@@ -65,7 +64,6 @@
 		454799851ABF3CEB000B19B8 /* Ghostscript_Tiger.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Ghostscript_Tiger.svg; sourceTree = "<group>"; };
 		454799861ABF3CEB000B19B8 /* JW_Bezier_1.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JW_Bezier_1.svg; sourceTree = "<group>"; };
 		454799871ABF3CEB000B19B8 /* SwiftOutline.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SwiftOutline.svg; sourceTree = "<group>"; };
-		454799931ABF3D30000B19B8 /* SVGStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGStyle.swift; sourceTree = "<group>"; };
 		455449271AB3C89C009F1F92 /* CenteringClipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CenteringClipView.swift; sourceTree = "<group>"; };
 		459B56B61AB3F211002E781F /* Adaptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Adaptor.swift; sourceTree = "<group>"; };
 		459B56BF1AB40722002E781F /* SVGElement+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SVGElement+Extensions.swift"; sourceTree = "<group>"; };
@@ -112,7 +110,6 @@
 		451B7A181AC2369700CA049F /* Misc */ = {
 			isa = PBXGroup;
 			children = (
-				455449271AB3C89C009F1F92 /* CenteringClipView.swift */,
 			);
 			name = Misc;
 			sourceTree = "<group>";
@@ -133,11 +130,7 @@
 				459B56BF1AB40722002E781F /* SVGElement+Extensions.swift */,
 				45D36F441A9EE3530005C3C9 /* SVGProcessor.swift */,
 				45D36F481A9EF43F0005C3C9 /* SVGRenderer.swift */,
-				454799931ABF3D30000B19B8 /* SVGStyle.swift */,
 				4522FA8A1AB4BA7E00DFEBA5 /* SVGTransform.swift */,
-				454734B11AB7A30300D877FD /* SVGValue.swift */,
-				45D36F421A9EDD5F0005C3C9 /* Scratch.swift */,
-				459B56B61AB3F211002E781F /* Adaptor.swift */,
 				4513B7001AB745C1005649B9 /* Transform.swift */,
 				45C203261B8DA2E000966AC6 /* SVGContainer+Flatten.swift */,
 			);
@@ -153,6 +146,24 @@
 				454799871ABF3CEB000B19B8 /* SwiftOutline.svg */,
 			);
 			path = Samples;
+			sourceTree = "<group>";
+		};
+		45C203281B8E0D4B00966AC6 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				455449271AB3C89C009F1F92 /* CenteringClipView.swift */,
+				45D36F421A9EDD5F0005C3C9 /* Scratch.swift */,
+				459B56B61AB3F211002E781F /* Adaptor.swift */,
+			);
+			name = Support;
+			sourceTree = "<group>";
+		};
+		45C203291B8E0DFC00966AC6 /* Experimenta */ = {
+			isa = PBXGroup;
+			children = (
+				454734B11AB7A30300D877FD /* SVGValue.swift */,
+			);
+			name = Experimenta;
 			sourceTree = "<group>";
 		};
 		45E6AD9B1A9EAB0200386CFE = {
@@ -182,6 +193,8 @@
 				45A1383F1AC2755C00DE5248 /* SummaryViewController.swift */,
 				451B7A181AC2369700CA049F /* Misc */,
 				454734AD1AB7976A00D877FD /* SVG */,
+				45C203291B8E0DFC00966AC6 /* Experimenta */,
+				45C203281B8E0D4B00966AC6 /* Support */,
 				454799831ABF3CEB000B19B8 /* Samples */,
 				454734AC1AB7976000D877FD /* Resources */,
 				45E6ADA71A9EAB0200386CFE /* Supporting Files */,
@@ -280,7 +293,6 @@
 				459B56C01AB40722002E781F /* SVGElement+Extensions.swift in Sources */,
 				45D36F491A9EF43F0005C3C9 /* SVGRenderer.swift in Sources */,
 				45D36F4B1A9EF8520005C3C9 /* SVGView.swift in Sources */,
-				454799941ABF3D30000B19B8 /* SVGStyle.swift in Sources */,
 				45C203271B8DA2E000966AC6 /* SVGContainer+Flatten.swift in Sources */,
 				454734B21AB7A30300D877FD /* SVGValue.swift in Sources */,
 				459B56B71AB3F211002E781F /* Adaptor.swift in Sources */,

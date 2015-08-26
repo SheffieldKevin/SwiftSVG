@@ -10,6 +10,8 @@ import Foundation
 
 import SwiftGraphics
 
+// MARK: -
+
 protocol Node {
     typealias ParentType
     var parent:ParentType? { get }
@@ -45,13 +47,13 @@ func == (lhs:SVGElement, rhs:SVGElement) -> Bool {
     return lhs === rhs
 }
 
-
 extension SVGElement: Hashable {
     var hashValue: Int {
         return uuid.hash
     }
-
 }
+
+// MARK: -
 
 class SVGContainer: SVGElement, GroupNode {
     var children:[SVGElement] = []
@@ -67,6 +69,8 @@ class SVGContainer: SVGElement, GroupNode {
         newElement.parent = self
     }
 }
+
+// MARK: -
 
 class SVGDocument: SVGContainer {
 
@@ -95,6 +99,8 @@ class SVGDocument: SVGContainer {
     }
 }
 
+// MARK: -
+
 class SVGGroup: SVGContainer {
     override func dump(depth:Int = 0) {
         super.dump(depth)
@@ -104,9 +110,13 @@ class SVGGroup: SVGContainer {
     }
 }
 
+// MARK: -
+
 protocol SVGGeometryNode: Node {
     var drawable:Drawable { get }
 }
+
+// MARK: -
 
 class SVGPath: SVGElement, CGPathable {
     let cgpath:CGPath

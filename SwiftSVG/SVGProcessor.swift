@@ -19,6 +19,10 @@ class SVGProcessor {
         var events:[Event] = []
     }
 
+    enum Error: ErrorType {
+        case corruptXML
+        case expectedSVGElementNotFound
+    }
 
     func processXMLDocument(xmlDocument:NSXMLDocument) throws -> SVGDocument? {
         let rootElement = xmlDocument.rootElement()!
@@ -29,7 +33,6 @@ class SVGProcessor {
                 print(event)
             }
         }
-
         return document
     }
 
@@ -83,7 +86,11 @@ class SVGProcessor {
 
         var svgElement:SVGElement? = nil
 
-        switch xmlElement.name! {
+        guard let name = xmlElement.name else {
+            throw Error.corruptXML
+        }
+
+        switch name {
             case "svg":
                 svgElement = try processSVGDocument(xmlElement, state:state)
             case "g":
@@ -136,16 +143,59 @@ class SVGProcessor {
     }
 
     func processSVGPath(xmlElement:NSXMLElement, state:State) throws -> SVGPath? {
-        let dAttribute = xmlElement["d"]
-        // TODO - can crash!
-        let path = CGPathFromSVGPath(dAttribute!.stringValue!)
+        guard let string = xmlElement["d"]?.stringValue else {
+            throw Error.expectedSVGElementNotFound
+        }
+
+        let path = CGPathFromSVGPath(string)
         xmlElement["d"] = nil
         return SVGPath(path:path)
     }
 
     func processStyle(xmlElement:NSXMLElement, state:State) throws -> SwiftGraphics.Style? {
-        let style = try processSVGStyle(xmlElement, state: state)
-        return style
+        var styleElements:[StyleElement] = []
+
+        // http://www.w3.org/TR/SVG/styling.html
+
+        // Fill
+        if let value = xmlElement["fill"]?.stringValue {
+            if let color = try stringToColor(value) {
+                let element = StyleElement.fillColor(color)
+                styleElements.append(element)
+            }
+
+            xmlElement["fill"] = nil
+        }
+
+        // Stroke
+        if let value = xmlElement["stroke"]?.stringValue {
+            if let color = try stringToColor(value) {
+                let element = StyleElement.strokeColor(color)
+                styleElements.append(element)
+            }
+
+            xmlElement["stroke"] = nil
+        }
+
+        // Stroke-Width
+        if let value = xmlElement["stroke-width"]?.stringValue {
+
+            if let double = NSNumberFormatter().numberFromString(value)?.doubleValue {
+                let element = StyleElement.lineWidth(CGFloat(double))
+                styleElements.append(element)
+            }
+
+            xmlElement["stroke-width"] = nil
+        }
+
+
+        //
+        if styleElements.count > 0 {
+            return SwiftGraphics.Style(elements: styleElements)
+        }
+        else {
+            return nil
+        }
     }
 
     func processTransform(xmlElement:NSXMLElement, state:State) throws -> Transform2D? {
@@ -156,5 +206,17 @@ class SVGProcessor {
         xmlElement["transform"] = nil
         return transform
     }
-}
 
+
+    func stringToColor(string:String) throws -> CGColor? {
+
+        if string == "none" {
+            return nil
+        }
+
+        let colorDictionary = try CColorConverter.sharedInstance().colorDictionaryWithString(string)
+        let color = CGColor.color(red: colorDictionary["red"] as! CGFloat , green: colorDictionary["green"] as! CGFloat, blue: colorDictionary["blue"] as! CGFloat, alpha: 1.0)
+        return color
+    }
+
+}
