@@ -83,8 +83,7 @@ func svgTransformAttributeStringToTransform(string:String) throws -> Transform2D
                 let compound = CompoundTransform(transforms: transforms)
                 return compound
             }
-                return nil
-//            }
+            return nil
         default:
             break
     }

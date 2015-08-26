@@ -19,15 +19,15 @@ class ViewController: NSViewController {
     @objc dynamic var selectionIndexPaths: [NSIndexPath]! {
         didSet {
             let selectedObjects = treeController.selectedObjects as! [ObjectAdaptor]
-//            let selectedElements:[SVGElement] = selectedObjects.map() {
-//                return $0.object as! SVGElement
-//            }
-//            self.selectedElements = NSMutableSet(array: selectedElements)
+            let selectedElements:[SVGElement] = selectedObjects.map() {
+                return $0.object as! SVGElement
+            }
+            self.selectedElements = Set <SVGElement> (selectedElements)
             svgView.needsDisplay = true
         }
     }
 
-//    @objc dynamic var selectedElements:NSMutableSet = NSMutableSet()
+    var selectedElements:Set <SVGElement> = Set <SVGElement> ()
 
     var svgDocument: SVGDocument! = nil {
         didSet {
@@ -50,14 +50,13 @@ class ViewController: NSViewController {
 
         svgView.renderer.callbacks.prerenderElement = {
             (svgElement:SVGElement, context:CGContext) -> Bool in
-//            if self.selectedElements.contains(svgElement) {
-            if false {
+            if self.selectedElements.contains(svgElement) {
 
                 if let transform = svgElement.transform {
                     CGContextConcatCTM(context, transform.asCGAffineTransform())
                 }
 
-                let path = self.svgView.renderer.pathForElement(svgElement)
+                let path = try self.svgView.renderer.pathForElement(svgElement)
                 context.strokeColor = CGColor.greenColor()
                 context.fillColor = CGColor.greenColor()
                 CGContextAddPath(context, path)
@@ -171,7 +170,7 @@ class ViewController: NSViewController {
 
             // Replace the parent with the child
             if let grandParent = parent.parent {
-                grandParent.replace(parent, with: child)
+                try! grandParent.replace(parent, with: child)
             }
         }
 
@@ -183,7 +182,7 @@ class ViewController: NSViewController {
         willChangeValueForKey("svgDocument")
         didChangeValueForKey("svgDocument")
 
-        summaryViewController.deepThought()
+        try! summaryViewController.deepThought()
 
     }
 }

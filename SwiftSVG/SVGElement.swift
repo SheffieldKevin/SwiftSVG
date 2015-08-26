@@ -56,7 +56,7 @@ extension SVGElement: Hashable {
 class SVGContainer: SVGElement, GroupNode {
     var children:[SVGElement] = []
 
-    func replace(oldElement:SVGElement, with newElement:SVGElement) {
+    func replace(oldElement:SVGElement, with newElement:SVGElement) throws {
 
         if let index = children.indexOf(oldElement) {
             oldElement.parent = nil
@@ -67,9 +67,6 @@ class SVGContainer: SVGElement, GroupNode {
             // TODO
             fatalError("BOOM")
         }
-        
-
-
     }
 }
 

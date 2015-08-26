@@ -11,8 +11,6 @@ import Foundation
 import SwiftGraphics
 import SwiftParsing
 
-
-
 class SVGProcessor {
 
     class State {
@@ -22,10 +20,10 @@ class SVGProcessor {
     }
 
 
-    func processXMLDocument(xmlDocument:NSXMLDocument) -> SVGDocument? {
+    func processXMLDocument(xmlDocument:NSXMLDocument) throws -> SVGDocument? {
         let rootElement = xmlDocument.rootElement()!
         let state = State()
-        let document = self.processSVGElement(rootElement, state:state) as? SVGDocument
+        let document = try self.processSVGElement(rootElement, state:state) as? SVGDocument
         if state.events.count > 0 {
             for event in state.events {
                 print(event)
@@ -35,7 +33,7 @@ class SVGProcessor {
         return document
     }
 
-    func processSVGDocument(xmlElement:NSXMLElement, state:State) -> SVGDocument {
+    func processSVGDocument(xmlElement:NSXMLElement, state:State) throws -> SVGDocument {
         let document = SVGDocument()
         state.document = document
 
@@ -70,7 +68,7 @@ class SVGProcessor {
         // Children
         if let nodes = xmlElement.children as? [NSXMLElement] {
             for node in nodes {
-                if let svgElement = self.processSVGElement(node, state:state) {
+                if let svgElement = try self.processSVGElement(node, state:state) {
                     svgElement.parent = document
                     document.children.append(svgElement)
                 }
@@ -81,17 +79,17 @@ class SVGProcessor {
         return document
     }
 
-    func processSVGElement(xmlElement:NSXMLElement, state:State) -> SVGElement? {
+    func processSVGElement(xmlElement:NSXMLElement, state:State) throws -> SVGElement? {
 
         var svgElement:SVGElement? = nil
 
         switch xmlElement.name! {
             case "svg":
-                svgElement = processSVGDocument(xmlElement, state:state)
+                svgElement = try processSVGDocument(xmlElement, state:state)
             case "g":
-                svgElement = processSVGGroup(xmlElement, state:state)
+                svgElement = try processSVGGroup(xmlElement, state:state)
             case "path":
-                svgElement = processSVGPath(xmlElement, state:state)
+                svgElement = try processSVGPath(xmlElement, state:state)
             case "title":
                 state.document!.title = xmlElement.stringValue as String?
             case "desc":
@@ -102,8 +100,8 @@ class SVGProcessor {
         }
 
         if let svgElement = svgElement {
-            svgElement.style = processStyle(xmlElement, state:state)
-            svgElement.transform = processTransform(xmlElement, state:state)
+            svgElement.style = try processStyle(xmlElement, state:state)
+            svgElement.transform = try processTransform(xmlElement, state:state)
 
             if let id = xmlElement["id"]?.stringValue {
                 svgElement.id = id
@@ -124,11 +122,11 @@ class SVGProcessor {
         return svgElement
     }
 
-    func processSVGGroup(xmlElement:NSXMLElement, state:State) -> SVGGroup {
+    func processSVGGroup(xmlElement:NSXMLElement, state:State) throws -> SVGGroup {
         let group = SVGGroup()
         let nodes = xmlElement.children! as! [NSXMLElement]
         for node in nodes {
-            if let svgElement = self.processSVGElement(node, state:state) {
+            if let svgElement = try self.processSVGElement(node, state:state) {
                 svgElement.parent = group
                 group.children.append(svgElement)
             }
@@ -137,7 +135,7 @@ class SVGProcessor {
         return group
     }
 
-    func processSVGPath(xmlElement:NSXMLElement, state:State) -> SVGPath? {
+    func processSVGPath(xmlElement:NSXMLElement, state:State) throws -> SVGPath? {
         let dAttribute = xmlElement["d"]
         // TODO - can crash!
         let path = CGPathFromSVGPath(dAttribute!.stringValue!)
@@ -145,14 +143,14 @@ class SVGProcessor {
         return SVGPath(path:path)
     }
 
-    func processStyle(xmlElement:NSXMLElement, state:State) -> SwiftGraphics.Style? {
-        let style = processSVGStyle(xmlElement, state: state)
+    func processStyle(xmlElement:NSXMLElement, state:State) throws -> SwiftGraphics.Style? {
+        let style = try processSVGStyle(xmlElement, state: state)
         return style
     }
 
-    func processTransform(xmlElement:NSXMLElement, state:State) -> Transform2D? {
+    func processTransform(xmlElement:NSXMLElement, state:State) throws -> Transform2D? {
         if let value = xmlElement["transform"]?.stringValue {
-            let transform = try! svgTransformAttributeStringToTransform(value)
+            let transform = try svgTransformAttributeStringToTransform(value)
             xmlElement["transform"] = nil
             return transform
         }

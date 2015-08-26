@@ -9,7 +9,7 @@
 import Foundation
 import SwiftGraphics
 
-func stringToColor(string:String) -> CGColor? {
+func stringToColor(string:String) throws -> CGColor? {
 
     let colorDictionary = try? CColorConverter.sharedInstance().colorDictionaryWithString(string)
     if let colorDictionary = colorDictionary {
@@ -23,7 +23,7 @@ func stringToColor(string:String) -> CGColor? {
 }
 
 
-func processSVGStyle(xmlElement:NSXMLElement, state:SVGProcessor.State) -> SwiftGraphics.Style? {
+func processSVGStyle(xmlElement:NSXMLElement, state:SVGProcessor.State) throws -> SwiftGraphics.Style? {
 
     var styleElements:[StyleElement] = []
 
@@ -31,7 +31,7 @@ func processSVGStyle(xmlElement:NSXMLElement, state:SVGProcessor.State) -> Swift
 
     // Fill
     if let value = xmlElement["fill"]?.stringValue {
-        if let color = stringToColor(value) {
+        if let color = try stringToColor(value) {
             let element = StyleElement.fillColor(color)
             styleElements.append(element)
         }
@@ -41,7 +41,7 @@ func processSVGStyle(xmlElement:NSXMLElement, state:SVGProcessor.State) -> Swift
 
     // Stroke
     if let value = xmlElement["stroke"]?.stringValue {
-        if let color = stringToColor(value) {
+        if let color = try stringToColor(value) {
             let element = StyleElement.strokeColor(color)
             styleElements.append(element)
         }

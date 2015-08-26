@@ -79,7 +79,6 @@ class SVGView: NSView {
 
     var elementSelected: ((svgElement:SVGElement) -> Void)?
 
-
     func elementForPoint(point:CGPoint) throws -> SVGElement? {
 
         if let svgDocument = svgDocument {

@@ -17,7 +17,7 @@ class SummaryViewController: NSViewController {
     var svgDocument: SVGDocument! {
         didSet {
             if svgDocument != nil {
-                deepThought()
+                try! deepThought()
             }
         }
     }
@@ -27,7 +27,7 @@ class SummaryViewController: NSViewController {
         // Do view setup here.
     }
 
-    func deepThought() {
+    func deepThought() throws {
 
         var elementCounts:[String:Int] = [
             "total":0,

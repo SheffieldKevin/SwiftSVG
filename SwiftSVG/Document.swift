@@ -14,7 +14,6 @@ class Document: NSDocument {
 
     override init() {
         super.init()
-        // Add your subclass-specific initialization here.
     }
 
     override func windowControllerDidLoadNib(aController: NSWindowController) {
@@ -38,19 +37,10 @@ class Document: NSDocument {
     }
 
     override func readFromData(data: NSData, ofType typeName: String) throws {
-
-        let xmlDocument: NSXMLDocument?
-        do {
-            xmlDocument = try NSXMLDocument(data: data, options: 0)
-        } catch _ {
-            xmlDocument = nil
-        }
-
+        let xmlDocument = try NSXMLDocument(data: data, options: 0)
         let processor = SVGProcessor()
-
-        svgDocument = processor.processXMLDocument(xmlDocument!)
+        svgDocument = try processor.processXMLDocument(xmlDocument)
     }
-
 
 }
 
