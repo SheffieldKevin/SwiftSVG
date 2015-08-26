@@ -10,7 +10,7 @@ import Foundation
 
 import SwiftGraphics
 
-extension SVGContainer {
+public extension SVGContainer {
 
     func flatten() {
 

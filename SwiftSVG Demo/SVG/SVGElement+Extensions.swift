@@ -8,7 +8,7 @@
 
 import SwiftUtilities
 
-extension SVGElement {
+public extension SVGElement {
 
     static var walker: Walker <SVGElement> {
         let walker = Walker() {

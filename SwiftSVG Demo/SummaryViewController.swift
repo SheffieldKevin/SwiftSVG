@@ -9,6 +9,7 @@
 import Cocoa
 
 import SwiftUtilities
+import SwiftSVG
 
 class SummaryViewController: NSViewController {
 

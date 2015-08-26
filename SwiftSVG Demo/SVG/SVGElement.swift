@@ -12,28 +12,28 @@ import SwiftGraphics
 
 // MARK: -
 
-protocol Node {
+public protocol Node {
     typealias ParentType
     var parent:ParentType? { get }
 }
 
-protocol GroupNode: Node {
+public protocol GroupNode: Node {
     typealias NodeType
     var children:[NodeType] { get }
 }
 
 // MARK: -
 
-class SVGElement: Node {
-    typealias ParentType = SVGContainer
-    weak var parent:SVGContainer? = nil
-    var style:SwiftGraphics.Style? = nil
-    var transform:Transform2D? = nil
-    var uuid = NSUUID() // TODO: This is silly.
-    var id:String? = nil
-    var xmlElement:NSXMLElement? = nil
+public class SVGElement: Node {
+    public typealias ParentType = SVGContainer
+    public weak var parent:SVGContainer? = nil
+    public var style:SwiftGraphics.Style? = nil
+    public var transform:Transform2D? = nil
+    public var uuid = NSUUID() // TODO: This is silly.
+    public var id:String? = nil
+    public var xmlElement:NSXMLElement? = nil
 
-    func dump(depth:Int = 0) {
+    public func dump(depth:Int = 0) {
         let padding = ("" as NSString).stringByPaddingToLength(depth, withString: " ", startingAtIndex: 0)
         let description = String(self)
         print("\(padding)\(description)")
@@ -43,22 +43,22 @@ class SVGElement: Node {
 extension SVGElement: Equatable {
 }
 
-func == (lhs:SVGElement, rhs:SVGElement) -> Bool {
+public func == (lhs:SVGElement, rhs:SVGElement) -> Bool {
     return lhs === rhs
 }
 
 extension SVGElement: Hashable {
-    var hashValue: Int {
+    public var hashValue: Int {
         return uuid.hash
     }
 }
 
 // MARK: -
 
-class SVGContainer: SVGElement, GroupNode {
-    var children:[SVGElement] = []
+public class SVGContainer: SVGElement, GroupNode {
+    public var children:[SVGElement] = []
 
-    func replace(oldElement:SVGElement, with newElement:SVGElement) throws {
+    public func replace(oldElement:SVGElement, with newElement:SVGElement) throws {
 
         guard let index = children.indexOf(oldElement) else {
             fatalError("BOOM")
@@ -72,26 +72,26 @@ class SVGContainer: SVGElement, GroupNode {
 
 // MARK: -
 
-class SVGDocument: SVGContainer {
+public class SVGDocument: SVGContainer {
 
-    enum Profile {
+    public enum Profile {
         case full
         case tiny
         case basic
     }
 
-    struct Version {
+    public struct Version {
         let majorVersion:Int
         let minorVersion:Int
     }
 
-    var profile:Profile?
-    var version:Version?
-    var viewBox:CGRect!
-    var title:String?
-    var documentDescription:String?
+    public var profile:Profile?
+    public var version:Version?
+    public var viewBox:CGRect!
+    public var title:String?
+    public var documentDescription:String?
 
-    override func dump(depth:Int = 0) {
+    public override func dump(depth:Int = 0) {
         super.dump(depth)
         for child in children {
             child.dump(depth + 1)
@@ -101,8 +101,8 @@ class SVGDocument: SVGContainer {
 
 // MARK: -
 
-class SVGGroup: SVGContainer {
-    override func dump(depth:Int = 0) {
+public class SVGGroup: SVGContainer {
+    public override func dump(depth:Int = 0) {
         super.dump(depth)
         for child in children {
             child.dump(depth + 1)
@@ -112,15 +112,15 @@ class SVGGroup: SVGContainer {
 
 // MARK: -
 
-protocol SVGGeometryNode: Node {
+public protocol SVGGeometryNode: Node {
     var drawable:Drawable { get }
 }
 
 // MARK: -
 
-class SVGPath: SVGElement, CGPathable {
-    let cgpath:CGPath
-    init(path:CGPath) {
+public class SVGPath: SVGElement, CGPathable {
+    public let cgpath:CGPath
+    public init(path:CGPath) {
         self.cgpath = path
     }
 }

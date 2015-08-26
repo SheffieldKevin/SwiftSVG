@@ -8,6 +8,8 @@
 
 import Cocoa
 
+import SwiftSVG
+
 class Document: NSDocument {
 
     var svgDocument:SVGDocument? = nil

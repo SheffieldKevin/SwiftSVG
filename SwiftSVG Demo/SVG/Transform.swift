@@ -9,22 +9,22 @@
 import Foundation
 import QuartzCore
 
-protocol Transform {
+public protocol Transform {
     var isIdentity:Bool { get }
 }
 
-protocol Transform2D: Transform {
+public protocol Transform2D: Transform {
     func asCGAffineTransform() -> CGAffineTransform!
 }
 
-protocol Transform3D: Transform {
+public protocol Transform3D: Transform {
     func asCATransform3D() -> CATransform3D!
 }
 
 // MARK: -
 
-struct IdentityTransform: Transform {
-    var isIdentity:Bool {
+public struct IdentityTransform: Transform {
+    public var isIdentity:Bool {
         get {
             return true
         }
@@ -32,17 +32,17 @@ struct IdentityTransform: Transform {
 }
 
 extension IdentityTransform: Transform2D {
-    func asCGAffineTransform() -> CGAffineTransform! {
+    public func asCGAffineTransform() -> CGAffineTransform! {
         return CGAffineTransformIdentity
     }
 }
 
 // MARK: -
 
-struct CompoundTransform: Transform {
-    let transforms:[Transform]
+public struct CompoundTransform: Transform {
+    public let transforms:[Transform]
 
-    init(transforms:[Transform]) {
+    public init(transforms:[Transform]) {
         // TODO: Check that all transforms are also Transform2D? Or use another init?
 
 
@@ -53,7 +53,7 @@ struct CompoundTransform: Transform {
         }
     }
 
-    var isIdentity:Bool {
+    public var isIdentity:Bool {
         get {
             if transforms.count == 0 {
                 return true
@@ -67,7 +67,7 @@ struct CompoundTransform: Transform {
 }
 
 extension CompoundTransform: Transform2D {
-    func asCGAffineTransform() -> CGAffineTransform! {
+    public func asCGAffineTransform() -> CGAffineTransform! {
 
         // Convert all transforms to 2D transforms. We will explode if not all transforms are 2D capable
         let affineTransforms:[CGAffineTransform] = transforms.map{
@@ -83,24 +83,24 @@ extension CompoundTransform: Transform2D {
     }
 }
 
-func + (lhs:Transform, rhs:Transform) -> CompoundTransform {
+public func + (lhs:Transform, rhs:Transform) -> CompoundTransform {
     return CompoundTransform(transforms: [lhs, rhs])
 }
 
-func + (lhs:CompoundTransform, rhs:Transform) -> CompoundTransform {
+public func + (lhs:CompoundTransform, rhs:Transform) -> CompoundTransform {
     return CompoundTransform(transforms: lhs.transforms + [rhs])
 }
 
-func + (lhs:Transform, rhs:CompoundTransform) -> CompoundTransform {
+public func + (lhs:Transform, rhs:CompoundTransform) -> CompoundTransform {
     return CompoundTransform(transforms: [lhs] + rhs.transforms)
 }
 
-func + (lhs:CompoundTransform, rhs:CompoundTransform) -> CompoundTransform {
+public func + (lhs:CompoundTransform, rhs:CompoundTransform) -> CompoundTransform {
     return CompoundTransform(transforms: lhs.transforms + rhs.transforms)
 }
 
 extension CompoundTransform: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         get {
             let transformStrings:[String] = transforms.map() { return String($0) }
             return "CompoundTransform(\(transformStrings))"
@@ -110,71 +110,65 @@ extension CompoundTransform: CustomStringConvertible {
 
 // MARK: -
 
-struct MatrixTransform2D: Transform {
-    let a:CGFloat
-    let b:CGFloat
-    let c:CGFloat
-    let d:CGFloat
-    let tx:CGFloat
-    let ty:CGFloat
+public struct MatrixTransform2D: Transform {
+    public let a:CGFloat
+    public let b:CGFloat
+    public let c:CGFloat
+    public let d:CGFloat
+    public let tx:CGFloat
+    public let ty:CGFloat
 
-    var isIdentity:Bool {
-        get {
-            // TODO: LIE
-            return false
-        }
+    public var isIdentity:Bool {
+        // TODO: LIE
+        return false
     }
 }
 
 extension MatrixTransform2D: Transform2D {
-    func asCGAffineTransform() -> CGAffineTransform! {
+    public func asCGAffineTransform() -> CGAffineTransform! {
         return CGAffineTransformMake(a, b, c, d, tx, ty)
     }
 }
 
 extension MatrixTransform2D: CustomStringConvertible {
-    var description: String {
-        get {
-            return "Matrix(\(a), \(b), \(c) \(d), \(tx), \(ty))"
-        }
+    public var description: String {
+        return "Matrix(\(a), \(b), \(c) \(d), \(tx), \(ty))"
     }
 }
 
 // MARK: Translate
 
-struct Translate: Transform {
-    let tx:CGFloat
-    let ty:CGFloat
-    let tz:CGFloat
+public struct Translate: Transform {
+    public let tx:CGFloat
+    public let ty:CGFloat
+    public let tz:CGFloat
 
-    init(tx:CGFloat, ty:CGFloat, tz:CGFloat = 0.0) {
+    public init(tx:CGFloat, ty:CGFloat, tz:CGFloat = 0.0) {
         self.tx = tx
         self.ty = ty
         self.tz = tz
     }
 
-    var isIdentity:Bool {
-        get {
-            // TODO: LIE
-            return false
-        }
+    public var isIdentity:Bool {
+        // TODO: LIE
+        return false
     }
 }
 
 extension Translate: Transform2D {
-    func asCGAffineTransform() -> CGAffineTransform! {
+    public func asCGAffineTransform() -> CGAffineTransform! {
         return tz == 0.0 ? CGAffineTransformMakeTranslation(tx, ty) : nil
     }
 }
 
 extension Translate: Transform3D {
-    func asCATransform3D() -> CATransform3D! {
+    public func asCATransform3D() -> CATransform3D! {
         return CATransform3DMakeTranslation(tx, ty, tz)
     }
 }
 
 extension Translate: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         get {
             return "Translate(\(tx), \(ty), \(tz))"
         }
@@ -183,73 +177,67 @@ extension Translate: CustomStringConvertible {
 
 // MARK: Scale
 
-struct Scale: Transform {
-    let sx:CGFloat
-    let sy:CGFloat
-    let sz:CGFloat
+public struct Scale: Transform {
+    public let sx:CGFloat
+    public let sy:CGFloat
+    public let sz:CGFloat
 
-    init(sx:CGFloat, sy:CGFloat, sz:CGFloat = 1) {
+    public init(sx:CGFloat, sy:CGFloat, sz:CGFloat = 1) {
         self.sx = sx
         self.sy = sy
         self.sz = sz
     }
 
-    init(scale:CGFloat) {
+    public init(scale:CGFloat) {
         sx = scale
         sy = scale
         sz = scale
     }
 
-    var isIdentity:Bool {
-        get {
-            // TODO: LIE
-            return false
-        }
+    public var isIdentity:Bool {
+        // TODO: LIE
+        return false
     }
 }
 
 extension Scale: Transform2D {
-    func asCGAffineTransform() -> CGAffineTransform! {
+    public func asCGAffineTransform() -> CGAffineTransform! {
         return sz == 1.0 ? CGAffineTransformMakeScale(sx, sy) : nil
     }
 }
 
 extension Scale: Transform3D {
-    func asCATransform3D() -> CATransform3D! {
+    public func asCATransform3D() -> CATransform3D! {
         return CATransform3DMakeScale(sx, sy, sz)
     }
 }
 
 extension Scale: CustomStringConvertible {
-    var description: String {
-        get {
-            return "Scale(\(sx), \(sy), \(sz))"
-        }
+    public var description: String {
+        return "Scale(\(sx), \(sy), \(sz))"
     }
 }
 
 // MARK: -
 
-struct Rotate: Transform {
-    let angle:CGFloat
+public struct Rotate: Transform {
+    public let angle:CGFloat
     // AXIS, TRANSLATION
 
-    var isIdentity:Bool {
-        get {
-            // TODO: LIE
-            return false
-        }
+    public var isIdentity:Bool {
+        // TODO: LIE
+        return false
     }
 }
 
 extension Rotate: Transform2D {
-    func asCGAffineTransform() -> CGAffineTransform! {
+    public func asCGAffineTransform() -> CGAffineTransform! {
         return CGAffineTransformMakeRotation(angle)
     }
 }
 
 extension Rotate: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         get {
             return "Rotate(\(angle))"
         }
@@ -258,27 +246,25 @@ extension Rotate: CustomStringConvertible {
 
 // MARK: -
 
-struct Skew: Transform {
-    let angle:CGFloat
+public struct Skew: Transform {
+    public let angle:CGFloat
     // AXIS
 
-    var isIdentity:Bool {
-        get {
-            // TODO: LIE
-            return false
-        }
+    public var isIdentity:Bool {
+        // TODO: LIE
+        return false
     }
 }
 
 extension Skew: Transform2D {
-    func asCGAffineTransform() -> CGAffineTransform! {
+    public func asCGAffineTransform() -> CGAffineTransform! {
         assertionFailure("Cannot skew")
         return nil
     }
 }
 
 extension Skew: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         get {
             return "Skew(\(angle))"
         }

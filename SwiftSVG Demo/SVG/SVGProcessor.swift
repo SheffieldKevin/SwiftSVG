@@ -11,20 +11,23 @@ import Foundation
 import SwiftGraphics
 import SwiftParsing
 
-class SVGProcessor {
+public class SVGProcessor {
 
-    class State {
+    public class State {
         var document:SVGDocument?
         var elementsByID:[String:SVGElement] = [:]
         var events:[Event] = []
     }
 
-    enum Error: ErrorType {
+    public enum Error: ErrorType {
         case corruptXML
         case expectedSVGElementNotFound
     }
 
-    func processXMLDocument(xmlDocument:NSXMLDocument) throws -> SVGDocument? {
+    public init() {
+    }
+
+    public func processXMLDocument(xmlDocument:NSXMLDocument) throws -> SVGDocument? {
         let rootElement = xmlDocument.rootElement()!
         let state = State()
         let document = try self.processSVGElement(rootElement, state:state) as? SVGDocument
@@ -36,7 +39,7 @@ class SVGProcessor {
         return document
     }
 
-    func processSVGDocument(xmlElement:NSXMLElement, state:State) throws -> SVGDocument {
+    public func processSVGDocument(xmlElement:NSXMLElement, state:State) throws -> SVGDocument {
         let document = SVGDocument()
         state.document = document
 
@@ -82,7 +85,7 @@ class SVGProcessor {
         return document
     }
 
-    func processSVGElement(xmlElement:NSXMLElement, state:State) throws -> SVGElement? {
+    public func processSVGElement(xmlElement:NSXMLElement, state:State) throws -> SVGElement? {
 
         var svgElement:SVGElement? = nil
 
@@ -129,7 +132,7 @@ class SVGProcessor {
         return svgElement
     }
 
-    func processSVGGroup(xmlElement:NSXMLElement, state:State) throws -> SVGGroup {
+    public func processSVGGroup(xmlElement:NSXMLElement, state:State) throws -> SVGGroup {
         let group = SVGGroup()
         let nodes = xmlElement.children! as! [NSXMLElement]
         for node in nodes {
@@ -142,7 +145,7 @@ class SVGProcessor {
         return group
     }
 
-    func processSVGPath(xmlElement:NSXMLElement, state:State) throws -> SVGPath? {
+    public func processSVGPath(xmlElement:NSXMLElement, state:State) throws -> SVGPath? {
         guard let string = xmlElement["d"]?.stringValue else {
             throw Error.expectedSVGElementNotFound
         }
@@ -152,7 +155,7 @@ class SVGProcessor {
         return SVGPath(path:path)
     }
 
-    func processStyle(xmlElement:NSXMLElement, state:State) throws -> SwiftGraphics.Style? {
+    public func processStyle(xmlElement:NSXMLElement, state:State) throws -> SwiftGraphics.Style? {
         var styleElements:[StyleElement] = []
 
         // http://www.w3.org/TR/SVG/styling.html
@@ -198,7 +201,7 @@ class SVGProcessor {
         }
     }
 
-    func processTransform(xmlElement:NSXMLElement, state:State) throws -> Transform2D? {
+    public func processTransform(xmlElement:NSXMLElement, state:State) throws -> Transform2D? {
         guard let value = xmlElement["transform"]?.stringValue else {
             return nil
         }
