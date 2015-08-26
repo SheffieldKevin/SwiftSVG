@@ -31,7 +31,7 @@ class SVGView: NSView {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        addGestureRecognizer(NSClickGestureRecognizer(target: self, action: Selector("tap: ")))
+        addGestureRecognizer(NSClickGestureRecognizer(target: self, action: Selector("tap:")))
     }
 
     override func layout() {
