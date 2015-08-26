@@ -11,15 +11,13 @@ import SwiftGraphics
 
 func stringToColor(string:String) throws -> CGColor? {
 
-    let colorDictionary = try? CColorConverter.sharedInstance().colorDictionaryWithString(string)
-    if let colorDictionary = colorDictionary {
-        let color = CGColor.color(red: colorDictionary["red"] as! CGFloat , green: colorDictionary["green"] as! CGFloat, blue: colorDictionary["blue"] as! CGFloat, alpha: 1.0)
-        return color
-    }
-    else {
+    if string == "none" {
         return nil
     }
 
+    let colorDictionary = try CColorConverter.sharedInstance().colorDictionaryWithString(string)
+    let color = CGColor.color(red: colorDictionary["red"] as! CGFloat , green: colorDictionary["green"] as! CGFloat, blue: colorDictionary["blue"] as! CGFloat, alpha: 1.0)
+    return color
 }
 
 
