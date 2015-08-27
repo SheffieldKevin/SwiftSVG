@@ -10,33 +10,45 @@ import Foundation
 
 import SwiftParsing
 
-func converter(value:Any) -> Any? {
 
-    guard let value = value as? [Any], let type = value[0] as? String, let parameters = value[1] as? [Any] else {
+func converter(value:Any) throws -> Any? {
+
+    guard let value = value as? [Any], let type = value[0] as? String else {
+        return nil
+    }
+
+    guard let parametersUntyped = (value[1] as? [Any]) else {
+        return nil
+    }
+
+    guard let parameters:[CGFloat] = parametersUntyped.map({ return $0 as! CGFloat }) else {
         return nil
     }
 
     switch type {
         case "matrix":
-            let a = parameters[0] as! CGFloat
-            let b = parameters[1] as! CGFloat
-            let c = parameters[2] as! CGFloat
-            let d = parameters[3] as! CGFloat
-            let e = parameters[4] as! CGFloat
-            let f = parameters[5] as! CGFloat
+            let parameters = parameters + Array <CGFloat> (count: 6 - parameters.count, repeatedValue: 0.0)
+            let a = parameters[0]
+            let b = parameters[1]
+            let c = parameters[2]
+            let d = parameters[3]
+            let e = parameters[4]
+            let f = parameters[5]
             return MatrixTransform2D(a: a, b: b, c: c, d: d, tx: e, ty: f)
         case "translate":
-            let x = parameters[0] as! CGFloat
-            let y = parameters.get(1, defaultValue: CGFloat(0)) as! CGFloat
+            let parameters = parameters + Array <CGFloat> (count: 2 - parameters.count, repeatedValue: 0.0)
+            let x = parameters[0]
+            let y = parameters[1]
             return Translate(tx: x, ty: y)
         case "scale":
-            let x = parameters[0] as! CGFloat
-            let y = parameters.get(1, defaultValue: x) as! CGFloat
+            let x = parameters[0]
+            let y = parameters.count > 1 ? parameters[1] : x
             return Scale(sx: x, sy: y)
         case "rotate":
-            let angle = parameters[0] as! CGFloat
-            let cx = parameters.get(1, defaultValue: CGFloat(0)) as? CGFloat
-            let cy = parameters.get(2, defaultValue: CGFloat(0)) as? CGFloat
+            let angle = parameters[0]
+            // TODO
+//            let cx = parameters.get(1, defaultValue: CGFloat(0))
+//            let cy = parameters.get(2, defaultValue: CGFloat(0))
             return Rotate(angle: angle)
         default:
             return nil
