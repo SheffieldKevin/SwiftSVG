@@ -145,14 +145,12 @@ public class SVGProcessor {
     }
 
     public func processSVGGroup(xmlElement: NSXMLElement, state: State) throws -> SVGGroup {
-        let group = SVGGroup()
         let nodes = xmlElement.children! as! [NSXMLElement]
-        for node in nodes {
-            if let svgElement = try self.processSVGElement(node, state: state) {
-                svgElement.parent = group
-                group.children.append(svgElement)
-            }
+
+        let children = try nodes.flatMap() {
+            return try processSVGElement($0, state: state)
         }
+        let group = SVGGroup(children: children)
         xmlElement.setChildren(nil)
         return group
     }

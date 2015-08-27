@@ -50,7 +50,21 @@ extension SVGElement: Hashable {
 // MARK: -
 
 public class SVGContainer: SVGElement, GroupNode {
-    public var children: [SVGElement] = []
+    public var children: [SVGElement] = [] {
+        didSet {
+            children.forEach() { $0.parent = self }
+        }
+    }
+
+    override init() {
+        super.init()
+    }
+
+    public convenience init(children:[SVGElement]) {
+        self.init()
+        self.children = children
+        self.children.forEach() { $0.parent = self }
+    }
 
     public func replace(oldElement: SVGElement, with newElement: SVGElement) throws {
 
@@ -90,6 +104,8 @@ public class SVGDocument: SVGContainer {
 // MARK: -
 
 public class SVGGroup: SVGContainer {
+
+
 }
 
 // MARK: -
