@@ -16,7 +16,7 @@ class SVGView: NSView {
     @IBOutlet var horizontalConstraint: NSLayoutConstraint?
     @IBOutlet var verticalConstraint: NSLayoutConstraint?
 
-    var renderer: SVGRenderer = SVGRenderer()
+    var svgRenderer: SVGRenderer = SVGRenderer()
 
     var svgDocument: SVGDocument? = nil {
         didSet {
@@ -56,7 +56,7 @@ class SVGView: NSView {
             context.with() {
                 CGContextScaleCTM(context, 1, -1)
                 CGContextTranslateCTM(context, 0, -bounds.size.height)
-                try! renderer.renderDocument(svgDocument, context: context)
+                try! svgRenderer.renderDocument(svgDocument, renderer: context)
             }
         }
 
@@ -82,8 +82,8 @@ class SVGView: NSView {
         var index: UInt32 = 0
 
         var elementsByIndex: [UInt32: SVGElement] = [: ]
-        let renderer = SVGRenderer()
-        renderer.callbacks.styleForElement = {
+        let svgRenderer = SVGRenderer()
+        svgRenderer.callbacks.styleForElement = {
             (svgElement: SVGElement) -> Style? in
 
             elementsByIndex[index] = svgElement
@@ -99,7 +99,7 @@ class SVGView: NSView {
             index = index + 1
             return style
         }
-        try renderer.renderDocument(svgDocument, context: context)
+        try svgRenderer.renderDocument(svgDocument, renderer: context)
 //            println("Max index: \(index)")
 
         var data = CGBitmapContextGetData(context)

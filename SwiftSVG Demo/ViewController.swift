@@ -48,19 +48,19 @@ class ViewController: NSViewController {
             self.treeController.setSelectionIndexPaths([svgElement.indexPath])
         }
 
-        svgView.renderer.callbacks.prerenderElement = {
-            (svgElement: SVGElement, context: CGContext) -> Bool in
+        svgView.svgRenderer.callbacks.prerenderElement = {
+            (svgElement: SVGElement, renderer: Renderer) -> Bool in
             if self.selectedElements.contains(svgElement) {
 
                 if let transform = svgElement.transform {
-                    CGContextConcatCTM(context, transform.toCGAffineTransform())
+                    renderer.concatCTM(transform.toCGAffineTransform())
                 }
 
-                let path = try self.svgView.renderer.pathForElement(svgElement)
-                context.strokeColor = CGColor.greenColor()
-                context.fillColor = CGColor.greenColor()
-                CGContextAddPath(context, path)
-                CGContextFillPath(context)
+                let path = try self.svgView.svgRenderer.pathForElement(svgElement)
+                renderer.strokeColor = CGColor.greenColor()
+                renderer.fillColor = CGColor.greenColor()
+                renderer.addPath(path)
+                renderer.fillPath()
                 return false
             }
 

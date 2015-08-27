@@ -42,6 +42,12 @@ class Document: NSDocument {
         let xmlDocument = try NSXMLDocument(data: data, options: 0)
         let processor = SVGProcessor()
         svgDocument = try processor.processXMLDocument(xmlDocument)
+
+        let renderer = SourceCodeRenderer()
+        let svgRenderer = SVGRenderer()
+        try svgRenderer.renderDocument(svgDocument!, renderer: renderer)
+        print(renderer.source)
+
     }
 
 }

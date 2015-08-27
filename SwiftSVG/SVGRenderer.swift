@@ -13,8 +13,8 @@ import SwiftGraphics
 public class SVGRenderer {
 
     public struct Callbacks {
-        public var prerenderElement: ((svgElement: SVGElement, context: CGContext) throws -> Bool)? = nil
-        public var postrenderElement: ((svgElement: SVGElement, context: CGContext) throws -> Void)? = nil
+        public var prerenderElement: ((svgElement: SVGElement, renderer: Renderer) throws -> Bool)? = nil
+        public var postrenderElement: ((svgElement: SVGElement, renderer: Renderer) throws -> Void)? = nil
         public var styleForElement: ((svgElement: SVGElement) throws -> Style?)? = nil
     }
 
@@ -23,9 +23,9 @@ public class SVGRenderer {
     public init() {
     }
 
-    public func prerenderElement(svgElement: SVGElement, context: CGContext) throws -> Bool {
+    public func prerenderElement(svgElement: SVGElement, renderer: Renderer) throws -> Bool {
         if let prerenderElement = callbacks.prerenderElement {
-            return try prerenderElement(svgElement: svgElement, context: context)
+            return try prerenderElement(svgElement: svgElement, renderer: renderer)
         }
         return true
     }
@@ -37,31 +37,31 @@ public class SVGRenderer {
         return svgElement.style
     }
 
-    public func renderElement(svgElement: SVGElement, context: CGContext) throws {
+    public func renderElement(svgElement: SVGElement, renderer: Renderer) throws {
 
-        if try prerenderElement(svgElement, context: context) == false {
+        if try prerenderElement(svgElement, renderer: renderer) == false {
             return
         }
 
         if let style = try styleForElement(svgElement) {
-            context.style = style
+            renderer.style = style
         }
 
         if let transform = svgElement.transform {
-            CGContextConcatCTM(context, transform.toCGAffineTransform())
+            renderer.concatTransform(transform.toCGAffineTransform())
             // TODO: Why are not cleanign this up at end of function?
         }
 
         switch svgElement {
             case let svgDocument as SVGDocument:
-                try renderDocument(svgDocument, context: context)
+                try renderDocument(svgDocument, renderer: renderer)
             case let svgGroup as SVGGroup:
-                try renderGroup(svgGroup, context: context)
+                try renderGroup(svgGroup, renderer: renderer)
             case let pathable as CGPathable:
                 let path = pathable.cgpath
-                let mode = CGPathDrawingMode(strokeColor: context.strokeColor, fillColor: context.fillColor)
-                CGContextAddPath(context, path)
-                CGContextDrawPath(context, mode)
+                let mode = CGPathDrawingMode(strokeColor: renderer.strokeColor, fillColor: renderer.fillColor)
+                renderer.addPath(path)
+                renderer.drawPath(mode)
             default:
                 assert(false)
         }
@@ -88,15 +88,15 @@ public class SVGRenderer {
         }
     }
 
-    public func renderDocument(svgDocument: SVGDocument, context: CGContext) throws {
+    public func renderDocument(svgDocument: SVGDocument, renderer: Renderer) throws {
         for child in svgDocument.children {
-            try renderElement(child, context: context)
+            try renderElement(child, renderer: renderer)
         }
     }
 
-    public func renderGroup(svgGroup: SVGGroup, context: CGContext) throws {
+    public func renderGroup(svgGroup: SVGGroup, renderer: Renderer) throws {
         for child in svgGroup.children {
-            try renderElement(child, context: context)
+            try renderElement(child, renderer: renderer)
         }
     }
 
