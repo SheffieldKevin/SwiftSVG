@@ -14,7 +14,7 @@ public protocol Transform {
 }
 
 public protocol Transform2D: Transform {
-    func asCGAffineTransform() -> CGAffineTransform!
+    func toCGAffineTransform() -> CGAffineTransform!
 }
 
 public protocol Transform3D: Transform {
@@ -30,7 +30,7 @@ public struct IdentityTransform: Transform {
 }
 
 extension IdentityTransform: Transform2D {
-    public func asCGAffineTransform() -> CGAffineTransform! {
+    public func toCGAffineTransform() -> CGAffineTransform! {
         return CGAffineTransformIdentity
     }
 }
@@ -61,11 +61,11 @@ public struct CompoundTransform: Transform {
 }
 
 extension CompoundTransform: Transform2D {
-    public func asCGAffineTransform() -> CGAffineTransform! {
+    public func toCGAffineTransform() -> CGAffineTransform! {
 
         // Convert all transforms to 2D transforms. We will explode if not all transforms are 2D capable
         let affineTransforms: [CGAffineTransform] = transforms.map{
-            return ($0 as! Transform2D).asCGAffineTransform()
+            return ($0 as! Transform2D).toCGAffineTransform()
         }
 
         let transform: CGAffineTransform = affineTransforms[0]
@@ -117,7 +117,7 @@ public struct MatrixTransform2D: Transform {
 }
 
 extension MatrixTransform2D: Transform2D {
-    public func asCGAffineTransform() -> CGAffineTransform! {
+    public func toCGAffineTransform() -> CGAffineTransform! {
         return CGAffineTransformMake(a, b, c, d, tx, ty)
     }
 }
@@ -148,7 +148,7 @@ public struct Translate: Transform {
 }
 
 extension Translate: Transform2D {
-    public func asCGAffineTransform() -> CGAffineTransform! {
+    public func toCGAffineTransform() -> CGAffineTransform! {
         return tz == 0.0 ? CGAffineTransformMakeTranslation(tx, ty): nil
     }
 }
@@ -191,7 +191,7 @@ public struct Scale: Transform {
 }
 
 extension Scale: Transform2D {
-    public func asCGAffineTransform() -> CGAffineTransform! {
+    public func toCGAffineTransform() -> CGAffineTransform! {
         return sz == 1.0 ? CGAffineTransformMakeScale(sx, sy): nil
     }
 }
@@ -221,7 +221,7 @@ public struct Rotate: Transform {
 }
 
 extension Rotate: Transform2D {
-    public func asCGAffineTransform() -> CGAffineTransform! {
+    public func toCGAffineTransform() -> CGAffineTransform! {
         return CGAffineTransformMakeRotation(angle)
     }
 }
@@ -245,7 +245,7 @@ public struct Skew: Transform {
 }
 
 extension Skew: Transform2D {
-    public func asCGAffineTransform() -> CGAffineTransform! {
+    public func toCGAffineTransform() -> CGAffineTransform! {
         assertionFailure("Cannot skew")
         return nil
     }

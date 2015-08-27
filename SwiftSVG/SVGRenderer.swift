@@ -48,7 +48,7 @@ public class SVGRenderer {
         }
 
         if let transform = svgElement.transform {
-            CGContextConcatCTM(context, transform.asCGAffineTransform())
+            CGContextConcatCTM(context, transform.toCGAffineTransform())
             // TODO: Why are not cleanign this up at end of function?
         }
 

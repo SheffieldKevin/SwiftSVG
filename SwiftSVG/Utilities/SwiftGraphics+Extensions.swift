@@ -111,11 +111,11 @@ extension SwiftGraphics.Style {
 
     var isEmpty: Bool {
         get {
-            return asStyleElements().count == 0
+            return toStyleElements().count == 0
         }
     }
 
-    func asStyleElements() -> [StyleElement] {
+    func toStyleElements() -> [StyleElement] {
 
         var elements: [StyleElement] = []
 
@@ -170,7 +170,7 @@ extension SwiftGraphics.Style {
 
 func + (lhs: SwiftGraphics.Style, rhs: SwiftGraphics.Style) -> SwiftGraphics.Style {
     var accumulator = lhs
-    accumulator.add(rhs.asStyleElements())
+    accumulator.add(rhs.toStyleElements())
     return accumulator
 }
 

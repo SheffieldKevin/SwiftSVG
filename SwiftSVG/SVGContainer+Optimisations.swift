@@ -80,7 +80,7 @@ public extension SVGContainer {
                         continue
                     }
 
-                    guard child.transform?.asCGAffineTransform() == lastChild.transform?.asCGAffineTransform() else {
+                    guard child.transform?.toCGAffineTransform() == lastChild.transform?.toCGAffineTransform() else {
                         continue
                     }
 

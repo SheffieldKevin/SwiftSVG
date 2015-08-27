@@ -53,7 +53,7 @@ class ViewController: NSViewController {
             if self.selectedElements.contains(svgElement) {
 
                 if let transform = svgElement.transform {
-                    CGContextConcatCTM(context, transform.asCGAffineTransform())
+                    CGContextConcatCTM(context, transform.toCGAffineTransform())
                 }
 
                 let path = try self.svgView.renderer.pathForElement(svgElement)
