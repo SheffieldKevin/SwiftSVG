@@ -10,36 +10,37 @@ import Foundation
 
 import SwiftParsing
 
-let converter = {
-    (value: Any) -> Any? in
-    if let value = value as? [Any], let type = value[0] as? String, let parameters = value[1] as? [Any] {
-        switch type {
-            case "matrix":
-                let a = parameters[0] as! CGFloat
-                let b = parameters[1] as! CGFloat
-                let c = parameters[2] as! CGFloat
-                let d = parameters[3] as! CGFloat
-                let e = parameters[4] as! CGFloat
-                let f = parameters[5] as! CGFloat
-                return MatrixTransform2D(a: a, b: b, c: c, d: d, tx: e, ty: f)
-            case "translate":
-                let x = parameters[0] as! CGFloat
-                let y = parameters.get(1, defaultValue: CGFloat(0)) as! CGFloat
-                return Translate(tx: x, ty: y)
-            case "scale":
-                let x = parameters[0] as! CGFloat
-                let y = parameters.get(1, defaultValue: x) as! CGFloat
-                return Scale(sx: x, sy: y)
-            case "rotate":
-                let angle = parameters[0] as! CGFloat
-                let cx = parameters.get(1, defaultValue: CGFloat(0)) as? CGFloat
-                let cy = parameters.get(2, defaultValue: CGFloat(0)) as? CGFloat
-                return Rotate(angle: angle)
-            default:
-                break
-        }
+func converter(value:Any) -> Any? {
+
+    guard let value = value as? [Any], let type = value[0] as? String, let parameters = value[1] as? [Any] else {
+        return nil
     }
-    return nil
+
+    switch type {
+        case "matrix":
+            let a = parameters[0] as! CGFloat
+            let b = parameters[1] as! CGFloat
+            let c = parameters[2] as! CGFloat
+            let d = parameters[3] as! CGFloat
+            let e = parameters[4] as! CGFloat
+            let f = parameters[5] as! CGFloat
+            return MatrixTransform2D(a: a, b: b, c: c, d: d, tx: e, ty: f)
+        case "translate":
+            let x = parameters[0] as! CGFloat
+            let y = parameters.get(1, defaultValue: CGFloat(0)) as! CGFloat
+            return Translate(tx: x, ty: y)
+        case "scale":
+            let x = parameters[0] as! CGFloat
+            let y = parameters.get(1, defaultValue: x) as! CGFloat
+            return Scale(sx: x, sy: y)
+        case "rotate":
+            let angle = parameters[0] as! CGFloat
+            let cx = parameters.get(1, defaultValue: CGFloat(0)) as? CGFloat
+            let cy = parameters.get(2, defaultValue: CGFloat(0)) as? CGFloat
+            return Rotate(angle: angle)
+        default:
+            return nil
+    }
 }
 
 let COMMA = Literal(",")
