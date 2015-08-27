@@ -19,6 +19,18 @@ public class SVGProcessor {
         var events: [Event] = []
     }
 
+    public struct Event {
+        enum Severity {
+            case debug
+            case info
+            case warning
+            case error
+        }
+
+        let severity: Severity
+        let message: String
+    }
+
     public enum Error: ErrorType {
         case corruptXML
         case expectedSVGElementNotFound
@@ -223,3 +235,22 @@ public class SVGProcessor {
     }
 
 }
+
+extension SVGProcessor.Event: CustomStringConvertible {
+    public var description: String {
+        get {
+            switch severity {
+                case .debug:
+                    return "DEBUG: \(message)"
+                case .info:
+                    return "INFO: \(message)"
+                case .warning:
+                    return "WARNING: \(message)"
+                case .error:
+                    return "ERROR: \(message)"
+            }
+        }
+    }
+}
+
+
