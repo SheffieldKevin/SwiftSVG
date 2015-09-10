@@ -13,6 +13,16 @@ import SwiftSVG
 
 class ViewController: NSViewController {
 
+    weak dynamic var document: Document! = nil {
+        didSet {
+            svgView?.svgDocument = document.svgDocument
+            if let svgDocument = document.svgDocument {
+                root = [ObjectAdaptor(object: svgDocument, template: ViewController.treeNodeTemplate())]
+            }
+            summaryViewController.svgDocument = document.svgDocument
+        }
+    }
+
     @IBOutlet var svgView: SVGView!
     @IBOutlet var treeController: NSTreeController!
     var summaryViewController: SummaryViewController!
@@ -29,16 +39,6 @@ class ViewController: NSViewController {
     }
 
     var selectedElements: Set <SVGElement> = Set <SVGElement> ()
-
-    var svgDocument: SVGDocument! = nil {
-        didSet {
-            svgView?.svgDocument = svgDocument
-            if let svgDocument = svgDocument {
-                root = [ObjectAdaptor(object: svgDocument, template: ViewController.treeNodeTemplate())]
-            }
-            summaryViewController.svgDocument = svgDocument
-        }
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,6 +133,11 @@ class ViewController: NSViewController {
     }
 
     @IBAction func flatten(sender: AnyObject?) {
+
+        guard let svgDocument = document.svgDocument else {
+
+            return
+        }
 
         svgDocument.optimise()
 

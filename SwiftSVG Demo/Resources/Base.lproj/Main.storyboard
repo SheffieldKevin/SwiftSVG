@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8187.4" systemVersion="15A263e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="9046" systemVersion="15A279b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8187.4"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9046"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -641,7 +642,7 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="SwiftSVG" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="SwiftSVG_Demo" customModuleProvider="target"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
@@ -667,7 +668,7 @@
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="5gI-5U-AMq" customClass="ViewController" customModule="SwiftSVG" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="5gI-5U-AMq" customClass="ViewController" customModule="SwiftSVG_Demo" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="ERx-hH-rdd">
                         <rect key="frame" x="0.0" y="0.0" width="1009" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -675,15 +676,52 @@
                             <splitView dividerStyle="paneSplitter" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PaG-xl-NOP">
                                 <rect key="frame" x="0.0" y="0.0" width="1011" height="270"/>
                                 <subviews>
-                                    <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" maxMagnification="16" minMagnification="0.0625" usesPredominantAxisScrolling="NO" id="XZz-Ju-YRp">
-                                        <rect key="frame" x="0.0" y="0.0" width="683" height="270"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <clipView key="contentView" id="A40-8A-FuR" customClass="CenteringClipView" customModule="SwiftSVG" customModuleProvider="target">
-                                            <rect key="frame" x="1" y="1" width="166" height="79"/>
+                                    <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="4mw-M6-3nP">
+                                        <rect key="frame" x="0.0" y="0.0" width="191.5" height="270"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <clipView key="contentView" ambiguous="YES" id="ca6-rd-iIW">
+                                            <rect key="frame" x="1" y="1" width="189.5" height="268"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <view translatesAutoresizingMaskIntoConstraints="NO" id="JTN-Ar-um0" customClass="SVGView" customModule="SwiftSVG" customModuleProvider="target">
-                                                    <rect key="frame" x="0.0" y="174" width="166" height="79"/>
+                                                <textView ambiguous="YES" importsGraphics="NO" richText="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="109-j8-VG5">
+                                                    <rect key="frame" x="0.0" y="0.0" width="189.5" height="268"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <animations/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <size key="minSize" width="189.5" height="268"/>
+                                                    <size key="maxSize" width="463" height="10000000"/>
+                                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <size key="minSize" width="189.5" height="268"/>
+                                                    <size key="maxSize" width="463" height="10000000"/>
+                                                    <connections>
+                                                        <binding destination="y0h-7z-60d" name="value" keyPath="selection.source" id="S6d-5q-YQv"/>
+                                                    </connections>
+                                                </textView>
+                                            </subviews>
+                                            <animations/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </clipView>
+                                        <animations/>
+                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="jUe-yq-R0U">
+                                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <animations/>
+                                        </scroller>
+                                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="pa5-Jm-Esz">
+                                            <rect key="frame" x="174.5" y="1" width="16" height="268"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <animations/>
+                                        </scroller>
+                                    </scrollView>
+                                    <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" maxMagnification="16" minMagnification="0.0625" usesPredominantAxisScrolling="NO" id="XZz-Ju-YRp">
+                                        <rect key="frame" x="201.5" y="0.0" width="545.5" height="270"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <clipView key="contentView" ambiguous="YES" id="A40-8A-FuR" customClass="CenteringClipView" customModule="SwiftSVG_Demo" customModuleProvider="target">
+                                            <rect key="frame" x="1" y="1" width="543.5" height="268"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <view misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JTN-Ar-um0" customClass="SVGView" customModule="SwiftSVG_Demo" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="363" width="166" height="79"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="79" id="Lfo-0c-dUQ"/>
                                                         <constraint firstAttribute="width" constant="166" id="ecd-Yf-0tI"/>
@@ -702,36 +740,36 @@
                                             <animations/>
                                         </clipView>
                                         <animations/>
-                                        <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="anJ-E3-xdf">
+                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="anJ-E3-xdf">
                                             <rect key="frame" x="1" y="254" width="666" height="15"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <animations/>
                                         </scroller>
-                                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="UP0-0C-OCi">
+                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="UP0-0C-OCi">
                                             <rect key="frame" x="667" y="1" width="15" height="253"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <animations/>
                                         </scroller>
                                     </scrollView>
                                     <tabView fixedFrame="YES" id="WNf-NF-yga">
-                                        <rect key="frame" x="686" y="-6" width="332" height="286"/>
+                                        <rect key="frame" x="750" y="-6" width="268" height="286"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <animations/>
                                         <font key="font" metaFont="system"/>
                                         <tabViewItems>
                                             <tabViewItem label="SVG Elements" identifier="1" id="ONU-D2-gRu">
                                                 <view key="view" id="M5K-z5-DMf">
-                                                    <rect key="frame" x="10" y="33" width="311" height="240"/>
+                                                    <rect key="frame" x="10" y="33" width="248" height="240"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0cX-Zc-S2P">
+                                                        <scrollView misplaced="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0cX-Zc-S2P">
                                                             <rect key="frame" x="0.0" y="0.0" width="312" height="240"/>
                                                             <clipView key="contentView" id="7cK-yb-Vmg">
-                                                                <rect key="frame" x="1" y="0.0" width="310" height="224"/>
+                                                                <rect key="frame" x="1" y="0.0" width="310" height="239"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="48q-sS-nYT" viewBased="YES" indentationPerLevel="16" outlineTableColumn="5Vr-C6-Kh4" id="5eY-Jq-TF9">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="420" height="201"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="420" height="216"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <animations/>
                                                                         <size key="intercellSpacing" width="3" height="2"/>
@@ -1010,7 +1048,7 @@
                                                             </clipView>
                                                             <animations/>
                                                             <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="1u1-zh-6HF">
-                                                                <rect key="frame" x="1" y="119" width="223" height="15"/>
+                                                                <rect key="frame" x="1" y="223" width="310" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <animations/>
                                                             </scroller>
@@ -1058,6 +1096,7 @@
                                 <holdingPriorities>
                                     <real value="250"/>
                                     <real value="250"/>
+                                    <real value="250"/>
                                 </holdingPriorities>
                             </splitView>
                         </subviews>
@@ -1075,6 +1114,11 @@
                     </connections>
                 </viewController>
                 <customObject id="2Tp-Fl-jBw" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <objectController id="y0h-7z-60d" userLabel="Document Controller">
+                    <connections>
+                        <binding destination="5gI-5U-AMq" name="contentObject" keyPath="document" id="vkz-gr-RHa"/>
+                    </connections>
+                </objectController>
                 <treeController editable="NO" childrenKeyPath="children" id="nDh-QL-d4z">
                     <connections>
                         <binding destination="5gI-5U-AMq" name="contentArray" keyPath="root" id="9XL-Sf-Wug"/>
@@ -1087,7 +1131,7 @@
         <!--Summary View Controller-->
         <scene sceneID="jJC-Hq-HXB">
             <objects>
-                <viewController id="48i-sj-Ga3" customClass="SummaryViewController" customModule="SwiftSVG" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="48i-sj-Ga3" customClass="SummaryViewController" customModule="SwiftSVG_Demo" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="XTc-PH-mzc">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
