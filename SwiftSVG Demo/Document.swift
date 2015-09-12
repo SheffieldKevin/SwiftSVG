@@ -12,14 +12,7 @@ import SwiftSVG
 
 class Document: NSDocument {
 
-    dynamic var source: String? = nil {
-        didSet {
-            if source != oldValue {
-                print(try? parse())
-            }
-        }
-    }
-    var svgDocument: SVGDocument? = nil
+    dynamic var source: String? = nil
 
     override init() {
         super.init()
@@ -32,9 +25,9 @@ class Document: NSDocument {
         }
     }
 
-    override class func autosavesInPlace() -> Bool {
-        return true
-    }
+//    override class func autosavesInPlace() -> Bool {
+//        return false
+//    }
 
     override func makeWindowControllers() {
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
@@ -50,21 +43,13 @@ class Document: NSDocument {
         source = try String(contentsOfURL: url, usedEncoding: &encoding)
     }
 
-    func parse() throws {
-        guard let source = source else {
-            return
+    override func dataOfType(typeName: String) throws -> NSData {
+        guard let data = source?.dataUsingEncoding(NSUTF8StringEncoding) else {
+            throw NSError(domain: "TODO", code: -1, userInfo: nil)
         }
-
-        let xmlDocument = try NSXMLDocument(XMLString: source, options: 0)
-        let processor = SVGProcessor()
-        svgDocument = try processor.processXMLDocument(xmlDocument)
-
-//        let renderer = SourceCodeRenderer()
-//        let svgRenderer = SVGRenderer()
-//        try svgRenderer.renderDocument(svgDocument!, renderer: renderer)
-//        print(renderer.source)
-
+        return data
     }
 
 }
+
 

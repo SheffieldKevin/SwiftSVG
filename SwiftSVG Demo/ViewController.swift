@@ -15,19 +15,42 @@ class ViewController: NSViewController {
 
     weak dynamic var document: Document! = nil {
         didSet {
-            svgView?.svgDocument = document.svgDocument
-            if let svgDocument = document.svgDocument {
-                root = [ObjectAdaptor(object: svgDocument, template: ViewController.treeNodeTemplate())]
-            }
-            summaryViewController.svgDocument = document.svgDocument
+            source = document.source
         }
     }
 
+    dynamic var source: String? = nil {
+        didSet {
+            do {
+                try self.parse()
+            }
+            catch let error {
+                print(error)
+            }
+            document.source = source
+        }
+    }
+
+    var svgDocument: SVGDocument? = nil {
+        didSet {
+            svgView?.svgDocument = svgDocument
+            if let svgDocument = svgDocument {
+                root = [ObjectAdaptor(object: svgDocument, template: ViewController.treeNodeTemplate())]
+            }
+            else {
+                root = nil
+            }
+
+            summaryViewController.svgDocument = svgDocument
+        }
+    }
+
+    @IBOutlet var sourceView: NSTextView!
     @IBOutlet var svgView: SVGView!
     @IBOutlet var treeController: NSTreeController!
-    var summaryViewController: SummaryViewController!
-    @objc dynamic var root: [ObjectAdaptor]!
-    @objc dynamic var selectionIndexPaths: [NSIndexPath]! {
+
+    dynamic var root: [ObjectAdaptor]!
+    dynamic var selectionIndexPaths: [NSIndexPath]! {
         didSet {
             let selectedObjects = treeController.selectedObjects as! [ObjectAdaptor]
             let selectedElements: [SVGElement] = selectedObjects.map() {
@@ -38,10 +61,14 @@ class ViewController: NSViewController {
         }
     }
 
+    var summaryViewController: SummaryViewController!
+
     var selectedElements: Set <SVGElement> = Set <SVGElement> ()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        sourceView.font = NSFont(name: "Menlo", size: 12)
 
         svgView.elementSelected = {
             (svgElement: SVGElement) -> Void in
@@ -67,6 +94,24 @@ class ViewController: NSViewController {
             return true
         }
     }
+
+    func parse() throws {
+        guard let source = source else {
+            svgDocument = nil
+            return
+        }
+
+        let xmlDocument = try NSXMLDocument(XMLString: source, options: 0)
+        let processor = SVGProcessor()
+        svgDocument = try processor.processXMLDocument(xmlDocument)
+
+//        let renderer = SourceCodeRenderer()
+//        let svgRenderer = SVGRenderer()
+//        try svgRenderer.renderDocument(svgDocument!, renderer: renderer)
+//        print(renderer.source)
+
+    }
+
 
     static func treeNodeTemplate() -> ObjectAdaptor.Template {
         var template = ObjectAdaptor.Template()
@@ -134,8 +179,7 @@ class ViewController: NSViewController {
 
     @IBAction func flatten(sender: AnyObject?) {
 
-        guard let svgDocument = document.svgDocument else {
-
+        guard let svgDocument = svgDocument else {
             return
         }
 
