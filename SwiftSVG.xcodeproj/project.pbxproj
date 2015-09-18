@@ -43,6 +43,11 @@
 		45E6ADAE1A9EAB0200386CFE /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E6ADAD1A9EAB0200386CFE /* Document.swift */; };
 		45E6ADB01A9EAB0200386CFE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45E6ADAF1A9EAB0200386CFE /* Images.xcassets */; };
 		45E6ADB31A9EAB0200386CFE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45E6ADB11A9EAB0200386CFE /* Main.storyboard */; };
+		6E4AFE281BAAF6A40015A1DE /* MIPathFromSVGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA9E2561BAAD5B600B7468C /* MIPathFromSVGPath.m */; settings = {ASSET_TAGS = (); }; };
+		6E8642D51BAB07DB00D6128E /* MIPathFromSVGPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E8642D41BAB07DB00D6128E /* MIPathFromSVGPath.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6E8642D71BAB10F100D6128E /* MIPathFromSwiftSVGPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8642D61BAB10F100D6128E /* MIPathFromSwiftSVGPath.swift */; settings = {ASSET_TAGS = (); }; };
+		6E8642DA1BAB685800D6128E /* MIJSONConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E8642D81BAB685800D6128E /* MIJSONConstants.h */; settings = {ASSET_TAGS = (); }; };
+		6E8642DB1BAB685800D6128E /* MIJSONConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8642D91BAB685800D6128E /* MIJSONConstants.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +110,11 @@
 		45E6ADAF1A9EAB0200386CFE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		45E6ADB21A9EAB0200386CFE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		45E6ADE61A9EABA700386CFE /* SVGElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGElement.swift; sourceTree = "<group>"; };
+		6E8642D41BAB07DB00D6128E /* MIPathFromSVGPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MIPathFromSVGPath.h; path = MovingImages/MIPathFromSVGPath.h; sourceTree = "<group>"; };
+		6E8642D61BAB10F100D6128E /* MIPathFromSwiftSVGPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MIPathFromSwiftSVGPath.swift; path = MovingImages/MIPathFromSwiftSVGPath.swift; sourceTree = SOURCE_ROOT; };
+		6E8642D81BAB685800D6128E /* MIJSONConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MIJSONConstants.h; path = MovingImages/MIJSONConstants.h; sourceTree = "<group>"; };
+		6E8642D91BAB685800D6128E /* MIJSONConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MIJSONConstants.m; path = MovingImages/MIJSONConstants.m; sourceTree = "<group>"; };
+		6EA9E2561BAAD5B600B7468C /* MIPathFromSVGPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MIPathFromSVGPath.m; path = MovingImages/MIPathFromSVGPath.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,6 +220,7 @@
 		45E6AD9B1A9EAB0200386CFE = {
 			isa = PBXGroup;
 			children = (
+				6EA9E2551BAAD52000B7468C /* MovingImages */,
 				45E6ADA61A9EAB0200386CFE /* SwiftSVG Demo */,
 				45C203301B8E0E8200966AC6 /* SwiftSVG */,
 				451958171AC22BDA00659E64 /* Frameworks */,
@@ -250,6 +261,18 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		6EA9E2551BAAD52000B7468C /* MovingImages */ = {
+			isa = PBXGroup;
+			children = (
+				6E8642D81BAB685800D6128E /* MIJSONConstants.h */,
+				6E8642D91BAB685800D6128E /* MIJSONConstants.m */,
+				6E8642D41BAB07DB00D6128E /* MIPathFromSVGPath.h */,
+				6EA9E2561BAAD5B600B7468C /* MIPathFromSVGPath.m */,
+				6E8642D61BAB10F100D6128E /* MIPathFromSwiftSVGPath.swift */,
+			);
+			name = MovingImages;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -257,7 +280,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E8642DA1BAB685800D6128E /* MIJSONConstants.h in Headers */,
 				45C203321B8E0E8200966AC6 /* SwiftSVG.h in Headers */,
+				6E8642D51BAB07DB00D6128E /* MIPathFromSVGPath.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,6 +392,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E8642D71BAB10F100D6128E /* MIPathFromSwiftSVGPath.swift in Sources */,
 				456363481B8EB63800FDE580 /* NSXML+Extensions.swift in Sources */,
 				45C203411B8E0E9400966AC6 /* SVGContainer+Optimisations.swift in Sources */,
 				45C2033D1B8E0E9400966AC6 /* SVGProcessor.swift in Sources */,
@@ -376,8 +402,10 @@
 				45C2033C1B8E0E9400966AC6 /* SVGElement+Extensions.swift in Sources */,
 				456363431B8EB58600FDE580 /* SVGValue.swift in Sources */,
 				45C2033F1B8E0E9400966AC6 /* TransformParser.swift in Sources */,
+				6E8642DB1BAB685800D6128E /* MIJSONConstants.m in Sources */,
 				45C203401B8E0E9400966AC6 /* Transform.swift in Sources */,
 				45C2033E1B8E0E9400966AC6 /* SVGRenderer.swift in Sources */,
+				6E4AFE281BAAF6A40015A1DE /* MIPathFromSVGPath.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,6 +449,7 @@
 		45C203381B8E0E8200966AC6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -439,6 +468,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.schwa.SwiftSVG;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -447,6 +477,7 @@
 		45C203391B8E0E8200966AC6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;

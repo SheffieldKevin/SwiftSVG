@@ -160,7 +160,7 @@ public class SVGProcessor {
             throw Error.expectedSVGElementNotFound
         }
 
-        let path = CGPathFromSVGPath(string)
+        let path = MICGPathFromSVGPath(string)
         xmlElement["d"] = nil
         return SVGPath(path: path)
     }
