@@ -48,6 +48,14 @@ public class SVGProcessor {
                 print(event)
             }
         }
+        if let document = document {
+            // document?.optimise()
+            document.printElement()
+            document.generateMovingImagesJSON()
+            if let jsonString = jsonObjectToString(document.movingImages) {
+                print(jsonString)
+            }
+        }
         return document
     }
 
@@ -93,7 +101,6 @@ public class SVGProcessor {
             }
             xmlElement.setChildren(nil)
         }
-
         return document
     }
 
@@ -122,8 +129,20 @@ public class SVGProcessor {
         }
 
         if let svgElement = svgElement {
-            svgElement.style = try processStyle(xmlElement, state: state)
+            svgElement.style = try processStyle(xmlElement, state: state, svgElement: svgElement)
             svgElement.transform = try processTransform(xmlElement, state: state)
+
+            if let theTransform = svgElement.transform?.asCGAffineTransform() {
+                let transformDict = [
+                    MIJSONKeyAffineTransformM11 : theTransform.a,
+                    MIJSONKeyAffineTransformM12 : theTransform.b,
+                    MIJSONKeyAffineTransformM21 : theTransform.c,
+                    MIJSONKeyAffineTransformM22 : theTransform.d,
+                    MIJSONKeyAffineTransformtX : theTransform.tx,
+                    MIJSONKeyAffineTransformtY : theTransform.ty
+                ]
+                svgElement.movingImages[MIJSONKeyAffineTransform] = transformDict
+            }
 
             if let id = xmlElement["id"]?.stringValue {
                 svgElement.id = id
@@ -131,8 +150,8 @@ public class SVGProcessor {
                     state.events.append(Event(severity: .warning, message: "Duplicate elements with id \"\(id)\"."))
                 }
                 state.elementsByID[id] = svgElement
-
                 xmlElement["id"] = nil
+                svgElement.movingImages[MIJSONKeyElementDebugName] = id
             }
 
             if xmlElement.attributes?.count > 0 {
@@ -160,44 +179,76 @@ public class SVGProcessor {
             throw Error.expectedSVGElementNotFound
         }
 
-        let path = MICGPathFromSVGPath(string)
+        var pathArray = NSMutableArray(capacity: 0)
+        let path = MICGPathFromSVGPath(string, pathArray: &pathArray)
         xmlElement["d"] = nil
-        return SVGPath(path: path)
+        let svgElement = SVGPath(path: path)
+        svgElement.movingImages[MIJSONKeyArrayOfPathElements] = pathArray
+        svgElement.movingImages[MIJSONKeyStartPoint] = [
+            MIJSONKeyX : 0.0,
+            MIJSONKeyY : 0.0
+        ]
+        return svgElement
     }
 
-    public func processStyle(xmlElement: NSXMLElement, state: State) throws -> SwiftGraphics.Style? {
+    public func processStyle(xmlElement: NSXMLElement,
+                                  state: State,
+                             svgElement: SVGElement) throws -> SwiftGraphics.Style? {
         var styleElements: [StyleElement] = []
 
         // http: //www.w3.org/TR/SVG/styling.html
 
+        var hasFill = false
+        var hasStroke = false
+        
         // Fill
         if let value = xmlElement["fill"]?.stringValue {
-            if let color = try stringToColor(value) {
-                let element = StyleElement.fillColor(color)
-                styleElements.append(element)
+            if let colorDict = try stringToColorDictionary(value) {
+                if let color = colorDictionaryToCGColor(colorDict) {
+                    let element = StyleElement.fillColor(color)
+                    styleElements.append(element)
+                }
+                svgElement.movingImages[MIJSONKeyFillColor] = colorDictToMIColorDict(colorDict)
             }
-
+            hasFill = true
             xmlElement["fill"] = nil
         }
 
         // Stroke
         if let value = xmlElement["stroke"]?.stringValue {
-            if let color = try stringToColor(value) {
-                let element = StyleElement.strokeColor(color)
-                styleElements.append(element)
+            if let colorDict = try stringToColorDictionary(value) {
+                svgElement.movingImages[MIJSONKeyStrokeColor] = colorDict
+                if let color = colorDictionaryToCGColor(colorDict) {
+                    let element = StyleElement.strokeColor(color)
+                    styleElements.append(element)
+                }
+                svgElement.movingImages[MIJSONKeyStrokeColor] = colorDictToMIColorDict(colorDict)
             }
-
+            hasStroke = true
             xmlElement["stroke"] = nil
         }
 
+        if hasFill {
+            if hasStroke {
+                svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathFillAndStrokeElement
+            }
+            else
+            {
+                svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathFillElement
+            }
+        }
+        else if hasStroke {
+            svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathStrokeElement
+        }
+        
         // Stroke-Width
         if let value = xmlElement["stroke-width"]?.stringValue {
 
             if let double = NSNumberFormatter().numberFromString(value)?.doubleValue {
                 let element = StyleElement.lineWidth(CGFloat(double))
                 styleElements.append(element)
+                svgElement.movingImages[MIJSONKeyLineWidth] = double
             }
-
             xmlElement["stroke-width"] = nil
         }
 
@@ -220,18 +271,38 @@ public class SVGProcessor {
         return transform
     }
 
+    func colorDictToMIColorDict(colorDict: [NSObject : AnyObject]) -> [NSObject : AnyObject] {
+        let mColorDict = [
+            MIJSONKeyRed : colorDict["red"]!,
+            MIJSONKeyGreen : colorDict["green"]!,
+            MIJSONKeyBlue : colorDict["blue"]!,
+            MIJSONKeyColorColorProfileName : kCGColorSpaceSRGB
+        ]
+        return mColorDict
+    }
 
     func stringToColor(string: String) throws -> CGColor? {
-
         if string == "none" {
             return nil
         }
 
-        let colorDictionary = try CColorConverter.sharedInstance().colorDictionaryWithString(string)
-        let color = CGColor.color(red: colorDictionary["red"] as! CGFloat , green: colorDictionary["green"] as! CGFloat, blue: colorDictionary["blue"] as! CGFloat, alpha: 1.0)
-        return color
+        if let colorDictionary = try stringToColorDictionary(string) {
+            return colorDictionaryToCGColor(colorDictionary)
+        }
+        return .None
     }
 
+    func stringToColorDictionary(string: String) throws -> [NSObject : AnyObject]? {
+        if string == "none" {
+            return nil
+        }
+        return try CColorConverter.sharedInstance().colorDictionaryWithString(string)
+    }
+
+    func colorDictionaryToCGColor(cDict: [NSObject : AnyObject]) -> CGColor? {
+        return CGColor.color(red: cDict["red"] as! CGFloat, green: cDict["green"] as! CGFloat,
+            blue: cDict["blue"] as! CGFloat, alpha: 1.0)
+    }
 }
 
 extension SVGProcessor.Event: CustomStringConvertible {

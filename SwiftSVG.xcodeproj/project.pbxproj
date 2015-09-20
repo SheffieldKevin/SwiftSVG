@@ -46,7 +46,7 @@
 		6E4AFE281BAAF6A40015A1DE /* MIPathFromSVGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA9E2561BAAD5B600B7468C /* MIPathFromSVGPath.m */; settings = {ASSET_TAGS = (); }; };
 		6E8642D51BAB07DB00D6128E /* MIPathFromSVGPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E8642D41BAB07DB00D6128E /* MIPathFromSVGPath.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6E8642D71BAB10F100D6128E /* MIPathFromSwiftSVGPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8642D61BAB10F100D6128E /* MIPathFromSwiftSVGPath.swift */; settings = {ASSET_TAGS = (); }; };
-		6E8642DA1BAB685800D6128E /* MIJSONConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E8642D81BAB685800D6128E /* MIJSONConstants.h */; settings = {ASSET_TAGS = (); }; };
+		6E8642DA1BAB685800D6128E /* MIJSONConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E8642D81BAB685800D6128E /* MIJSONConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6E8642DB1BAB685800D6128E /* MIJSONConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8642D91BAB685800D6128E /* MIJSONConstants.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
@@ -79,9 +79,9 @@
 
 /* Begin PBXFileReference section */
 		4513B7001AB745C1005649B9 /* Transform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transform.swift; sourceTree = "<group>"; };
-		451958181AC22BEE00659E64 /* SwiftGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftGraphics.framework; path = Carthage/Build/Mac/SwiftGraphics.framework; sourceTree = "<group>"; };
-		451958191AC22BEE00659E64 /* SwiftParsing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftParsing.framework; path = Carthage/Build/Mac/SwiftParsing.framework; sourceTree = "<group>"; };
-		4519581A1AC22BEE00659E64 /* SwiftUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUtilities.framework; path = Carthage/Build/Mac/SwiftUtilities.framework; sourceTree = "<group>"; };
+		451958181AC22BEE00659E64 /* SwiftGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftGraphics.framework; path = Carthage/Checkouts/SwiftGraphics/DerivedData/SwiftGraphics/Build/Products/Debug/SwiftGraphics.framework; sourceTree = "<group>"; };
+		451958191AC22BEE00659E64 /* SwiftParsing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftParsing.framework; path = Carthage/Checkouts/SwiftParsing/DerivedData/SwiftParsing/Build/Products/Debug/SwiftParsing.framework; sourceTree = "<group>"; };
+		4519581A1AC22BEE00659E64 /* SwiftUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUtilities.framework; path = Carthage/Checkouts/SwiftUtilities/DerivedData/SwiftUtilities/Build/Products/Debug/SwiftUtilities.framework; sourceTree = "<group>"; };
 		4522FA8A1AB4BA7E00DFEBA5 /* TransformParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformParser.swift; sourceTree = "<group>"; };
 		454734B11AB7A30300D877FD /* SVGValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGValue.swift; sourceTree = "<group>"; };
 		454799841ABF3CEB000B19B8 /* Apple_Swift_Logo.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Apple_Swift_Logo.svg; sourceTree = "<group>"; };
@@ -280,8 +280,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E8642DA1BAB685800D6128E /* MIJSONConstants.h in Headers */,
 				45C203321B8E0E8200966AC6 /* SwiftSVG.h in Headers */,
+				6E8642DA1BAB685800D6128E /* MIJSONConstants.h in Headers */,
 				6E8642D51BAB07DB00D6128E /* MIPathFromSVGPath.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

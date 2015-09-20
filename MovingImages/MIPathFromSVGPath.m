@@ -349,7 +349,7 @@ NSDictionary *MI_CreateMovetoDictionary(CGFloat x, CGFloat y)
 NSDictionary *MI_CreateLinetoDictionary(CGFloat x, CGFloat y)
 {
     return @{ MIJSONKeyElementType : MIJSONValuePathLine,
-              MIJSONKeyPoint : @{ MIJSONKeyX : @(x), MIJSONKeyY : @(y) } };
+              MIJSONKeyEndPoint : @{ MIJSONKeyX : @(x), MIJSONKeyY : @(y) } };
 }
 
 NSDictionary *MI_CreateCurveDictionary(CGFloat cp1x, CGFloat cp1y, CGFloat cp2x,
@@ -358,7 +358,7 @@ NSDictionary *MI_CreateCurveDictionary(CGFloat cp1x, CGFloat cp1y, CGFloat cp2x,
     return @{ MIJSONKeyElementType : MIJSONValuePathBezierCurve,
               MIJSONKeyControlPoint1 : @{ MIJSONKeyX : @(cp1x), MIJSONKeyY : @(cp1y) },
               MIJSONKeyControlPoint2 : @{ MIJSONKeyX : @(cp2x), MIJSONKeyY : @(cp2y) },
-              MIJSONKeyPoint : @{ MIJSONKeyX : @(x), MIJSONKeyY : @(y) } };
+              MIJSONKeyEndPoint : @{ MIJSONKeyX : @(x), MIJSONKeyY : @(y) } };
 }
 
 NSDictionary *MI_CreateQuadCurveDictionary(CGFloat cp1x, CGFloat cp1y,
@@ -366,7 +366,7 @@ NSDictionary *MI_CreateQuadCurveDictionary(CGFloat cp1x, CGFloat cp1y,
 {
     return @{ MIJSONKeyElementType : MIJSONValuePathQuadraticCurve,
               MIJSONKeyControlPoint1 : @{ MIJSONKeyX : @(cp1x), MIJSONKeyY : @(cp1y) },
-              MIJSONKeyPoint : @{ MIJSONKeyX : @(x), MIJSONKeyY : @(y) } };
+              MIJSONKeyEndPoint : @{ MIJSONKeyX : @(x), MIJSONKeyY : @(y) } };
 }
 
 // Convert path string as the ‘d’ attribute of SVG path to CGPath.

@@ -24,6 +24,18 @@ public protocol GroupNode: Node {
 
 // MARK: -
 
+public func jsonObjectToString(jsonObject: AnyObject) -> String? {
+    if NSJSONSerialization.isValidJSONObject(jsonObject) {
+        let data = try? NSJSONSerialization.dataWithJSONObject(jsonObject,
+            options: NSJSONWritingOptions.PrettyPrinted)
+        if let data = data,
+            let jsonString = NSString(data: data, encoding: NSUTF8StringEncoding) {
+                return jsonString as String
+        }
+    }
+    return nil
+}
+
 public class SVGElement: Node {
     public typealias ParentType = SVGContainer
     public weak var parent: SVGContainer? = nil
@@ -32,6 +44,56 @@ public class SVGElement: Node {
     public let uuid = NSUUID() // TODO: This is silly.
     public internal(set) var id: String? = nil
     public internal(set) var xmlElement: NSXMLElement? = nil
+    
+    public internal(set) var movingImages = [NSString : AnyObject]()
+    
+    var numParents: Int {
+        if let parent = parent {
+            return parent.numParents + 1
+        }
+        return 0
+    }
+
+    func printElement()
+    {
+        var description = "================================================================\n"
+        description += "Element with numParents: \(numParents) \n"
+        if let id = id {
+            description += "id: \(id). "
+        }
+        if let _ = self as? SVGContainer {
+            description += "base type: container. "
+            if let _ = self as? SVGGroup {
+                description += "type: group. "
+            }
+            if let _ = self as? SVGDocument {
+                description += "type: document. "
+            }
+        }
+
+        if let _ = self.style {
+            description += "Has style. "
+        }
+        
+        if let _ = self.transform {
+            description += "Has transform. "
+        }
+        
+        if let _ = self as? SVGPath {
+            description += "type: path.\n"
+        }
+
+/*
+        if let jsonString = jsonObjectToString(self.movingImages) {
+            description += jsonString
+        }
+*/
+        print(description)
+    }
+    
+    func generateMovingImagesJSON() -> [NSString : AnyObject] {
+        return self.movingImages
+    }
 }
 
 extension SVGElement: Equatable {
@@ -77,6 +139,19 @@ public class SVGContainer: SVGElement, GroupNode {
         children[index] = newElement
         newElement.parent = self
     }
+    
+    override func printElement() {
+        super.printElement()
+        self.children.forEach() { $0.printElement() }
+    }
+    
+    override func generateMovingImagesJSON() -> [NSString : AnyObject] {
+        var elementsArray = [AnyObject]()
+        self.children.forEach() { elementsArray.append($0.generateMovingImagesJSON()) }
+        self.movingImages[MIJSONKeyElementType] = MIJSONValueArrayOfElements
+        self.movingImages[MIJSONValueArrayOfElements] = elementsArray
+        return self.movingImages
+    }
 }
 
 // MARK: -
@@ -105,19 +180,13 @@ public class SVGDocument: SVGContainer {
 
 public class SVGGroup: SVGContainer {
 
-
-}
-
-// MARK: -
-
-public protocol SVGGeometryNode: Node {
-    var drawable: Drawable { get }
 }
 
 // MARK: -
 
 public class SVGPath: SVGElement, CGPathable {
     public internal(set) var cgpath: CGPath
+
     public init(path: CGPath) {
         self.cgpath = path
     }
