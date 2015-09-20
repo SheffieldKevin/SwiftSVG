@@ -147,7 +147,23 @@ public class SVGContainer: SVGElement, GroupNode {
     
     override func generateMovingImagesJSON() -> [NSString : AnyObject] {
         var elementsArray = [AnyObject]()
-        self.children.forEach() { elementsArray.append($0.generateMovingImagesJSON()) }
+        if self.children.count == 0 {
+            return self.movingImages
+        }
+        
+        if self.children.count == 1 {
+            if let svgPathElement = self.children[0] as? SVGPath {
+                if svgPathElement.style == Optional.None {
+                    self.movingImages[MIJSONKeyArrayOfPathElements] = svgPathElement.movingImages[MIJSONKeyArrayOfPathElements]
+                    self.movingImages[MIJSONKeyStartPoint] = svgPathElement.movingImages[MIJSONKeyStartPoint]
+                    return self.movingImages
+                }
+            }
+        }
+        
+        self.children.forEach() {
+            elementsArray.append($0.generateMovingImagesJSON())
+        }
         self.movingImages[MIJSONKeyElementType] = MIJSONValueArrayOfElements
         self.movingImages[MIJSONValueArrayOfElements] = elementsArray
         return self.movingImages

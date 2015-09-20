@@ -228,6 +228,9 @@ public class SVGProcessor {
             xmlElement["stroke"] = nil
         }
 
+        // Should not be assuming a path for these element types.
+        // Either this is a path element, or there is a child path element which
+        // would tell us that this is a path element.
         if hasFill {
             if hasStroke {
                 svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathFillAndStrokeElement
