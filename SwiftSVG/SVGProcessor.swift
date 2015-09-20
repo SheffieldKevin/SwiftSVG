@@ -299,6 +299,9 @@ public class SVGProcessor {
         if string == "none" {
             return nil
         }
+        if let colorWithName = SVGStandardColors.colorFromName(string) {
+            return try CColorConverter.sharedInstance().colorDictionaryWithString(colorWithName)
+        }
         return try CColorConverter.sharedInstance().colorDictionaryWithString(string)
     }
 

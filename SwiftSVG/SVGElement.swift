@@ -83,11 +83,6 @@ public class SVGElement: Node {
             description += "type: path.\n"
         }
 
-/*
-        if let jsonString = jsonObjectToString(self.movingImages) {
-            description += jsonString
-        }
-*/
         print(description)
     }
     

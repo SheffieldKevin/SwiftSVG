@@ -48,6 +48,7 @@
 		6E8642D71BAB10F100D6128E /* MIPathFromSwiftSVGPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8642D61BAB10F100D6128E /* MIPathFromSwiftSVGPath.swift */; settings = {ASSET_TAGS = (); }; };
 		6E8642DA1BAB685800D6128E /* MIJSONConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E8642D81BAB685800D6128E /* MIJSONConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6E8642DB1BAB685800D6128E /* MIJSONConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8642D91BAB685800D6128E /* MIJSONConstants.m */; settings = {ASSET_TAGS = (); }; };
+		6EABBDC61BAF600C004C5C9F /* SVGStandardColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EABBDC51BAF600C004C5C9F /* SVGStandardColors.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +116,7 @@
 		6E8642D81BAB685800D6128E /* MIJSONConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MIJSONConstants.h; path = MovingImages/MIJSONConstants.h; sourceTree = "<group>"; };
 		6E8642D91BAB685800D6128E /* MIJSONConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MIJSONConstants.m; path = MovingImages/MIJSONConstants.m; sourceTree = "<group>"; };
 		6EA9E2561BAAD5B600B7468C /* MIPathFromSVGPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MIPathFromSVGPath.m; path = MovingImages/MIPathFromSVGPath.m; sourceTree = "<group>"; };
+		6EABBDC51BAF600C004C5C9F /* SVGStandardColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGStandardColors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +215,7 @@
 				45C203261B8DA2E000966AC6 /* SVGContainer+Optimisations.swift */,
 				45C203311B8E0E8200966AC6 /* SwiftSVG.h */,
 				45C203331B8E0E8200966AC6 /* Info.plist */,
+				6EABBDC51BAF600C004C5C9F /* SVGStandardColors.swift */,
 			);
 			path = SwiftSVG;
 			sourceTree = "<group>";
@@ -400,6 +403,7 @@
 				4563634A1B8EC73000FDE580 /* Renderer.swift in Sources */,
 				456363451B8EB5BF00FDE580 /* SwiftGraphics+Extensions.swift in Sources */,
 				45C2033C1B8E0E9400966AC6 /* SVGElement+Extensions.swift in Sources */,
+				6EABBDC61BAF600C004C5C9F /* SVGStandardColors.swift in Sources */,
 				456363431B8EB58600FDE580 /* SVGValue.swift in Sources */,
 				45C2033F1B8E0E9400966AC6 /* TransformParser.swift in Sources */,
 				6E8642DB1BAB685800D6128E /* MIJSONConstants.m in Sources */,
