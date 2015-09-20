@@ -132,7 +132,7 @@ public class SVGProcessor {
             svgElement.style = try processStyle(xmlElement, state: state, svgElement: svgElement)
             svgElement.transform = try processTransform(xmlElement, state: state)
 
-            if let theTransform = svgElement.transform?.asCGAffineTransform() {
+            if let theTransform = svgElement.transform?.toCGAffineTransform() {
                 let transformDict = [
                     MIJSONKeyAffineTransformM11 : theTransform.a,
                     MIJSONKeyAffineTransformM12 : theTransform.b,
