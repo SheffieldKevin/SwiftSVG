@@ -16,16 +16,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-/*
-static CFStringRef kElementType = CFSTR("elementtype");
-static CFStringRef kPoint = CFSTR("point");
-static CFStringRef kX = CFSTR("x");
-static CFStringRef kY = CFSTR("y");
-static CFStringRef kSize = CFSTR("size");
-static CFStringRef kWidth = CFSTR("width");
-static CFStringRef kHeight = CFSTR("height");
-*/
-
 static bool mi_svg_isspace(char c) {
     return strchr(" \t\n\v\f\r", c) != 0;
 }
@@ -319,22 +309,6 @@ static CGPoint mi_svg_outControlPoint(CGMutablePathRef path)
     return CGPointMake(2 * pts[0].x - pts[1].x, 2 * pts[0].y - pts[1].y);
 }
 
-/*
- NSString *const MIJSONKeyElementType = @"elementtype";
- NSString *const MIJSONValuePathMoveTo = @"pathmoveto"; // { point }
- NSString *const MIJSONValuePathLine = @"pathlineto"; // { endpoint }
- NSString *const MIJSONValuePathBezierCurve = @"pathbeziercurve";
- NSString *const MIJSONValuePathQuadraticCurve = @"pathquadraticcurve";
- NSString *const MIJSONValuePathRectangle = @"pathrectangle"; // { rect }
- NSString *const MIJSONValuePathRoundedRectangle = @"pathroundedrectangle";
- NSString *const MIJSONValuePathOval = @"pathoval"; // { rect }
- NSString *const MIJSONValuePathArc = @"patharc";
- NSString *const MIJSONValuePathAddArcToPoint = @"pathaddarctopoint";
- NSString *const MIJSONValueCloseSubPath = @"pathclosesubpath"; // nil
- NSString *const MIJSONKeyControlPoint1 = @"controlpoint1"; // { x, y }
- NSString *const MIJSONKeyControlPoint2 = @"controlpoint2"; // { x, y }
-*/
-
 NSDictionary *MI_CreateCloseSubpathDictionary()
 {
     return @{ MIJSONKeyElementType : MIJSONValueCloseSubPath };
@@ -554,12 +528,3 @@ void MI_CGPathFromSVGPath(CGMutablePathRef path, NSMutableArray *pathArray,
         }
     }
 }
-
-/*
-CGMutablePathRef MICGPathFromSVGPath(const char *s)
-{
-    CGMutablePathRef path = CGPathCreateMutable();
-    MI_CGPathFromSVGPath(path, s);
-    return path;
-}
-*/
