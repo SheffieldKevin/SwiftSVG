@@ -146,12 +146,13 @@ public class SVGContainer: SVGElement, GroupNode {
             return self.movingImages
         }
         
+        var jsonDict = self.movingImages
         if self.children.count == 1 {
             if let svgPathElement = self.children[0] as? SVGPath {
                 if svgPathElement.style == Optional.None {
-                    self.movingImages[MIJSONKeyArrayOfPathElements] = svgPathElement.movingImages[MIJSONKeyArrayOfPathElements]
-                    self.movingImages[MIJSONKeyStartPoint] = svgPathElement.movingImages[MIJSONKeyStartPoint]
-                    return self.movingImages
+                    jsonDict[MIJSONKeyArrayOfPathElements] = svgPathElement.movingImages[MIJSONKeyArrayOfPathElements]
+                    jsonDict[MIJSONKeyStartPoint] = svgPathElement.movingImages[MIJSONKeyStartPoint]
+                    return jsonDict
                 }
             }
         }
@@ -159,9 +160,9 @@ public class SVGContainer: SVGElement, GroupNode {
         self.children.forEach() {
             elementsArray.append($0.generateMovingImagesJSON())
         }
-        self.movingImages[MIJSONKeyElementType] = MIJSONValueArrayOfElements
-        self.movingImages[MIJSONValueArrayOfElements] = elementsArray
-        return self.movingImages
+        jsonDict[MIJSONKeyElementType] = MIJSONValueArrayOfElements
+        jsonDict[MIJSONValueArrayOfElements] = elementsArray
+        return jsonDict
     }
 }
 

@@ -51,8 +51,8 @@ public class SVGProcessor {
         if let document = document {
             // document?.optimise()
             document.printElement()
-            document.generateMovingImagesJSON()
-            if let jsonString = jsonObjectToString(document.movingImages) {
+            let jsonObject = document.generateMovingImagesJSON()
+            if let jsonString = jsonObjectToString(jsonObject) {
                 print(jsonString)
             }
         }
