@@ -24,18 +24,6 @@ public protocol GroupNode: Node {
 
 // MARK: -
 
-public func jsonObjectToString(jsonObject: AnyObject) -> String? {
-    if NSJSONSerialization.isValidJSONObject(jsonObject) {
-        let data = try? NSJSONSerialization.dataWithJSONObject(jsonObject,
-            options: NSJSONWritingOptions.PrettyPrinted)
-        if let data = data,
-            let jsonString = NSString(data: data, encoding: NSUTF8StringEncoding) {
-                return jsonString as String
-        }
-    }
-    return nil
-}
-
 public class SVGElement: Node {
     public typealias ParentType = SVGContainer
     public weak var parent: SVGContainer? = nil
@@ -86,7 +74,7 @@ public class SVGElement: Node {
         print(description)
     }
     
-    func generateMovingImagesJSON() -> [NSString : AnyObject] {
+    public func generateMovingImagesJSON() -> [NSString : AnyObject] {
         return self.movingImages
     }
 }
@@ -140,7 +128,7 @@ public class SVGContainer: SVGElement, GroupNode {
         self.children.forEach() { $0.printElement() }
     }
     
-    override func generateMovingImagesJSON() -> [NSString : AnyObject] {
+    override public func generateMovingImagesJSON() -> [NSString : AnyObject] {
         var elementsArray = [AnyObject]()
         if self.children.count == 0 {
             return self.movingImages

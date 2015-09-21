@@ -110,6 +110,12 @@ class ViewController: NSViewController {
 //        try svgRenderer.renderDocument(svgDocument!, renderer: renderer)
 //        print(renderer.source)
 
+        guard let jsonObject = svgDocument?.generateMovingImagesJSON(),
+                let fileURL = document.fileURL else {
+            return
+        }
+        
+        writeMovingImagesJSON(jsonObject, sourceFileURL: fileURL)
     }
 
 
