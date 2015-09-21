@@ -240,9 +240,6 @@ public class SVGProcessor {
 
         // http: //www.w3.org/TR/SVG/styling.html
 
-        var hasFill = false
-        var hasStroke = false
-        
         // Fill
         if let value = xmlElement["fill"]?.stringValue {
             if let colorDict = try stringToColorDictionary(value) {
@@ -251,7 +248,6 @@ public class SVGProcessor {
                     styleElements.append(element)
                 }
                 svgElement.movingImages[MIJSONKeyFillColor] = colorDictToMIColorDict(colorDict)
-                hasFill = true
             }
             xmlElement["fill"] = nil
         }
@@ -265,13 +261,10 @@ public class SVGProcessor {
                     styleElements.append(element)
                 }
                 svgElement.movingImages[MIJSONKeyStrokeColor] = colorDictToMIColorDict(colorDict)
-                hasStroke = true
             }
             xmlElement["stroke"] = nil
         }
 
-        SVGProcessor.updateMovingImagesElementType(svgElement, hasStroke: hasStroke, hasFill: hasFill)
-    
         // Stroke-Width
         if let value = xmlElement["stroke-width"]?.stringValue {
 
@@ -294,6 +287,7 @@ public class SVGProcessor {
             xmlElement["stroke-miterlimit"] = nil
         }
 
+        SVGProcessor.updateMovingImagesElementType(svgElement)
         //
         if styleElements.count > 0 {
             return SwiftGraphics.Style(elements: styleElements)
@@ -369,28 +363,40 @@ extension SVGProcessor.Event: CustomStringConvertible {
 //! MARK MovingImages specific customization of SVGProcessor.
 
 extension SVGProcessor {
-    class func updateMovingImagesElementType(svgElement: SVGElement,
-        hasStroke: Bool, hasFill: Bool) {
-        // Should not be assuming a path for these element types.
-        // Either this is a path element, or there is a child path element which
-        // would tell us that this is a path element.
+    private class final func updateStrokeOrFillType(svgElement: SVGElement,
+        strokeElementKey: NSString, fillElementKey: NSString) {
+        let hasStroke = svgElement.hasProperty(MIJSONKeyStrokeColor)
+        let hasFill = svgElement.hasProperty(MIJSONKeyFillColor)
         
-            
+        if hasStroke {
+            if hasFill {
+                var element1 = svgElement.movingImages
+                element1[MIJSONKeyElementType] = fillElementKey
+                var element2 = svgElement.movingImages
+                element2[MIJSONKeyElementType] = strokeElementKey
+                svgElement.movingImages = [
+                    MIJSONKeyElementType : MIJSONValueArrayOfElements,
+                    MIJSONValueArrayOfElements : [ element1, element2 ]
+                ]
+            }
+            else {
+                svgElement.movingImages[MIJSONKeyElementType] = strokeElementKey
+            }
+        }
+        else if hasFill {
+            svgElement.movingImages[MIJSONKeyElementType] = fillElementKey
+        }
+    }
+
+    internal class func updateMovingImagesElementType(svgElement: SVGElement) {
         if svgElement.movingImages[MIJSONKeyElementType] == nil {
-            if let _ = svgElement as? SVGCircle {
-                svgElement.movingImages[MIJSONKeyElementType] = hasFill ? MIJSONValueOvalFillElement : MIJSONValueOvalStrokeElement
-            }
-            else if hasFill {
-                if hasStroke {
-                    svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathFillAndStrokeElement
-                }
-                else
-                {
-                    svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathFillElement
-                }
-            }
-            else if hasStroke {
-                svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathStrokeElement
+            switch svgElement {
+                case let svgCircle as SVGCircle:
+                    updateStrokeOrFillType(svgCircle, strokeElementKey: MIJSONValueOvalStrokeElement, fillElementKey: MIJSONValueOvalFillElement)
+                case let path as SVGPath:
+                     path.movingImages[MIJSONKeyElementType] = path.getPathElementType()
+                default:
+                    return
             }
         }
     }

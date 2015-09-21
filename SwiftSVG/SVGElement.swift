@@ -92,6 +92,30 @@ extension SVGElement: Hashable {
     }
 }
 
+// MARK: MovingImages customizations.
+
+extension SVGElement {
+    final func hasProperty(property: NSString) -> Bool {
+        if let _ = self.movingImages[property] {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+
+    // This is on SVGElement and not SVGPath because a group with styles set
+    // might contain a single path child.
+    final func getPathElementType() -> String? {
+        let hasStroke = self.hasProperty(MIJSONKeyStrokeColor)
+        let hasFill = self.hasProperty(MIJSONKeyFillColor)
+        guard hasStroke || hasFill else {
+            return nil
+        }
+        return hasFill ? (hasStroke ? MIJSONValuePathFillAndStrokeElement : MIJSONValuePathFillElement) : MIJSONValuePathStrokeElement
+    }
+}
+
 // MARK: -
 
 public class SVGContainer: SVGElement, GroupNode {
@@ -140,6 +164,9 @@ public class SVGContainer: SVGElement, GroupNode {
                 if svgPathElement.style == Optional.None {
                     jsonDict[MIJSONKeyArrayOfPathElements] = svgPathElement.movingImages[MIJSONKeyArrayOfPathElements]
                     jsonDict[MIJSONKeyStartPoint] = svgPathElement.movingImages[MIJSONKeyStartPoint]
+                    if jsonDict[MIJSONKeyElementType] == nil {
+                        jsonDict[MIJSONKeyElementType] = self.getPathElementType()
+                    }
                     return jsonDict
                 }
             }
@@ -191,6 +218,7 @@ public class SVGPath: SVGElement, CGPathable {
         self.cgpath = path
     }
 }
+
 
 public class SVGLine: SVGElement {
     public var startPoint: CGPoint!
