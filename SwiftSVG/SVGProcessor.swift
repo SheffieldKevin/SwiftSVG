@@ -203,6 +203,11 @@ public class SVGProcessor {
         let x2 = try SVGProcessor.stringToCGFloat(xmlElement["x2"]?.stringValue)
         let y2 = try SVGProcessor.stringToCGFloat(xmlElement["y2"]?.stringValue)
 
+        xmlElement["x1"] = nil
+        xmlElement["y1"] = nil
+        xmlElement["x2"] = nil
+        xmlElement["y2"] = nil
+        
         let startPoint = CGPoint(x: x1, y: y1)
         let endPoint = CGPoint(x: x2, y: y2)
         
@@ -249,25 +254,8 @@ public class SVGProcessor {
             xmlElement["stroke"] = nil
         }
 
-        // Should not be assuming a path for these element types.
-        // Either this is a path element, or there is a child path element which
-        // would tell us that this is a path element.
-        
-        if svgElement.movingImages[MIJSONKeyElementType] == nil {
-            if hasFill {
-                if hasStroke {
-                    svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathFillAndStrokeElement
-                }
-                else
-                {
-                    svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathFillElement
-                }
-            }
-            else if hasStroke {
-                svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathStrokeElement
-            }
-        }
-
+        SVGProcessor.updateMovingImagesElementType(svgElement, hasStroke: hasStroke, hasFill: hasFill)
+    
         // Stroke-Width
         if let value = xmlElement["stroke-width"]?.stringValue {
 
@@ -277,6 +265,17 @@ public class SVGProcessor {
                 svgElement.movingImages[MIJSONKeyLineWidth] = double
             }
             xmlElement["stroke-width"] = nil
+        }
+
+        // Stroke-Miterlimit
+        if let value = xmlElement["stroke-miterlimit"]?.stringValue {
+            
+            if let double = NSNumberFormatter().numberFromString(value)?.doubleValue {
+                let element = StyleElement.miterLimit(CGFloat(double))
+                styleElements.append(element)
+                svgElement.movingImages[MIJSONKeyMiter] = double
+            }
+            xmlElement["stroke-miterlimit"] = nil
         }
 
         //
@@ -351,4 +350,28 @@ extension SVGProcessor.Event: CustomStringConvertible {
     }
 }
 
+//! MARK MovingImages specific customization of SVGProcessor.
 
+extension SVGProcessor {
+    class func updateMovingImagesElementType(svgElement: SVGElement,
+        hasStroke: Bool, hasFill: Bool) {
+        // Should not be assuming a path for these element types.
+        // Either this is a path element, or there is a child path element which
+        // would tell us that this is a path element.
+        
+        if svgElement.movingImages[MIJSONKeyElementType] == nil {
+            if hasFill {
+                if hasStroke {
+                    svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathFillAndStrokeElement
+                }
+                else
+                {
+                    svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathFillElement
+                }
+            }
+            else if hasStroke {
+                svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathStrokeElement
+            }
+        }
+    }
+}
