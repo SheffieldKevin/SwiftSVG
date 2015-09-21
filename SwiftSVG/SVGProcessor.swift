@@ -91,16 +91,17 @@ public class SVGProcessor {
             xmlElement["viewBox"] = nil
         }
 
-        // Children
-        if let nodes = xmlElement.children as? [NSXMLElement] {
-            for node in nodes {
-                if let svgElement = try self.processSVGElement(node, state: state) {
-                    svgElement.parent = document
-                    document.children.append(svgElement)
-                }
-            }
-            xmlElement.setChildren(nil)
+        guard let nodes = xmlElement.children else {
+            return document
         }
+
+        for node in nodes where node is NSXMLElement {
+            if let svgElement = try self.processSVGElement(node as! NSXMLElement, state: state) {
+                svgElement.parent = document
+                document.children.append(svgElement)
+            }
+        }
+        xmlElement.setChildren(nil)
         return document
     }
 
