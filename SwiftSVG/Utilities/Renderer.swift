@@ -16,6 +16,7 @@ public protocol Renderer: AnyObject {
     func addPath(path:CGPath)
     func fillPath()
     func drawPath(mode: CGPathDrawingMode)
+    func drawLine(startPoint: CGPoint, endPoint: CGPoint)
 
     var strokeColor:CGColor? { get set }
     var fillColor:CGColor? { get set }
@@ -62,12 +63,16 @@ extension CGContext: Renderer {
         CGContextDrawPath(self, mode)
     }
 
-
+    public func drawLine(startPoint: CGPoint, endPoint: CGPoint) {
+        CGContextBeginPath(self)
+        CGContextMoveToPoint(self, startPoint.x, startPoint.y)
+        CGContextAddLineToPoint(self, endPoint.x, endPoint.y)
+        CGContextClosePath(self)
+        CGContextStrokePath(self)
+    }
 }
 
 // MARK: -
-
-
 
 public class SourceCodeRenderer: Renderer {
     public internal(set) var source = ""
@@ -94,6 +99,14 @@ public class SourceCodeRenderer: Renderer {
 
     public func drawPath(mode: CGPathDrawingMode) {
         source += "CGContextDrawPath(context, TODO)\n"
+    }
+
+    public func drawLine(startPoint: CGPoint, endPoint: CGPoint) {
+        source += "CGContextBeginPath(context)\n" +
+                  "CGContextMoveToPoint(context, TODO)\n" +
+                  "CGContextAddLineToPoint(context, TODO, TODO)\n" +
+                  "CGContextClosePath(context)\n" +
+                  "CGContextStrokePath(context)\n"
     }
 
     public var strokeColor:CGColor? {

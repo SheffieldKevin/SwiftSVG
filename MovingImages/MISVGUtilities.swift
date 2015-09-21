@@ -10,10 +10,11 @@ import Foundation
 
 let defaultSaveFolder = "~/Desktop/Current/swiftsvg"
 
-public func jsonObjectToString(jsonObject: AnyObject) -> String? {
+func jsonObjectToString(jsonObject: AnyObject) -> String? {
     if NSJSONSerialization.isValidJSONObject(jsonObject) {
         let data = try? NSJSONSerialization.dataWithJSONObject(jsonObject,
             options: NSJSONWritingOptions.PrettyPrinted)
+            //            options: NSJSONWritingOptions(rawValue: 0))
         if let data = data,
             let jsonString = NSString(data: data, encoding: NSUTF8StringEncoding) {
                 return jsonString as String
@@ -46,4 +47,18 @@ public func writeMovingImagesJSON(jsonObject: [NSString : AnyObject], sourceFile
     catch {
         print("Failed to save file: \(saveFolder)/\(newName)")
     }
+}
+
+public func makePointDictionary(point: CGPoint) -> [NSString : AnyObject] {
+    return [
+        MIJSONKeyX : point.x,
+        MIJSONKeyY : point.y
+    ]
+}
+
+public func makeLineDictionary(startPoint: CGPoint, endPoint: CGPoint) -> [NSString : AnyObject] {
+    return [
+        MIJSONKeyStartPoint : makePointDictionary(startPoint),
+        MIJSONKeyEndPoint : makePointDictionary(endPoint)
+    ]
 }

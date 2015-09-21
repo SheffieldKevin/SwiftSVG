@@ -57,6 +57,8 @@ public class SVGRenderer {
                 try renderDocument(svgDocument, renderer: renderer)
             case let svgGroup as SVGGroup:
                 try renderGroup(svgGroup, renderer: renderer)
+            case let svgLine as SVGLine:
+                renderer.drawLine(svgLine.startPoint, endPoint: svgLine.endPoint)
             case let pathable as CGPathable:
                 let path = pathable.cgpath
                 let mode = CGPathDrawingMode(strokeColor: renderer.strokeColor, fillColor: renderer.fillColor)

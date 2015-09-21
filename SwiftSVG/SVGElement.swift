@@ -191,3 +191,13 @@ public class SVGPath: SVGElement, CGPathable {
         self.cgpath = path
     }
 }
+
+public class SVGLine: SVGElement {
+    public var startPoint: CGPoint!
+    public var endPoint: CGPoint!
+    
+    public init(startPoint: CGPoint, endPoint: CGPoint) {
+        self.startPoint = startPoint
+        self.endPoint = endPoint
+    }
+}

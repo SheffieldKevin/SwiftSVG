@@ -116,6 +116,8 @@ public class SVGProcessor {
                 svgElement = try processSVGGroup(xmlElement, state: state)
             case "path":
                 svgElement = try processSVGPath(xmlElement, state: state)
+            case "line":
+                svgElement = try processSVGLine(xmlElement, state: state)
             case "title":
                 state.document!.title = xmlElement.stringValue as String?
             case "desc":
@@ -181,10 +183,32 @@ public class SVGProcessor {
         xmlElement["d"] = nil
         let svgElement = SVGPath(path: path)
         svgElement.movingImages[MIJSONKeyArrayOfPathElements] = pathArray
-        svgElement.movingImages[MIJSONKeyStartPoint] = [
-            MIJSONKeyX : 0.0,
-            MIJSONKeyY : 0.0
-        ]
+        svgElement.movingImages[MIJSONKeyStartPoint] = makePointDictionary(CGPoint(x: 0.0, y: 0.0))
+        return svgElement
+    }
+
+    private class func stringToCGFloat(string: String?) throws -> CGFloat {
+        guard let string = string else {
+            throw Error.expectedSVGElementNotFound
+        }
+        guard let value = NSNumberFormatter().numberFromString(string)?.doubleValue else {
+            throw Error.corruptXML
+        }
+        return CGFloat(value)
+    }
+    
+    public func processSVGLine(xmlElement: NSXMLElement, state: State) throws -> SVGLine? {
+        let x1 = try SVGProcessor.stringToCGFloat(xmlElement["x1"]?.stringValue)
+        let y1 = try SVGProcessor.stringToCGFloat(xmlElement["y1"]?.stringValue)
+        let x2 = try SVGProcessor.stringToCGFloat(xmlElement["x2"]?.stringValue)
+        let y2 = try SVGProcessor.stringToCGFloat(xmlElement["y2"]?.stringValue)
+
+        let startPoint = CGPoint(x: x1, y: y1)
+        let endPoint = CGPoint(x: x2, y: y2)
+        
+        let svgElement = SVGLine(startPoint: startPoint, endPoint: endPoint)
+        svgElement.movingImages[MIJSONKeyLine] = makeLineDictionary(startPoint, endPoint: endPoint)
+        svgElement.movingImages[MIJSONKeyElementType] = MIJSONValueLineElement
         return svgElement
     }
 
@@ -228,19 +252,22 @@ public class SVGProcessor {
         // Should not be assuming a path for these element types.
         // Either this is a path element, or there is a child path element which
         // would tell us that this is a path element.
-        if hasFill {
-            if hasStroke {
-                svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathFillAndStrokeElement
-            }
-            else
-            {
-                svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathFillElement
-            }
-        }
-        else if hasStroke {
-            svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathStrokeElement
-        }
         
+        if svgElement.movingImages[MIJSONKeyElementType] == nil {
+            if hasFill {
+                if hasStroke {
+                    svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathFillAndStrokeElement
+                }
+                else
+                {
+                    svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathFillElement
+                }
+            }
+            else if hasStroke {
+                svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathStrokeElement
+            }
+        }
+
         // Stroke-Width
         if let value = xmlElement["stroke-width"]?.stringValue {
 
@@ -251,7 +278,6 @@ public class SVGProcessor {
             }
             xmlElement["stroke-width"] = nil
         }
-
 
         //
         if styleElements.count > 0 {
