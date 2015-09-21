@@ -201,3 +201,19 @@ public class SVGLine: SVGElement {
         self.endPoint = endPoint
     }
 }
+
+public class SVGCircle: SVGElement {
+    public var center: CGPoint!
+    public var radius: CGFloat!
+
+    public var rect: CGRect {
+        let rectSize = CGSize(width: 2.0 * radius, height: 2.0 * radius)
+        let rectOrigin = CGPoint(x: center.x - radius, y: center.y - radius)
+        return CGRect(origin: rectOrigin, size: rectSize)
+    }
+
+    public init(center: CGPoint, radius: CGFloat) {
+        self.center = center
+        self.radius = radius
+    }
+}

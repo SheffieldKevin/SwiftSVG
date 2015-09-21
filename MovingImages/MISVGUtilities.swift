@@ -62,3 +62,16 @@ public func makeLineDictionary(startPoint: CGPoint, endPoint: CGPoint) -> [NSStr
         MIJSONKeyEndPoint : makePointDictionary(endPoint)
     ]
 }
+
+public func makeRectDictionary(rectangle: CGRect) -> [NSString : AnyObject] {
+    return [
+        MIJSONKeySize : [
+            MIJSONKeyWidth : rectangle.size.width,
+            MIJSONKeyHeight : rectangle.size.height,
+        ],
+        MIJSONKeyOrigin : [
+            MIJSONKeyX : rectangle.origin.x,
+            MIJSONKeyY : rectangle.origin.y,
+        ]
+    ]
+}

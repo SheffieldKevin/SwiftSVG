@@ -118,6 +118,8 @@ public class SVGProcessor {
                 svgElement = try processSVGPath(xmlElement, state: state)
             case "line":
                 svgElement = try processSVGLine(xmlElement, state: state)
+            case "circle":
+                svgElement = try processSVGCircle(xmlElement, state: state)
             case "title":
                 state.document!.title = xmlElement.stringValue as String?
             case "desc":
@@ -217,6 +219,20 @@ public class SVGProcessor {
         return svgElement
     }
 
+    public func processSVGCircle(xmlElement: NSXMLElement, state: State) throws -> SVGCircle? {
+        let cx = try SVGProcessor.stringToCGFloat(xmlElement["cx"]?.stringValue)
+        let cy = try SVGProcessor.stringToCGFloat(xmlElement["cy"]?.stringValue)
+        let r = try SVGProcessor.stringToCGFloat(xmlElement["r"]?.stringValue)
+
+        xmlElement["cx"] = nil
+        xmlElement["cy"] = nil
+        xmlElement["r"] = nil
+        
+        let svgElement = SVGCircle(center: CGPoint(x: cx, y: cy), radius: r)
+        svgElement.movingImages[MIJSONKeyRect] = makeRectDictionary(svgElement.rect)
+        return svgElement
+    }
+
     public func processStyle(xmlElement: NSXMLElement,
                                   state: State,
                              svgElement: SVGElement) throws -> SwiftGraphics.Style? {
@@ -235,8 +251,8 @@ public class SVGProcessor {
                     styleElements.append(element)
                 }
                 svgElement.movingImages[MIJSONKeyFillColor] = colorDictToMIColorDict(colorDict)
+                hasFill = true
             }
-            hasFill = true
             xmlElement["fill"] = nil
         }
 
@@ -249,8 +265,8 @@ public class SVGProcessor {
                     styleElements.append(element)
                 }
                 svgElement.movingImages[MIJSONKeyStrokeColor] = colorDictToMIColorDict(colorDict)
+                hasStroke = true
             }
-            hasStroke = true
             xmlElement["stroke"] = nil
         }
 
@@ -359,8 +375,12 @@ extension SVGProcessor {
         // Either this is a path element, or there is a child path element which
         // would tell us that this is a path element.
         
+            
         if svgElement.movingImages[MIJSONKeyElementType] == nil {
-            if hasFill {
+            if let _ = svgElement as? SVGCircle {
+                svgElement.movingImages[MIJSONKeyElementType] = hasFill ? MIJSONValueOvalFillElement : MIJSONValueOvalStrokeElement
+            }
+            else if hasFill {
                 if hasStroke {
                     svgElement.movingImages[MIJSONKeyElementType] = MIJSONValuePathFillAndStrokeElement
                 }

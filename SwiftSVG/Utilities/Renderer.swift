@@ -17,6 +17,8 @@ public protocol Renderer: AnyObject {
     func fillPath()
     func drawPath(mode: CGPathDrawingMode)
     func drawLine(startPoint: CGPoint, endPoint: CGPoint)
+    func fillCircle(rect: CGRect)
+    func strokeCircle(rect: CGRect)
 
     var strokeColor:CGColor? { get set }
     var fillColor:CGColor? { get set }
@@ -58,6 +60,13 @@ extension CGContext: Renderer {
         CGContextFillPath(self)
     }
 
+    public func fillCircle(rect: CGRect) {
+        CGContextFillEllipseInRect(self, rect)
+    }
+
+    public func strokeCircle(rect: CGRect) {
+        CGContextStrokeEllipseInRect(self, rect)
+    }
 
     public func drawPath(mode: CGPathDrawingMode) {
         CGContextDrawPath(self, mode)
@@ -107,6 +116,14 @@ public class SourceCodeRenderer: Renderer {
                   "CGContextAddLineToPoint(context, TODO, TODO)\n" +
                   "CGContextClosePath(context)\n" +
                   "CGContextStrokePath(context)\n"
+    }
+
+    public func fillCircle(rect: CGRect) {
+        source += "CGContextFillEllipseInRect(context, TODO)\n"
+    }
+    
+    public func strokeCircle(rect: CGRect) {
+        source += "CGContextStrokeEllipseInRect(context, TODO)\n"
     }
 
     public var strokeColor:CGColor? {
