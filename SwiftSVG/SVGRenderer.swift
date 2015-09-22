@@ -48,8 +48,13 @@ public class SVGRenderer {
         }
 
         if let transform = svgElement.transform {
+            renderer.pushGraphicsState()
             renderer.concatTransform(transform.toCGAffineTransform())
-            // TODO: Why are not cleanign this up at end of function?
+        }
+        defer {
+            if let _ = svgElement.transform {
+                renderer.restoreGraphicsState()
+            }
         }
 
         switch svgElement {

@@ -80,7 +80,13 @@ class ViewController: NSViewController {
             if self.selectedElements.contains(svgElement) {
 
                 if let transform = svgElement.transform {
+                    renderer.pushGraphicsState()
                     renderer.concatCTM(transform.toCGAffineTransform())
+                }
+                defer {
+                    if let _ = svgElement.transform {
+                        renderer.restoreGraphicsState()
+                    }
                 }
 
                 let path = try self.svgView.svgRenderer.pathForElement(svgElement)

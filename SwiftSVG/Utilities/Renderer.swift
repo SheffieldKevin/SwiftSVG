@@ -12,6 +12,8 @@ public protocol Renderer: AnyObject {
 
     func concatTransform(transform:CGAffineTransform)
     func concatCTM(transform:CGAffineTransform)
+    func pushGraphicsState()
+    func restoreGraphicsState()
 
     func addPath(path:CGPath)
     func fillPath()
@@ -19,6 +21,8 @@ public protocol Renderer: AnyObject {
     func drawLine(startPoint: CGPoint, endPoint: CGPoint)
     func fillCircle(rect: CGRect)
     func strokeCircle(rect: CGRect)
+    func fillRect(rect: CGRect)
+    func strokeRect(rect: CGRect)
 
     var strokeColor:CGColor? { get set }
     var fillColor:CGColor? { get set }
@@ -50,6 +54,14 @@ extension CGContext: Renderer {
 
     public func concatCTM(transform:CGAffineTransform) {
         CGContextConcatCTM(self, transform)
+    }
+
+    public func pushGraphicsState() {
+        CGContextSaveGState(self)
+    }
+
+    public func restoreGraphicsState() {
+        CGContextRestoreGState(self)
     }
 
     public func addPath(path:CGPath) {
@@ -96,6 +108,14 @@ public class SourceCodeRenderer: Renderer {
 
     public func concatCTM(transform:CGAffineTransform) {
         source += "CGContextConcatCTM(context, \(transform.toSource()))\n"
+    }
+
+    public func pushGraphicsState() {
+        source += "CGContextSaveGState(context)\n"
+    }
+    
+    public func restoreGraphicsState() {
+        source += "CGContextRestoreGState(self)\n"
     }
 
     public func addPath(path:CGPath) {
