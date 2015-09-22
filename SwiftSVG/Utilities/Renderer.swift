@@ -23,7 +23,8 @@ public protocol Renderer: AnyObject {
     func strokeCircle(rect: CGRect)
     func fillRect(rect: CGRect)
     func strokeRect(rect: CGRect)
-
+    func fillPolygon(points: [CGPoint])
+    func strokePolygon(points: [CGPoint])
     var strokeColor:CGColor? { get set }
     var fillColor:CGColor? { get set }
 
@@ -86,6 +87,20 @@ extension CGContext: Renderer {
     
     public func strokeRect(rect: CGRect) {
         CGContextStrokeRect(self, rect)
+    }
+
+    public func fillPolygon(points: [CGPoint]) {
+        var thePoints = points
+        CGContextAddLines(self, &thePoints, thePoints.count)
+        CGContextClosePath(self)
+        CGContextFillPath(self)
+    }
+    
+    public func strokePolygon(points: [CGPoint]) {
+        var thePoints = points
+        CGContextAddLines(self, &thePoints, thePoints.count)
+        CGContextClosePath(self)
+        CGContextStrokePath(self)
     }
 
     public func drawPath(mode: CGPathDrawingMode) {
@@ -160,6 +175,18 @@ public class SourceCodeRenderer: Renderer {
     
     public func strokeRect(rect: CGRect) {
         source += "CGContextStrokeRect(context, TODO)\n"
+    }
+
+    public func fillPolygon(points: [CGPoint]) {
+        source += "CGContextAddLines(self, TODO)\n" +
+                  "CGContextClosePath(self)\n" +
+                  "CGContextFillPath(self)\n"
+    }
+    
+    public func strokePolygon(points: [CGPoint]) {
+        source += "CGContextAddLines(self, TODO)\n" +
+                  "CGContextClosePath(self)\n" +
+                  "CGContextStrokePath(self)\n"
     }
 
     public var strokeColor:CGColor? {

@@ -77,6 +77,13 @@ public class SVGRenderer {
                 if let _ = svgRect.style?.strokeColor {
                     renderer.strokeRect(svgRect.rect)
                 }
+            case let svgPolygon as SVGPolygon:
+                if let _ = svgPolygon.style?.fillColor {
+                    renderer.fillPolygon(svgPolygon.points)
+                }
+                if let _ = svgPolygon.style?.strokeColor {
+                    renderer.strokePolygon(svgPolygon.points)
+                }
             case let pathable as CGPathable:
                 let path = pathable.cgpath
                 let mode = CGPathDrawingMode(strokeColor: renderer.strokeColor, fillColor: renderer.fillColor)

@@ -126,6 +126,8 @@ public class SVGProcessor {
                 svgElement = try processSVGCircle(xmlElement, state: state)
             case "rect":
                 svgElement = try processSVGRect(xmlElement, state: state)
+            case "polygon":
+                svgElement = try processSVGPolygon(xmlElement, state:state)
             case "title":
                 state.document!.title = xmlElement.stringValue as String?
             case "desc":
@@ -215,6 +217,46 @@ public class SVGProcessor {
         return CGFloat(value)
     }
     
+    private class func stringToCGFloat(string: String?, defaultVal: CGFloat) throws -> CGFloat {
+        guard let string = string else {
+            return defaultVal
+        }
+
+        guard let value = NSNumberFormatter().numberFromString(string)?.doubleValue else {
+            throw Error.corruptXML
+        }
+        return CGFloat(value)
+    }
+    
+    public func processSVGPolygon(xmlElement: NSXMLElement, state: State) throws -> SVGPolygon? {
+        guard let pointsString = xmlElement["points"]?.stringValue else {
+            throw Error.expectedSVGElementNotFound
+        }
+        let points = try parseListOfPoints(pointsString)
+        
+        xmlElement["points"] = nil
+        let svgElement = SVGPolygon(points: points)
+        svgElement.movingImages[MIJSONKeyStartPoint] = [
+            MIJSONKeyX : points[0].x,
+            MIJSONKeyY : points[0].y
+        ]
+
+        var pathArray = points[1..<points.count].map() {
+            return [
+                MIJSONKeyElementType : MIJSONValuePathLine,
+                MIJSONKeyEndPoint : [ MIJSONKeyX : $0.x, MIJSONKeyY : $0.y ]
+            ]
+        }
+        pathArray.append([MIJSONKeyElementType : MIJSONValueCloseSubPath])
+        svgElement.movingImages[MIJSONKeyArrayOfPathElements] = pathArray
+
+        svgElement.movingImages[MIJSONKeyPoints] = points.map() {
+            return [ MIJSONKeyX : $0.x, MIJSONKeyY : $0.y ]
+        }
+        // svgElement.movingImages[MIJSONKeyElementType] = MIJSONValueLineElement
+        return svgElement
+    }
+    
     public func processSVGLine(xmlElement: NSXMLElement, state: State) throws -> SVGLine? {
         let x1 = try SVGProcessor.stringToCGFloat(xmlElement["x1"]?.stringValue)
         let y1 = try SVGProcessor.stringToCGFloat(xmlElement["y1"]?.stringValue)
@@ -250,8 +292,8 @@ public class SVGProcessor {
     }
 
     public func processSVGRect(xmlElement: NSXMLElement, state: State) throws -> SVGRect? {
-        let x = try SVGProcessor.stringToCGFloat(xmlElement["x"]?.stringValue)
-        let y = try SVGProcessor.stringToCGFloat(xmlElement["y"]?.stringValue)
+        let x = try SVGProcessor.stringToCGFloat(xmlElement["x"]?.stringValue, defaultVal: 0.0)
+        let y = try SVGProcessor.stringToCGFloat(xmlElement["y"]?.stringValue, defaultVal: 0.0)
         let width = try SVGProcessor.stringToCGFloat(xmlElement["width"]?.stringValue)
         let height = try SVGProcessor.stringToCGFloat(xmlElement["height"]?.stringValue)
         
@@ -374,6 +416,29 @@ public class SVGProcessor {
         return CGColor.color(red: cDict["red"] as! CGFloat, green: cDict["green"] as! CGFloat,
             blue: cDict["blue"] as! CGFloat, alpha: 1.0)
     }
+
+    // TODO: @schwa - I couldn't work out how to apply your parser to an array of points float,float
+    /// Convert an even list of floats to CGPoints
+    private func floatsToPoints(data: [Float]) throws -> [CGPoint] {
+        guard data.count % 2 == 0 else {
+            throw Error.corruptXML
+        }
+        var out : [CGPoint] = []
+        for var i = 0; i < data.count-1; i += 2 {
+            out.append(CGPointMake(CGFloat(data[i]), CGFloat(data[i+1])))
+        }
+        return out
+    }
+
+    /// Parse the list of points from a polygon/polyline entry
+    private func parseListOfPoints(entry : String) throws -> [CGPoint] {
+        // Split by all commas and whitespace, then group into coords of two floats
+        let entry = entry.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        let separating = NSMutableCharacterSet.whitespaceAndNewlineCharacterSet()
+        separating.addCharactersInString(",")
+        let parts = entry.componentsSeparatedByCharactersInSet(separating).filter { !$0.isEmpty }
+        return try floatsToPoints(parts.map({Float($0)!}))
+    }
 }
 
 extension SVGProcessor.Event: CustomStringConvertible {
@@ -426,10 +491,12 @@ extension SVGProcessor {
             switch svgElement {
                 case let svgCircle as SVGCircle:
                     updateStrokeOrFillType(svgCircle, strokeElementKey: MIJSONValueOvalStrokeElement, fillElementKey: MIJSONValueOvalFillElement)
+                case let svgPolygon as SVGPolygon:
+                    svgPolygon.movingImages[MIJSONKeyElementType] = svgPolygon.getPathElementType()
                 case let svgRect as SVGRect:
                     updateStrokeOrFillType(svgRect, strokeElementKey: MIJSONValueRectangleStrokeElement, fillElementKey: MIJSONValueRectangleFillElement)
                 case let path as SVGPath:
-                     path.movingImages[MIJSONKeyElementType] = path.getPathElementType()
+                    path.movingImages[MIJSONKeyElementType] = path.getPathElementType()
                 default:
                     return
             }

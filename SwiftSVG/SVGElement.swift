@@ -153,7 +153,6 @@ public class SVGContainer: SVGElement, GroupNode {
     }
     
     override public func generateMovingImagesJSON() -> [NSString : AnyObject] {
-        var elementsArray = [AnyObject]()
         if self.children.count == 0 {
             return self.movingImages
         }
@@ -172,11 +171,19 @@ public class SVGContainer: SVGElement, GroupNode {
             }
         }
         
+        var elementsArray = [AnyObject]()
         self.children.forEach() {
-            elementsArray.append($0.generateMovingImagesJSON())
+            let movingImagesJSON = $0.generateMovingImagesJSON()
+            // only add elements to array of elements if they have a type.
+            if let _ = movingImagesJSON[MIJSONKeyElementType] {
+                elementsArray.append($0.generateMovingImagesJSON())
+            }
         }
-        jsonDict[MIJSONKeyElementType] = MIJSONValueArrayOfElements
-        jsonDict[MIJSONValueArrayOfElements] = elementsArray
+        
+        if elementsArray.count != 0 {
+            jsonDict[MIJSONKeyElementType] = MIJSONValueArrayOfElements
+            jsonDict[MIJSONValueArrayOfElements] = elementsArray
+        }
         return jsonDict
     }
 }
@@ -221,12 +228,20 @@ public class SVGPath: SVGElement, CGPathable {
 
 
 public class SVGLine: SVGElement {
-    public var startPoint: CGPoint!
-    public var endPoint: CGPoint!
+    public let startPoint: CGPoint
+    public let endPoint: CGPoint
     
     public init(startPoint: CGPoint, endPoint: CGPoint) {
         self.startPoint = startPoint
         self.endPoint = endPoint
+    }
+}
+
+public class SVGPolygon: SVGElement {
+    public let points: [CGPoint]
+    
+    public init(points: [CGPoint]) {
+        self.points = points
     }
 }
 
