@@ -47,14 +47,13 @@ public class SVGRenderer {
             renderer.style = style
         }
 
-        if let transform = svgElement.transform {
-            renderer.pushGraphicsState()
-            renderer.concatTransform(transform.toCGAffineTransform())
-        }
+        renderer.pushGraphicsState()
         defer {
-            if let _ = svgElement.transform {
-                renderer.restoreGraphicsState()
-            }
+            renderer.restoreGraphicsState()
+        }
+
+        if let transform = svgElement.transform {
+            renderer.concatTransform(transform.toCGAffineTransform())
         }
 
         switch svgElement {
