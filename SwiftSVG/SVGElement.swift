@@ -230,6 +230,14 @@ public class SVGLine: SVGElement {
     }
 }
 
+public class SVGRect: SVGElement {
+    public var rect: CGRect!
+    
+    public init(rect: CGRect) {
+        self.rect = rect
+    }
+}
+
 public class SVGCircle: SVGElement {
     public var center: CGPoint!
     public var radius: CGFloat!

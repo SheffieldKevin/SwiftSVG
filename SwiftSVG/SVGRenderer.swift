@@ -71,6 +71,13 @@ public class SVGRenderer {
                 if let _ = svgCircle.style?.strokeColor {
                     renderer.strokeCircle(svgCircle.rect)
                 }
+            case let svgRect as SVGRect:
+                if let _ = svgRect.style?.fillColor {
+                    renderer.fillRect(svgRect.rect)
+                }
+                if let _ = svgRect.style?.strokeColor {
+                    renderer.strokeRect(svgRect.rect)
+                }
             case let pathable as CGPathable:
                 let path = pathable.cgpath
                 let mode = CGPathDrawingMode(strokeColor: renderer.strokeColor, fillColor: renderer.fillColor)

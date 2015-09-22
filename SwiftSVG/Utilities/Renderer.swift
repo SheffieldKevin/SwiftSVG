@@ -80,6 +80,14 @@ extension CGContext: Renderer {
         CGContextStrokeEllipseInRect(self, rect)
     }
 
+    public func fillRect(rect: CGRect) {
+        CGContextFillRect(self, rect)
+    }
+    
+    public func strokeRect(rect: CGRect) {
+        CGContextStrokeRect(self, rect)
+    }
+
     public func drawPath(mode: CGPathDrawingMode) {
         CGContextDrawPath(self, mode)
     }
@@ -144,6 +152,14 @@ public class SourceCodeRenderer: Renderer {
     
     public func strokeCircle(rect: CGRect) {
         source += "CGContextStrokeEllipseInRect(context, TODO)\n"
+    }
+
+    public func fillRect(rect: CGRect) {
+        source += "CGContextFillRect(context, TODO)\n"
+    }
+    
+    public func strokeRect(rect: CGRect) {
+        source += "CGContextStrokeRect(context, TODO)\n"
     }
 
     public var strokeColor:CGColor? {

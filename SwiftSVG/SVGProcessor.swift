@@ -120,6 +120,8 @@ public class SVGProcessor {
                 svgElement = try processSVGLine(xmlElement, state: state)
             case "circle":
                 svgElement = try processSVGCircle(xmlElement, state: state)
+            case "rect":
+                svgElement = try processSVGRect(xmlElement, state: state)
             case "title":
                 state.document!.title = xmlElement.stringValue as String?
             case "desc":
@@ -165,11 +167,21 @@ public class SVGProcessor {
     }
 
     public func processSVGGroup(xmlElement: NSXMLElement, state: State) throws -> SVGGroup {
+        // A commented out <!--  --> node comes in as a NSXMLNode which causes crashes here.
+/*
         let nodes = xmlElement.children! as! [NSXMLElement]
-
         let children = try nodes.flatMap() {
             return try processSVGElement($0, state: state)
         }
+*/
+        let nodes = xmlElement.children!
+        var children = [SVGElement]()
+        for node in nodes where node is NSXMLElement {
+            if let svgElement = try self.processSVGElement(node as! NSXMLElement, state: state) {
+                children.append(svgElement)
+            }
+        }
+
         let group = SVGGroup(children: children)
         xmlElement.setChildren(nil)
         return group
@@ -233,6 +245,23 @@ public class SVGProcessor {
         return svgElement
     }
 
+    public func processSVGRect(xmlElement: NSXMLElement, state: State) throws -> SVGRect? {
+        let x = try SVGProcessor.stringToCGFloat(xmlElement["x"]?.stringValue)
+        let y = try SVGProcessor.stringToCGFloat(xmlElement["y"]?.stringValue)
+        let width = try SVGProcessor.stringToCGFloat(xmlElement["width"]?.stringValue)
+        let height = try SVGProcessor.stringToCGFloat(xmlElement["height"]?.stringValue)
+        
+        xmlElement["x"] = nil
+        xmlElement["y"] = nil
+        xmlElement["width"] = nil
+        xmlElement["height"] = nil
+        
+        // let svgElement = SVGCircle(center: CGPoint(x: cx, y: cy), radius: r)
+        let svgElement = SVGRect(rect: CGRect(x: x, y: y, w: width, h: height))
+        svgElement.movingImages[MIJSONKeyRect] = makeRectDictionary(svgElement.rect)
+        return svgElement
+    }
+    
     public func processStyle(xmlElement: NSXMLElement,
                                   state: State,
                              svgElement: SVGElement) throws -> SwiftGraphics.Style? {
@@ -393,6 +422,8 @@ extension SVGProcessor {
             switch svgElement {
                 case let svgCircle as SVGCircle:
                     updateStrokeOrFillType(svgCircle, strokeElementKey: MIJSONValueOvalStrokeElement, fillElementKey: MIJSONValueOvalFillElement)
+                case let svgRect as SVGRect:
+                    updateStrokeOrFillType(svgRect, strokeElementKey: MIJSONValueRectangleStrokeElement, fillElementKey: MIJSONValueRectangleFillElement)
                 case let path as SVGPath:
                      path.movingImages[MIJSONKeyElementType] = path.getPathElementType()
                 default:
