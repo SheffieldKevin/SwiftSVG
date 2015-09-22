@@ -85,6 +85,10 @@ public class SVGProcessor {
             document.viewBox = CGRect(x: x, y: y, width: width, height: height)
 
             xmlElement["viewBox"] = nil
+            document.movingImages["viewBox"] = [
+                MIJSONKeySize : [ MIJSONKeyWidth : width, MIJSONKeyHeight : height ],
+                MIJSONKeyOrigin : [ MIJSONKeyX : x, MIJSONKeyY : y ]
+            ]
         }
 
         guard let nodes = xmlElement.children else {
