@@ -16,6 +16,8 @@ public protocol Renderer: AnyObject {
     func restoreGraphicsState()
 
     func addPath(path:CGPath)
+    func addRect(rect: CGRect)
+
     func fillPath()
     func drawPath(mode: CGPathDrawingMode)
     func drawLine(startPoint: CGPoint, endPoint: CGPoint)
@@ -67,6 +69,10 @@ extension CGContext: Renderer {
 
     public func addPath(path:CGPath) {
         CGContextAddPath(self, path)
+    }
+
+    public func addRect(rect: CGRect) {
+        CGContextAddRect(self, rect)
     }
 
     public func fillPath() {
@@ -143,6 +149,10 @@ public class SourceCodeRenderer: Renderer {
 
     public func addPath(path:CGPath) {
         source += "CGContextAddPath(context, \(path))\n"
+    }
+
+    public func addRect(rect:CGRect) {
+        source += "CGContextAddRect(context, \(rect))\n"
     }
 
     public func fillPath() {

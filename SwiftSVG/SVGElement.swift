@@ -33,6 +33,64 @@ public class SVGElement: Node {
     public internal(set) var id: String? = nil
     public internal(set) var xmlElement: NSXMLElement? = nil
     
+    public internal(set) var display = true
+
+    var drawFill = true // If fill="none" this explictly turns off fill.
+    var fillColor: CGColor? {
+        get {
+            if !drawFill {
+                return nil
+            }
+            if let color = self.style?.fillColor {
+                return color
+            }
+            guard let parent = self.parent else {
+                return nil
+            }
+            
+            if parent is SVGGroup {
+                return parent.fillColor
+            }
+            
+            if parent is SVGDocument {
+                return try! SVGColors.stringToColor("black")
+            }
+            return nil
+        }
+    }
+    
+    var hasFill: Bool {
+        get {
+            // return self.fillColor != nil
+            if let _ = self.fillColor {
+                return true
+            }
+            return false
+        }
+    }
+
+    // Different default behaviour for fill and stroke. Default fill is to draw
+    // black, while default stroke is not drawing anything.
+    var strokeColor: CGColor? {
+        get {
+            if let color = self.style?.strokeColor {
+                return color
+            }
+            guard let parent = self.parent else {
+                return nil
+            }
+            
+            if parent is SVGGroup {
+                return parent.strokeColor
+            }
+            return nil
+        }
+    }
+
+    var hasStroke: Bool {
+        get { return self.strokeColor != nil }
+    }
+
     public internal(set) var movingImages = [NSString : AnyObject]()
     
     var numParents: Int {
@@ -42,38 +100,25 @@ public class SVGElement: Node {
         return 0
     }
 
-    func printElement()
+    func updateMovingImagesJSON() {
+        updateMovingImagesElementType(self)
+    }
+
+    final func printElement()
     {
         var description = "================================================================\n"
         description += "Element with numParents: \(numParents) \n"
-        if let id = id {
-            description += "id: \(id). "
-        }
-        if let _ = self as? SVGContainer {
-            description += "base type: container. "
-            if let _ = self as? SVGGroup {
-                description += "type: group. "
-            }
-            if let _ = self as? SVGDocument {
-                description += "type: document. "
-            }
-        }
-
-        if let _ = self.style {
-            description += "Has style. "
-        }
-        
-        if let _ = self.transform {
-            description += "Has transform. "
-        }
-        
-        if let _ = self as? SVGPath {
-            description += "type: path.\n"
-        }
-
+        if let id = id { description += "id: \(id). " }
+        description += "type: \(self.dynamicType). "
+        if let _ = self.style { description += "Has style. " }
+        if let _ = self.transform { description += "Has transform. " }
         print(description)
     }
     
+    func printElements() {
+        printElement()
+    }
+
     public func generateMovingImagesJSON() -> [NSString : AnyObject] {
         return self.movingImages
     }
@@ -95,20 +140,11 @@ extension SVGElement: Hashable {
 // MARK: MovingImages customizations.
 
 extension SVGElement {
-    final func hasProperty(property: NSString) -> Bool {
-        if let _ = self.movingImages[property] {
-            return true
-        }
-        else {
-            return false
-        }
-    }
-
     // This is on SVGElement and not SVGPath because a group with styles set
-    // might contain a single path child.
+    // might contain children with paths.
     final func getPathElementType() -> String? {
-        let hasStroke = self.hasProperty(MIJSONKeyStrokeColor)
-        let hasFill = self.hasProperty(MIJSONKeyFillColor)
+        let hasStroke = self.hasStroke
+        let hasFill = self.hasFill
         guard hasStroke || hasFill else {
             return nil
         }
@@ -147,9 +183,9 @@ public class SVGContainer: SVGElement, GroupNode {
         newElement.parent = self
     }
     
-    override func printElement() {
-        super.printElement()
-        self.children.forEach() { $0.printElement() }
+    override func printElements() {
+        self.printElement()
+        self.children.forEach() { $0.printElements() }
     }
     
     override public func generateMovingImagesJSON() -> [NSString : AnyObject] {
@@ -173,10 +209,12 @@ public class SVGContainer: SVGElement, GroupNode {
         
         var elementsArray = [AnyObject]()
         self.children.forEach() {
-            let movingImagesJSON = $0.generateMovingImagesJSON()
-            // only add elements to array of elements if they have a type.
-            if let _ = movingImagesJSON[MIJSONKeyElementType] {
-                elementsArray.append($0.generateMovingImagesJSON())
+            if $0.display {
+                let movingImagesJSON = $0.generateMovingImagesJSON()
+                // only add elements to array of elements if they have a type.
+                if let _ = movingImagesJSON[MIJSONKeyElementType] {
+                    elementsArray.append($0.generateMovingImagesJSON())
+                }
             }
         }
         
@@ -185,6 +223,15 @@ public class SVGContainer: SVGElement, GroupNode {
             jsonDict[MIJSONValueArrayOfElements] = elementsArray
         }
         return jsonDict
+    }
+    
+    override func updateMovingImagesJSON() {
+        self.children.forEach() {
+            if $0.display {
+                $0.updateMovingImagesJSON()
+            }
+        }
+        // SVGProcessor.updateMovingImagesElementType(self)
     }
 }
 
@@ -227,36 +274,67 @@ public class SVGPath: SVGElement, CGPathable {
 }
 
 
-public class SVGLine: SVGElement {
+public class SVGLine: SVGElement, CGPathable {
     public let startPoint: CGPoint
     public let endPoint: CGPoint
+    
+    lazy public var cgpath:CGPath = self.makePath()
     
     public init(startPoint: CGPoint, endPoint: CGPoint) {
         self.startPoint = startPoint
         self.endPoint = endPoint
     }
+    
+    private func makePath() -> CGPath {
+        let localPath = CGPathCreateMutable()
+        CGPathMoveToPoint(localPath, nil, startPoint.x, startPoint.y)
+        CGPathAddLineToPoint(localPath, nil, endPoint.x, endPoint.y)
+        CGPathCloseSubpath(localPath)
+        return CGPathCreateCopy(localPath)!
+    }
 }
 
-public class SVGPolygon: SVGElement {
+public class SVGPolygon: SVGElement, CGPathable {
     public let points: [CGPoint]
+    
+    lazy public var cgpath:CGPath = self.makePath()
     
     public init(points: [CGPoint]) {
         self.points = points
     }
+    
+    private func makePath() -> CGPath {
+        let thePoints = self.points
+        let localPath = CGPathCreateMutable()
+        CGPathAddLines(localPath,nil, thePoints, thePoints.count)
+        CGPathCloseSubpath(localPath)
+        return CGPathCreateCopy(localPath)!
+    }
 }
 
-public class SVGRect: SVGElement {
+public class SVGRect: SVGElement, CGPathable {
     public var rect: CGRect!
+    
+    lazy public var cgpath:CGPath = self.makePath()
     
     public init(rect: CGRect) {
         self.rect = rect
     }
+
+    private func makePath() -> CGPath {
+        let localPath = CGPathCreateMutable()
+        CGPathAddRect(localPath, nil, self.rect)
+        CGPathCloseSubpath(localPath)
+        return CGPathCreateCopy(localPath)!
+    }
 }
 
-public class SVGCircle: SVGElement {
+public class SVGCircle: SVGElement, CGPathable {
     public var center: CGPoint!
     public var radius: CGFloat!
 
+    lazy public var cgpath:CGPath = self.makePath()
+    
     public var rect: CGRect {
         let rectSize = CGSize(width: 2.0 * radius, height: 2.0 * radius)
         let rectOrigin = CGPoint(x: center.x - radius, y: center.y - radius)
@@ -266,5 +344,12 @@ public class SVGCircle: SVGElement {
     public init(center: CGPoint, radius: CGFloat) {
         self.center = center
         self.radius = radius
+    }
+    
+    private func makePath() -> CGPath {
+        let localPath = CGPathCreateMutable()
+        CGPathAddEllipseInRect(localPath, nil, self.rect)
+        CGPathCloseSubpath(localPath)
+        return CGPathCreateCopy(localPath)!
     }
 }

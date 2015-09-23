@@ -38,57 +38,52 @@ public class SVGRenderer {
     }
 
     public func renderElement(svgElement: SVGElement, renderer: Renderer) throws {
-
-        if try prerenderElement(svgElement, renderer: renderer) == false {
+        if !svgElement.display {
             return
-        }
-
-        if let style = try styleForElement(svgElement) {
-            renderer.style = style
         }
 
         renderer.pushGraphicsState()
         defer {
             renderer.restoreGraphicsState()
         }
+        
+        if try prerenderElement(svgElement, renderer: renderer) == false {
+            return
+        }
+
+        var hasFill = false
+        let fillColor = svgElement.fillColor
+        if let fillColor = fillColor {
+            renderer.fillColor = fillColor
+            hasFill = true
+        }
+        
+        var hasStroke = false
+        let strokeColor = svgElement.strokeColor
+        if let strokeColor = strokeColor {
+            renderer.strokeColor = strokeColor
+            hasStroke = true
+        }
+
+        if let style = try styleForElement(svgElement) {
+            renderer.style = style
+        }
 
         if let transform = svgElement.transform {
             renderer.concatTransform(transform.toCGAffineTransform())
         }
-
+        
         switch svgElement {
             case let svgDocument as SVGDocument:
                 try renderDocument(svgDocument, renderer: renderer)
             case let svgGroup as SVGGroup:
                 try renderGroup(svgGroup, renderer: renderer)
-            case let svgLine as SVGLine:
-                renderer.drawLine(svgLine.startPoint, endPoint: svgLine.endPoint)
-            case let svgCircle as SVGCircle:
-                if let _ = svgCircle.style?.fillColor {
-                    renderer.fillCircle(svgCircle.rect)
-                }
-                if let _ = svgCircle.style?.strokeColor {
-                    renderer.strokeCircle(svgCircle.rect)
-                }
-            case let svgRect as SVGRect:
-                if let _ = svgRect.style?.fillColor {
-                    renderer.fillRect(svgRect.rect)
-                }
-                if let _ = svgRect.style?.strokeColor {
-                    renderer.strokeRect(svgRect.rect)
-                }
-            case let svgPolygon as SVGPolygon:
-                if let _ = svgPolygon.style?.fillColor {
-                    renderer.fillPolygon(svgPolygon.points)
-                }
-                if let _ = svgPolygon.style?.strokeColor {
-                    renderer.strokePolygon(svgPolygon.points)
-                }
             case let pathable as CGPathable:
-                let path = pathable.cgpath
-                let mode = CGPathDrawingMode(strokeColor: renderer.strokeColor, fillColor: renderer.fillColor)
-                renderer.addPath(path)
-                renderer.drawPath(mode)
+                if (hasStroke || hasFill) {
+                    let mode = CGPathDrawingMode(hasStroke: hasStroke, hasFill: hasFill)
+                    renderer.addPath(pathable.cgpath)
+                    renderer.drawPath(mode)
+                }
             default:
                 assert(false)
         }

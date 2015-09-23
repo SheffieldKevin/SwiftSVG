@@ -75,3 +75,47 @@ public func makeRectDictionary(rectangle: CGRect) -> [NSString : AnyObject] {
         ]
     ]
 }
+
+private func updateStrokeOrFillType(svgElement: SVGElement,
+    strokeElementKey: NSString, fillElementKey: NSString) {
+    // let hasStroke = svgElement.hasProperty(MIJSONKeyStrokeColor)
+    // let hasFill = svgElement.hasProperty(MIJSONKeyFillColor)
+    let hasStroke = !(svgElement.strokeColor == nil)
+    let hasFill = !(svgElement.fillColor == nil)
+    
+    if hasStroke {
+        if hasFill {
+            var element1 = svgElement.movingImages
+            element1[MIJSONKeyElementType] = fillElementKey
+            var element2 = svgElement.movingImages
+            element2[MIJSONKeyElementType] = strokeElementKey
+            svgElement.movingImages = [
+                MIJSONKeyElementType : MIJSONValueArrayOfElements,
+                MIJSONValueArrayOfElements : [ element1, element2 ]
+            ]
+        }
+        else {
+            svgElement.movingImages[MIJSONKeyElementType] = strokeElementKey
+        }
+    }
+    else if hasFill {
+        svgElement.movingImages[MIJSONKeyElementType] = fillElementKey
+    }
+}
+
+func updateMovingImagesElementType(svgElement: SVGElement) {
+    if svgElement.movingImages[MIJSONKeyElementType] == nil {
+        switch svgElement {
+        case let svgCircle as SVGCircle:
+            updateStrokeOrFillType(svgCircle, strokeElementKey: MIJSONValueOvalStrokeElement, fillElementKey: MIJSONValueOvalFillElement)
+        case let svgPolygon as SVGPolygon:
+            svgPolygon.movingImages[MIJSONKeyElementType] = svgPolygon.getPathElementType()
+        case let svgRect as SVGRect:
+            updateStrokeOrFillType(svgRect, strokeElementKey: MIJSONValueRectangleStrokeElement, fillElementKey: MIJSONValueRectangleFillElement)
+        case let path as SVGPath:
+            path.movingImages[MIJSONKeyElementType] = path.getPathElementType()
+        default:
+            return
+        }
+    }
+}

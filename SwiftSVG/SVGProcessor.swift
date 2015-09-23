@@ -49,8 +49,10 @@ public class SVGProcessor {
             }
         }
         if let document = document {
+            document.updateMovingImagesJSON()
+            // SVGProcessor.updateMovingImagesElementType(svgElement)
             // document?.optimise()
-            document.printElement()
+            document.printElements()
         }
         return document
     }
@@ -95,6 +97,10 @@ public class SVGProcessor {
             return document
         }
 
+        // SVG defaults to a black background drawing color.
+        let colorDict = try! SVGColors.stringToColorDictionary("black")!
+        document.movingImages[MIJSONKeyFillColor] = SVGColors.colorDictToMIColorDict(colorDict)
+        
         for node in nodes where node is NSXMLElement {
             if let svgElement = try self.processSVGElement(node as! NSXMLElement, state: state) {
                 svgElement.parent = document
@@ -174,12 +180,6 @@ public class SVGProcessor {
 
     public func processSVGGroup(xmlElement: NSXMLElement, state: State) throws -> SVGGroup {
         // A commented out <!--  --> node comes in as a NSXMLNode which causes crashes here.
-/*
-        let nodes = xmlElement.children! as! [NSXMLElement]
-        let children = try nodes.flatMap() {
-            return try processSVGElement($0, state: state)
-        }
-*/
         let nodes = xmlElement.children!
         var children = [SVGElement]()
         for node in nodes where node is NSXMLElement {
@@ -250,10 +250,6 @@ public class SVGProcessor {
         pathArray.append([MIJSONKeyElementType : MIJSONValueCloseSubPath])
         svgElement.movingImages[MIJSONKeyArrayOfPathElements] = pathArray
 
-        svgElement.movingImages[MIJSONKeyPoints] = points.map() {
-            return [ MIJSONKeyX : $0.x, MIJSONKeyY : $0.y ]
-        }
-        // svgElement.movingImages[MIJSONKeyElementType] = MIJSONValueLineElement
         return svgElement
     }
     
@@ -301,8 +297,7 @@ public class SVGProcessor {
         xmlElement["y"] = nil
         xmlElement["width"] = nil
         xmlElement["height"] = nil
-        
-        // let svgElement = SVGCircle(center: CGPoint(x: cx, y: cy), radius: r)
+
         let svgElement = SVGRect(rect: CGRect(x: x, y: y, w: width, h: height))
         svgElement.movingImages[MIJSONKeyRect] = makeRectDictionary(svgElement.rect)
         return svgElement
@@ -315,27 +310,32 @@ public class SVGProcessor {
 
         // http: //www.w3.org/TR/SVG/styling.html
 
-        // Fill
+        // If fill is not set then the default fill is black. Fill is not applied
+        // if you set fill="none".
         if let value = xmlElement["fill"]?.stringValue {
-            if let colorDict = try stringToColorDictionary(value) {
-                if let color = colorDictionaryToCGColor(colorDict) {
+            if let colorDict = try SVGColors.stringToColorDictionary(value) {
+                if let color = SVGColors.colorDictionaryToCGColor(colorDict) {
                     let element = StyleElement.fillColor(color)
                     styleElements.append(element)
+                    svgElement.movingImages[MIJSONKeyFillColor] = SVGColors.colorDictToMIColorDict(colorDict)
                 }
-                svgElement.movingImages[MIJSONKeyFillColor] = colorDictToMIColorDict(colorDict)
             }
-            xmlElement["fill"] = nil
+            else if value == "none" {
+                svgElement.drawFill = false
+            }
         }
+        
+        xmlElement["fill"] = nil
 
         // Stroke
         if let value = xmlElement["stroke"]?.stringValue {
-            if let colorDict = try stringToColorDictionary(value) {
+            if let colorDict = try SVGColors.stringToColorDictionary(value) {
                 svgElement.movingImages[MIJSONKeyStrokeColor] = colorDict
-                if let color = colorDictionaryToCGColor(colorDict) {
+                if let color = SVGColors.colorDictionaryToCGColor(colorDict) {
                     let element = StyleElement.strokeColor(color)
                     styleElements.append(element)
+                    svgElement.movingImages[MIJSONKeyStrokeColor] = SVGColors.colorDictToMIColorDict(colorDict)
                 }
-                svgElement.movingImages[MIJSONKeyStrokeColor] = colorDictToMIColorDict(colorDict)
             }
             xmlElement["stroke"] = nil
         }
@@ -362,7 +362,13 @@ public class SVGProcessor {
             xmlElement["stroke-miterlimit"] = nil
         }
 
-        SVGProcessor.updateMovingImagesElementType(svgElement)
+        if let value = xmlElement["display"]?.stringValue {
+            if value == "none" {
+                svgElement.display = false
+            }
+            xmlElement["display"] = nil
+        }
+                            
         //
         if styleElements.count > 0 {
             return SwiftGraphics.Style(elements: styleElements)
@@ -379,42 +385,6 @@ public class SVGProcessor {
         let transform = try svgTransformAttributeStringToTransform(value)
         xmlElement["transform"] = nil
         return transform
-    }
-
-    func colorDictToMIColorDict(colorDict: [NSObject : AnyObject]) -> [NSObject : AnyObject] {
-        let mColorDict = [
-            MIJSONKeyRed : colorDict["red"]!,
-            MIJSONKeyGreen : colorDict["green"]!,
-            MIJSONKeyBlue : colorDict["blue"]!,
-            MIJSONKeyColorColorProfileName : kCGColorSpaceSRGB
-        ]
-        return mColorDict
-    }
-
-    func stringToColor(string: String) throws -> CGColor? {
-        if string == "none" {
-            return nil
-        }
-
-        if let colorDictionary = try stringToColorDictionary(string) {
-            return colorDictionaryToCGColor(colorDictionary)
-        }
-        return .None
-    }
-
-    func stringToColorDictionary(string: String) throws -> [NSObject : AnyObject]? {
-        if string == "none" {
-            return nil
-        }
-        if let colorWithName = SVGStandardColors.colorFromName(string) {
-            return try CColorConverter.sharedInstance().colorDictionaryWithString(colorWithName)
-        }
-        return try CColorConverter.sharedInstance().colorDictionaryWithString(string)
-    }
-
-    func colorDictionaryToCGColor(cDict: [NSObject : AnyObject]) -> CGColor? {
-        return CGColor.color(red: cDict["red"] as! CGFloat, green: cDict["green"] as! CGFloat,
-            blue: cDict["blue"] as! CGFloat, alpha: 1.0)
     }
 
     // TODO: @schwa - I couldn't work out how to apply your parser to an array of points float,float
@@ -441,6 +411,8 @@ public class SVGProcessor {
     }
 }
 
+// MARK: -
+
 extension SVGProcessor.Event: CustomStringConvertible {
     public var description: String {
         get {
@@ -453,52 +425,6 @@ extension SVGProcessor.Event: CustomStringConvertible {
                     return "WARNING: \(message)"
                 case .error:
                     return "ERROR: \(message)"
-            }
-        }
-    }
-}
-
-//! MARK MovingImages specific customization of SVGProcessor.
-
-extension SVGProcessor {
-    private class final func updateStrokeOrFillType(svgElement: SVGElement,
-        strokeElementKey: NSString, fillElementKey: NSString) {
-        let hasStroke = svgElement.hasProperty(MIJSONKeyStrokeColor)
-        let hasFill = svgElement.hasProperty(MIJSONKeyFillColor)
-        
-        if hasStroke {
-            if hasFill {
-                var element1 = svgElement.movingImages
-                element1[MIJSONKeyElementType] = fillElementKey
-                var element2 = svgElement.movingImages
-                element2[MIJSONKeyElementType] = strokeElementKey
-                svgElement.movingImages = [
-                    MIJSONKeyElementType : MIJSONValueArrayOfElements,
-                    MIJSONValueArrayOfElements : [ element1, element2 ]
-                ]
-            }
-            else {
-                svgElement.movingImages[MIJSONKeyElementType] = strokeElementKey
-            }
-        }
-        else if hasFill {
-            svgElement.movingImages[MIJSONKeyElementType] = fillElementKey
-        }
-    }
-
-    internal class func updateMovingImagesElementType(svgElement: SVGElement) {
-        if svgElement.movingImages[MIJSONKeyElementType] == nil {
-            switch svgElement {
-                case let svgCircle as SVGCircle:
-                    updateStrokeOrFillType(svgCircle, strokeElementKey: MIJSONValueOvalStrokeElement, fillElementKey: MIJSONValueOvalFillElement)
-                case let svgPolygon as SVGPolygon:
-                    svgPolygon.movingImages[MIJSONKeyElementType] = svgPolygon.getPathElementType()
-                case let svgRect as SVGRect:
-                    updateStrokeOrFillType(svgRect, strokeElementKey: MIJSONValueRectangleStrokeElement, fillElementKey: MIJSONValueRectangleFillElement)
-                case let path as SVGPath:
-                    path.movingImages[MIJSONKeyElementType] = path.getPathElementType()
-                default:
-                    return
             }
         }
     }

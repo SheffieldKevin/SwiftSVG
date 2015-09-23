@@ -176,6 +176,14 @@ class ViewController: NSViewController {
                     return "Group"
                 case is SVGPath:
                     return "Path"
+                case is SVGRect:
+                    return "Rect"
+                case is SVGCircle:
+                    return "Circle"
+                case is SVGPolygon:
+                    return "Polygon"
+                case is SVGLine:
+                    return "Line"
                 default:
                     preconditionFailure()
             }

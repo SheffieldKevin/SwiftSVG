@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftGraphics
 
 // SVG Color names
 private let svgColorNames = [
@@ -83,11 +84,49 @@ private let svgColorNames = [
     "lawngreen": "rgb(124, 252, 0)",   "mediumvioletred":      "rgb(199, 21, 133)",
     "lightblue": "rgb(173, 216, 230)", "mediumaquamarine":     "rgb(102, 205, 170)",
     "lightcyan": "rgb(224, 255, 255)", "mediumspringgreen":    "rgb( 0, 250, 154)",
-    "lightgoldenrodyellow": "rgb(250, 250, 210)"
+    "none": "rgb(0, 0, 0)", "lightgoldenrodyellow": "rgb(250, 250, 210)"
 ]
 
-class SVGStandardColors {
+private class SVGStandardColors {
     class func colorFromName(name: String) -> String? {
         return svgColorNames[name]
+    }
+}
+
+class SVGColors {
+    class func colorDictToMIColorDict(colorDict: [NSObject : AnyObject]) -> [NSObject : AnyObject] {
+        let mColorDict = [
+            MIJSONKeyRed : colorDict["red"]!,
+            MIJSONKeyGreen : colorDict["green"]!,
+            MIJSONKeyBlue : colorDict["blue"]!,
+            MIJSONKeyColorColorProfileName : kCGColorSpaceSRGB
+        ]
+        return mColorDict
+    }
+    
+    class func stringToColor(string: String) throws -> CGColor? {
+        // if string == "none" {
+        //    return nil
+        // }
+        
+        if let colorDictionary = try stringToColorDictionary(string) {
+            return colorDictionaryToCGColor(colorDictionary)
+        }
+        return .None
+    }
+    
+    class func stringToColorDictionary(string: String) throws -> [NSObject : AnyObject]? {
+        if string == "none" {
+            return nil
+        }
+        if let colorWithName = SVGStandardColors.colorFromName(string) {
+            return try CColorConverter.sharedInstance().colorDictionaryWithString(colorWithName)
+        }
+        return try CColorConverter.sharedInstance().colorDictionaryWithString(string)
+    }
+    
+    class func colorDictionaryToCGColor(cDict: [NSObject : AnyObject]) -> CGColor? {
+        return CGColor.color(red: cDict["red"] as! CGFloat, green: cDict["green"] as! CGFloat,
+            blue: cDict["blue"] as! CGFloat, alpha: 1.0)
     }
 }
