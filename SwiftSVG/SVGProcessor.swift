@@ -368,11 +368,102 @@ public class SVGProcessor {
         return svgElement
     }
     
+    private class func processColorString(colorString: String) -> [NSObject : AnyObject]? {
+        // Double optional. What?
+        let colorDict = try? SVGColors.stringToColorDictionary(colorString)
+        if let colorDict = colorDict {
+            return colorDict
+        }
+        return nil
+    }
+    
+    private class func processFillColor(colorString: String, svgElement: SVGElement) -> StyleElement? {
+        if colorString == "none" {
+            svgElement.drawFill = false
+            return nil
+        }
+        if let colorDict = processColorString(colorString),
+            let color = SVGColors.colorDictionaryToCGColor(colorDict)
+        {
+            svgElement.movingImages[MIJSONKeyFillColor] = SVGColors.colorDictToMIColorDict(colorDict)
+            return StyleElement.fillColor(color)
+        }
+        else {
+            return nil
+        }
+    }
+
+    private class func processStrokeColor(colorString: String, svgElement: SVGElement) -> StyleElement? {
+        if let colorDict = processColorString(colorString),
+            let color = SVGColors.colorDictionaryToCGColor(colorDict)
+        {
+            svgElement.movingImages[MIJSONKeyStrokeColor] = SVGColors.colorDictToMIColorDict(colorDict)
+            return StyleElement.strokeColor(color)
+        }
+        else {
+            return nil
+        }
+    }
+    
+    private class func processPresentationAttribute(style: String, inout styleElements: [StyleElement], svgElement: SVGElement) throws {
+        let seperators = NSCharacterSet(charactersInString: ";")
+        let trimChars = NSCharacterSet.whitespaceAndNewlineCharacterSet()
+        let parts = style.componentsSeparatedByCharactersInSet(seperators)
+        let pairSeperator = NSCharacterSet(charactersInString: ":")
+                                                
+        let styles:[StyleElement?] = parts.map {
+            let pair = $0.componentsSeparatedByCharactersInSet(pairSeperator)
+            if pair.count != 2 {
+                return nil
+            }
+            let propertyName = pair[0].stringByTrimmingCharactersInSet(trimChars)
+            let value = pair[1].stringByTrimmingCharactersInSet(trimChars)
+            switch(propertyName) {
+                case "fill":
+                    return processFillColor(value, svgElement: svgElement)
+                case "stroke":
+                    return processStrokeColor(value, svgElement: svgElement)
+                case "stroke-width":
+                    let floatVal = try? SVGProcessor.stringToCGFloat(value)
+                    if let strokeValue = floatVal {
+                        svgElement.movingImages[MIJSONKeyLineWidth] = strokeValue
+                        return StyleElement.lineWidth(strokeValue)
+                    }
+                    return nil
+                case "stroke-miterlimit":
+                    let floatVal = try? SVGProcessor.stringToCGFloat(value)
+                    if let miterLimit = floatVal {
+                        svgElement.movingImages[MIJSONKeyMiter] = miterLimit
+                        return StyleElement.miterLimit(miterLimit)
+                    }
+                    return nil
+                case "display":
+                    if value == "none" {
+                        svgElement.display = false
+                    }
+                    return nil
+                default:
+                    return nil
+            }
+        }
+        
+        styles.forEach {
+            if let theStyle = $0 {
+                styleElements.append(theStyle)
+            }
+        }
+    }
+    
     public func processStyle(xmlElement: NSXMLElement,
                              svgElement: SVGElement) throws -> SwiftGraphics.Style? {
         var styleElements: [StyleElement] = []
 
-        // http: //www.w3.org/TR/SVG/styling.html
+        if let value = xmlElement["style"]?.stringValue {
+            try SVGProcessor.processPresentationAttribute(value, styleElements: &styleElements, svgElement: svgElement)
+            xmlElement["style"] = nil
+        }
+
+        // http://www.w3.org/TR/SVG/styling.html
 
         // If fill is not set then the default fill is black. Fill is not applied
         // if you set fill="none".
@@ -387,9 +478,8 @@ public class SVGProcessor {
             else if value == "none" {
                 svgElement.drawFill = false
             }
+            xmlElement["fill"] = nil
         }
-        
-        xmlElement["fill"] = nil
 
         // Stroke
         if let value = xmlElement["stroke"]?.stringValue {
