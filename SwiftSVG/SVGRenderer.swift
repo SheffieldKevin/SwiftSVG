@@ -79,6 +79,7 @@ public class SVGRenderer {
             case let svgGroup as SVGGroup:
                 try renderGroup(svgGroup, renderer: renderer)
             case let pathable as CGPathable:
+                // svgElement.printSelfAndParents()
                 if (hasStroke || hasFill) {
                     let mode = CGPathDrawingMode(hasStroke: hasStroke, hasFill: hasFill)
                     renderer.addPath(pathable.cgpath)
@@ -121,8 +122,4 @@ public class SVGRenderer {
             try renderElement(child, renderer: renderer)
         }
     }
-
-
-
-
 }

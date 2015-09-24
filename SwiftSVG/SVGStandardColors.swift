@@ -84,7 +84,7 @@ private let svgColorNames = [
     "lawngreen": "rgb(124, 252, 0)",   "mediumvioletred":      "rgb(199, 21, 133)",
     "lightblue": "rgb(173, 216, 230)", "mediumaquamarine":     "rgb(102, 205, 170)",
     "lightcyan": "rgb(224, 255, 255)", "mediumspringgreen":    "rgb( 0, 250, 154)",
-    "none": "rgb(0, 0, 0)", "lightgoldenrodyellow": "rgb(250, 250, 210)"
+    "lightgoldenrodyellow": "rgb(250, 250, 210)"
 ]
 
 private class SVGStandardColors {

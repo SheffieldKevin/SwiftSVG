@@ -60,13 +60,7 @@ public class SVGElement: Node {
     }
     
     var hasFill: Bool {
-        get {
-            // return self.fillColor != nil
-            if let _ = self.fillColor {
-                return true
-            }
-            return false
-        }
+        get { return self.fillColor != nil }
     }
 
     // Different default behaviour for fill and stroke. Default fill is to draw
@@ -91,17 +85,11 @@ public class SVGElement: Node {
         get { return self.strokeColor != nil }
     }
 
-    public internal(set) var movingImages = [NSString : AnyObject]()
-    
     var numParents: Int {
         if let parent = parent {
             return parent.numParents + 1
         }
         return 0
-    }
-
-    func updateMovingImagesJSON() {
-        updateMovingImagesElementType(self)
     }
 
     final func printElement()
@@ -118,10 +106,36 @@ public class SVGElement: Node {
     func printElements() {
         printElement()
     }
+    
+    func printSelfAndParents() {
+        for var parent:SVGElement? = self; parent != nil; parent = parent!.parent {
+            parent?.printElement()
+        }
+    }
+
+// MARK: MovingImages start.
+    public internal(set) var movingImages = [NSString : AnyObject]()
+    
+    func updateMovingImagesJSON() {
+        updateMovingImagesElementType(self)
+    }
 
     public func generateMovingImagesJSON() -> [NSString : AnyObject] {
         return self.movingImages
     }
+
+    // This is on SVGElement and not SVGPath because a group with styles set
+    // might contain children with paths.
+    final func getPathElementType() -> String? {
+        let hasStroke = self.hasStroke
+        let hasFill = self.hasFill
+        guard hasStroke || hasFill else {
+            return nil
+        }
+        return hasFill ? (hasStroke ? MIJSONValuePathFillAndStrokeElement : MIJSONValuePathFillElement) : MIJSONValuePathStrokeElement
+    }
+
+// MARK: MovingImages end.
 }
 
 extension SVGElement: Equatable {
@@ -134,21 +148,6 @@ public func == (lhs: SVGElement, rhs: SVGElement) -> Bool {
 extension SVGElement: Hashable {
     public var hashValue: Int {
         return uuid.hash
-    }
-}
-
-// MARK: MovingImages customizations.
-
-extension SVGElement {
-    // This is on SVGElement and not SVGPath because a group with styles set
-    // might contain children with paths.
-    final func getPathElementType() -> String? {
-        let hasStroke = self.hasStroke
-        let hasFill = self.hasFill
-        guard hasStroke || hasFill else {
-            return nil
-        }
-        return hasFill ? (hasStroke ? MIJSONValuePathFillAndStrokeElement : MIJSONValuePathFillElement) : MIJSONValuePathStrokeElement
     }
 }
 
@@ -188,6 +187,7 @@ public class SVGContainer: SVGElement, GroupNode {
         self.children.forEach() { $0.printElements() }
     }
     
+// MARK: MovingImages start.
     override public func generateMovingImagesJSON() -> [NSString : AnyObject] {
         if self.children.count == 0 {
             return self.movingImages
@@ -231,8 +231,8 @@ public class SVGContainer: SVGElement, GroupNode {
                 $0.updateMovingImagesJSON()
             }
         }
-        // SVGProcessor.updateMovingImagesElementType(self)
     }
+// MARK: MovingImages end.
 }
 
 // MARK: -
