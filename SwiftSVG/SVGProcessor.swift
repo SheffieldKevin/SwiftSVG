@@ -136,8 +136,12 @@ public class SVGProcessor {
                 svgElement = try processSVGCircle(xmlElement, state: state)
             case "rect":
                 svgElement = try processSVGRect(xmlElement, state: state)
+            case "ellipse":
+                svgElement = try processSVGEllipse(xmlElement, state: state)
             case "polygon":
                 svgElement = try processSVGPolygon(xmlElement, state:state)
+            case "polyline":
+                svgElement = try processSVGPolyline(xmlElement, state:state)
             case "title":
                 state.document!.title = xmlElement.stringValue as String?
             case "desc":
@@ -262,7 +266,33 @@ public class SVGProcessor {
 // MARK: MovingImages end.
         return svgElement
     }
-    
+
+    public func processSVGPolyline(xmlElement: NSXMLElement, state: State) throws -> SVGPolyline? {
+        guard let pointsString = xmlElement["points"]?.stringValue else {
+            throw Error.expectedSVGElementNotFound
+        }
+        let points = try parseListOfPoints(pointsString)
+        
+        xmlElement["points"] = nil
+        let svgElement = SVGPolyline(points: points)
+        
+// MARK: MovingImages start.
+        svgElement.movingImages[MIJSONKeyStartPoint] = [
+            MIJSONKeyX : points[0].x,
+            MIJSONKeyY : points[0].y
+        ]
+        
+        let pathArray = points[1..<points.count].map() {
+            return [
+                MIJSONKeyElementType : MIJSONValuePathLine,
+                MIJSONKeyEndPoint : [ MIJSONKeyX : $0.x, MIJSONKeyY : $0.y ]
+            ]
+        }
+        svgElement.movingImages[MIJSONKeyArrayOfPathElements] = pathArray
+// MARK: MovingImages end.
+        return svgElement
+    }
+
     public func processSVGLine(xmlElement: NSXMLElement, state: State) throws -> SVGLine? {
         let x1 = try SVGProcessor.stringToCGFloat(xmlElement["x1"]?.stringValue)
         let y1 = try SVGProcessor.stringToCGFloat(xmlElement["y1"]?.stringValue)
@@ -301,6 +331,25 @@ public class SVGProcessor {
         return svgElement
     }
 
+    public func processSVGEllipse(xmlElement: NSXMLElement, state: State) throws -> SVGEllipse? {
+        let cx = try SVGProcessor.stringToCGFloat(xmlElement["cx"]?.stringValue, defaultVal: 0.0)
+        let cy = try SVGProcessor.stringToCGFloat(xmlElement["cy"]?.stringValue, defaultVal: 0.0)
+        let rx = try SVGProcessor.stringToCGFloat(xmlElement["rx"]?.stringValue)
+        let ry = try SVGProcessor.stringToCGFloat(xmlElement["ry"]?.stringValue)
+        
+        xmlElement["cx"] = nil
+        xmlElement["cy"] = nil
+        xmlElement["rx"] = nil
+        xmlElement["ry"] = nil
+
+        let rect = CGRect(x: cx - rx, y: cy - ry, width: 2 * rx, height: 2 * ry)
+        let svgElement = SVGEllipse(rect: rect)
+// MARK: MovingImages start.
+        svgElement.movingImages[MIJSONKeyRect] = makeRectDictionary(svgElement.rect)
+// MARK: MovingImages end.
+        return svgElement
+    }
+    
     public func processSVGRect(xmlElement: NSXMLElement, state: State) throws -> SVGRect? {
         let x = try SVGProcessor.stringToCGFloat(xmlElement["x"]?.stringValue, defaultVal: 0.0)
         let y = try SVGProcessor.stringToCGFloat(xmlElement["y"]?.stringValue, defaultVal: 0.0)

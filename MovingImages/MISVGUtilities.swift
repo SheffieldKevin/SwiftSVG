@@ -110,8 +110,12 @@ func updateMovingImagesElementType(svgElement: SVGElement) {
             updateStrokeOrFillType(svgCircle, strokeElementKey: MIJSONValueOvalStrokeElement, fillElementKey: MIJSONValueOvalFillElement)
         case let svgPolygon as SVGPolygon:
             svgPolygon.movingImages[MIJSONKeyElementType] = svgPolygon.getPathElementType()
+        case let svgPolyline as SVGPolyline:
+            svgPolyline.movingImages[MIJSONKeyElementType] = svgPolyline.getPathElementType()
         case let svgRect as SVGRect:
             updateStrokeOrFillType(svgRect, strokeElementKey: MIJSONValueRectangleStrokeElement, fillElementKey: MIJSONValueRectangleFillElement)
+        case let svgEllipse as SVGEllipse:
+            updateStrokeOrFillType(svgEllipse, strokeElementKey: MIJSONValueOvalStrokeElement, fillElementKey: MIJSONValueOvalFillElement)
         case let path as SVGPath:
             path.movingImages[MIJSONKeyElementType] = path.getPathElementType()
         default:

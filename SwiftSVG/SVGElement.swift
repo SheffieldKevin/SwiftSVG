@@ -312,6 +312,23 @@ public class SVGPolygon: SVGElement, CGPathable {
     }
 }
 
+public class SVGPolyline: SVGElement, CGPathable {
+    public let points: [CGPoint]
+    
+    lazy public var cgpath:CGPath = self.makePath()
+    
+    public init(points: [CGPoint]) {
+        self.points = points
+    }
+    
+    private func makePath() -> CGPath {
+        let thePoints = self.points
+        let localPath = CGPathCreateMutable()
+        CGPathAddLines(localPath,nil, thePoints, thePoints.count)
+        return CGPathCreateCopy(localPath)!
+    }
+}
+
 public class SVGRect: SVGElement, CGPathable {
     public var rect: CGRect!
     
@@ -324,6 +341,23 @@ public class SVGRect: SVGElement, CGPathable {
     private func makePath() -> CGPath {
         let localPath = CGPathCreateMutable()
         CGPathAddRect(localPath, nil, self.rect)
+        CGPathCloseSubpath(localPath)
+        return CGPathCreateCopy(localPath)!
+    }
+}
+
+public class SVGEllipse: SVGElement, CGPathable {
+    public var rect: CGRect!
+    
+    lazy public var cgpath:CGPath = self.makePath()
+    
+    public init(rect: CGRect) {
+        self.rect = rect
+    }
+    
+    private func makePath() -> CGPath {
+        let localPath = CGPathCreateMutable()
+        CGPathAddEllipseInRect(localPath, nil, self.rect)
         CGPathCloseSubpath(localPath)
         return CGPathCreateCopy(localPath)!
     }

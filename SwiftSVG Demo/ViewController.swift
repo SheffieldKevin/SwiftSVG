@@ -178,10 +178,14 @@ class ViewController: NSViewController {
                     return "Path"
                 case is SVGRect:
                     return "Rect"
+                case is SVGEllipse:
+                    return "Ellipse"
                 case is SVGCircle:
                     return "Circle"
                 case is SVGPolygon:
                     return "Polygon"
+                case is SVGPolyline:
+                    return "Polyline"
                 case is SVGLine:
                     return "Line"
                 default:
