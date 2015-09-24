@@ -152,8 +152,8 @@ public class SVGProcessor {
         }
 
         if let svgElement = svgElement {
-            svgElement.style = try processStyle(xmlElement, state: state, svgElement: svgElement)
-            svgElement.transform = try processTransform(xmlElement, state: state)
+            svgElement.style = try processStyle(xmlElement, svgElement: svgElement)
+            svgElement.transform = try processTransform(xmlElement)
 
             if let id = xmlElement["id"]?.stringValue {
                 svgElement.id = id
@@ -369,7 +369,6 @@ public class SVGProcessor {
     }
     
     public func processStyle(xmlElement: NSXMLElement,
-                                  state: State,
                              svgElement: SVGElement) throws -> SwiftGraphics.Style? {
         var styleElements: [StyleElement] = []
 
@@ -449,7 +448,7 @@ public class SVGProcessor {
         }
     }
 
-    public func processTransform(xmlElement: NSXMLElement, state: State) throws -> Transform2D? {
+    public func processTransform(xmlElement: NSXMLElement) throws -> Transform2D? {
         guard let value = xmlElement["transform"]?.stringValue else {
             return nil
         }
