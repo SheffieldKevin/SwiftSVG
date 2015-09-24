@@ -385,7 +385,9 @@ public class SVGProcessor {
         if let colorDict = processColorString(colorString),
             let color = SVGColors.colorDictionaryToCGColor(colorDict)
         {
+// MARK: MovingImages start.
             svgElement.movingImages[MIJSONKeyFillColor] = SVGColors.colorDictToMIColorDict(colorDict)
+// MARK: MovingImages end.
             return StyleElement.fillColor(color)
         }
         else {
@@ -397,7 +399,9 @@ public class SVGProcessor {
         if let colorDict = processColorString(colorString),
             let color = SVGColors.colorDictionaryToCGColor(colorDict)
         {
+// MARK: MovingImages start.
             svgElement.movingImages[MIJSONKeyStrokeColor] = SVGColors.colorDictToMIColorDict(colorDict)
+// MARK: MovingImages end.
             return StyleElement.strokeColor(color)
         }
         else {
@@ -426,14 +430,18 @@ public class SVGProcessor {
                 case "stroke-width":
                     let floatVal = try? SVGProcessor.stringToCGFloat(value)
                     if let strokeValue = floatVal {
+// MARK: MovingImages start.
                         svgElement.movingImages[MIJSONKeyLineWidth] = strokeValue
+// MARK: MovingImages end.
                         return StyleElement.lineWidth(strokeValue)
                     }
                     return nil
                 case "stroke-miterlimit":
                     let floatVal = try? SVGProcessor.stringToCGFloat(value)
                     if let miterLimit = floatVal {
+// MARK: MovingImages start.
                         svgElement.movingImages[MIJSONKeyMiter] = miterLimit
+// MARK: MovingImages end.
                         return StyleElement.miterLimit(miterLimit)
                     }
                     return nil
@@ -454,8 +462,8 @@ public class SVGProcessor {
         }
     }
     
-    public func processStyle(xmlElement: NSXMLElement,
-                             svgElement: SVGElement) throws -> SwiftGraphics.Style? {
+    public func processStyle(xmlElement: NSXMLElement, svgElement: SVGElement) throws -> SwiftGraphics.Style? {
+        // http://www.w3.org/TR/SVG/styling.html
         var styleElements: [StyleElement] = []
 
         if let value = xmlElement["style"]?.stringValue {
@@ -463,64 +471,37 @@ public class SVGProcessor {
             xmlElement["style"] = nil
         }
 
-        // http://www.w3.org/TR/SVG/styling.html
-
-        // If fill is not set then the default fill is black. Fill is not applied
-        // if you set fill="none".
         if let value = xmlElement["fill"]?.stringValue {
-            if let colorDict = try SVGColors.stringToColorDictionary(value) {
-                if let color = SVGColors.colorDictionaryToCGColor(colorDict) {
-                    let element = StyleElement.fillColor(color)
-                    styleElements.append(element)
-                    svgElement.movingImages[MIJSONKeyFillColor] = SVGColors.colorDictToMIColorDict(colorDict)
-                }
-            }
-            else if value == "none" {
-                svgElement.drawFill = false
+            if let styleElement = SVGProcessor.processFillColor(value, svgElement: svgElement) {
+                styleElements.append(styleElement)
             }
             xmlElement["fill"] = nil
         }
-
-        // Stroke
+        
         if let value = xmlElement["stroke"]?.stringValue {
-            if let colorDict = try SVGColors.stringToColorDictionary(value) {
-                svgElement.movingImages[MIJSONKeyStrokeColor] = colorDict
-                if let color = SVGColors.colorDictionaryToCGColor(colorDict) {
-                    let element = StyleElement.strokeColor(color)
-                    styleElements.append(element)
-// MARK: MovingImages start.
-                    svgElement.movingImages[MIJSONKeyStrokeColor] = SVGColors.colorDictToMIColorDict(colorDict)
-// MARK: MovingImages end.
-                }
+            if let styleElement = SVGProcessor.processStrokeColor(value, svgElement: svgElement) {
+                styleElements.append(styleElement)
             }
             xmlElement["stroke"] = nil
         }
 
-        // Stroke-Width
-        if let value = xmlElement["stroke-width"]?.stringValue {
-
-            if let double = NSNumberFormatter().numberFromString(value)?.doubleValue {
-                let element = StyleElement.lineWidth(CGFloat(double))
-                styleElements.append(element)
+        let stroke = try? SVGProcessor.stringToCGFloat(xmlElement["stroke-width"]?.stringValue)
+        if let strokeValue = stroke {
 // MARK: MovingImages start.
-                svgElement.movingImages[MIJSONKeyLineWidth] = double
-// MARK: MovingImages end.
-            }
-            xmlElement["stroke-width"] = nil
-        }
-
-        // Stroke-Miterlimit
-        if let value = xmlElement["stroke-miterlimit"]?.stringValue {
-            
-            if let double = NSNumberFormatter().numberFromString(value)?.doubleValue {
-                let element = StyleElement.miterLimit(CGFloat(double))
-                styleElements.append(element)
+            svgElement.movingImages[MIJSONKeyLineWidth] = strokeValue
 // MARK: MovingImages start.
-                svgElement.movingImages[MIJSONKeyMiter] = double
-// MARK: MovingImages end.
-            }
-            xmlElement["stroke-miterlimit"] = nil
+            styleElements.append(StyleElement.lineWidth(strokeValue))
         }
+        xmlElement["stroke-width"] = nil
+
+        let mitreLimit = try? SVGProcessor.stringToCGFloat(xmlElement["stroke-miterlimit"]?.stringValue)
+        if let mitreLimitValue = mitreLimit {
+// MARK: MovingImages start.
+            svgElement.movingImages[MIJSONKeyMiter] = mitreLimitValue
+// MARK: MovingImages start.
+            styleElements.append(StyleElement.miterLimit(mitreLimitValue))
+        }
+        xmlElement["stroke-miterlimit"] = nil
 
         if let value = xmlElement["display"]?.stringValue {
             if value == "none" {
