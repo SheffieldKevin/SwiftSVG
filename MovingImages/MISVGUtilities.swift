@@ -78,8 +78,6 @@ public func makeRectDictionary(rectangle: CGRect) -> [NSString : AnyObject] {
 
 private func updateStrokeOrFillType(svgElement: SVGElement,
     strokeElementKey: NSString, fillElementKey: NSString) {
-    // let hasStroke = svgElement.hasProperty(MIJSONKeyStrokeColor)
-    // let hasFill = svgElement.hasProperty(MIJSONKeyFillColor)
     let hasStroke = !(svgElement.strokeColor == nil)
     let hasFill = !(svgElement.fillColor == nil)
     

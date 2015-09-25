@@ -78,21 +78,19 @@ class ViewController: NSViewController {
         svgView.svgRenderer.callbacks.prerenderElement = {
             (svgElement: SVGElement, renderer: Renderer) -> Bool in
             if self.selectedElements.contains(svgElement) {
+                renderer.pushGraphicsState()
+                defer {
+                    renderer.restoreGraphicsState()
+                }
 
                 if let transform = svgElement.transform {
-                    renderer.pushGraphicsState()
                     renderer.concatCTM(transform.toCGAffineTransform())
-                }
-                defer {
-                    if let _ = svgElement.transform {
-                        renderer.restoreGraphicsState()
-                    }
                 }
 
                 let path = try self.svgView.svgRenderer.pathForElement(svgElement)
-                renderer.strokeColor = CGColor.greenColor()
+                // renderer.strokeColor = CGColor.greenColor()
                 renderer.fillColor = CGColor.greenColor()
-                renderer.addPath(path)
+                renderer.addPath(path, miPath: svgElement.movingImages)
                 renderer.fillPath()
                 return false
             }
