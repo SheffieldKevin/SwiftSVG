@@ -15,7 +15,8 @@ public protocol Renderer: AnyObject {
     func pushGraphicsState()
     func restoreGraphicsState()
 
-    func addPath(path:CGPath, miPath: [NSString : AnyObject])
+    func addPath(path:PathGenerator)
+    func addCGPath(path: CGPath)
     func drawPath(mode: CGPathDrawingMode)
     func fillPath()
 /*
@@ -68,8 +69,13 @@ extension CGContext: Renderer {
         CGContextRestoreGState(self)
     }
 
-    public func addPath(path:CGPath, miPath: [NSString : AnyObject]) {
+    public func addCGPath(path: CGPath) {
         CGContextAddPath(self, path)
+    }
+
+    public func addPath(path:PathGenerator) {
+        addCGPath(path.cgpath)
+        CGContextAddPath(self, path.cgpath)
     }
 
     public func drawPath(mode: CGPathDrawingMode) {
@@ -146,9 +152,14 @@ public class MovingImagesRenderer: Renderer {
     
     public func restoreGraphicsState() { }
     
-    public func addPath(path:CGPath, miPath:[NSString : AnyObject]) {
-        movingImagesJSON[MIJSONKeyArrayOfPathElements] = miPath[MIJSONKeyArrayOfPathElements]
-        movingImagesJSON[MIJSONKeyStartPoint] = miPath[MIJSONKeyStartPoint]
+    public func addCGPath(path: CGPath) { }
+    
+    public func addPath(path:PathGenerator) {
+        for (key, value) in path.mipath {
+            movingImagesJSON[key] = value
+        }
+        // movingImagesJSON[MIJSONKeyArrayOfPathElements] = miPath[MIJSONKeyArrayOfPathElements]
+        // movingImagesJSON[MIJSONKeyStartPoint] = miPath[MIJSONKeyStartPoint]
     }
     
     public func drawPath(mode: CGPathDrawingMode) {
@@ -310,8 +321,12 @@ public class SourceCodeRenderer: Renderer {
         source += "CGContextRestoreGState(self)\n"
     }
 
-    public func addPath(path:CGPath, miPath: [NSString : AnyObject]) {
+    public func addCGPath(path: CGPath) {
         source += "CGContextAddPath(context, \(path))\n"
+    }
+
+    public func addPath(path:PathGenerator) {
+        addCGPath(path.cgpath)
     }
 
     public func drawPath(mode: CGPathDrawingMode) {

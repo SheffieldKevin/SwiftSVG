@@ -284,10 +284,10 @@ public class SVGPath: SVGElement, PathGenerator {
     
     // Returns true on success. False on failure.
     internal func addPath(svgPath: SVGPath) -> Bool {
-        self.cgpath = self.cgpath + svgPath.cgpath
         let miPath1 = self.mipath[MIJSONKeyArrayOfPathElements] as? [[NSString : AnyObject]]
         let miPath2 = svgPath.mipath[MIJSONKeyArrayOfPathElements] as? [[NSString : AnyObject]]
         if let miPath1 = miPath1, let miPath2 = miPath2 {
+            self.cgpath = self.cgpath + svgPath.cgpath
             self.mipath[MIJSONKeyArrayOfPathElements] = miPath1 + miPath2
             return true
         }
@@ -297,7 +297,7 @@ public class SVGPath: SVGElement, PathGenerator {
     }
 }
 
-
+/*
 public class SVGLine: SVGElement, CGPathable {
     public let startPoint: CGPoint
     public let endPoint: CGPoint
@@ -317,24 +317,48 @@ public class SVGLine: SVGElement, CGPathable {
         return CGPathCreateCopy(localPath)!
     }
 }
+*/
 
-public class SVGPolygon: SVGElement, PathGenerator {
-    public let points: [CGPoint]
-    
-    lazy public var cgpath:CGPath = self.makePath()
-    lazy public var mipath:MovingImagesPath = makePolygonDictionary(self.points)
-    
-    public init(points: [CGPoint]) {
-        self.points = points
+public class SVGLine: SVGElement, PathGenerator {
+    public let startPoint: CGPoint
+    public let endPoint: CGPoint
+
+    lazy public var cgpath: CGPath = self.makePath()
+    lazy public var mipath: MovingImagesPath = makeLineDictionary(self.startPoint, endPoint: self.endPoint)
+
+    public init(startPoint: CGPoint, endPoint: CGPoint) {
+        self.startPoint = startPoint
+        self.endPoint = endPoint
     }
     
     private func makePath() -> CGPath {
-        let thePoints = self.points
+        let localPath = CGPathCreateMutable()
+        localPath.move(startPoint)
+        localPath.addLine(endPoint)
+        localPath.close()
+        return localPath
+    }
+}
+
+public class SVGPolygon: SVGElement, PathGenerator {
+    public let polygon:SwiftGraphics.Polygon
+    
+    lazy public var cgpath:CGPath = self.polygon.cgpath
+    lazy public var mipath:MovingImagesPath = makePolygonDictionary(self.polygon.points)
+    
+    public init(points: [CGPoint]) {
+        self.polygon = SwiftGraphics.Polygon(points: points)
+    }
+
+/*
+    private func makePath() -> CGPath {
+        let thePoints = self.polygon.points
         let localPath = CGPathCreateMutable()
         CGPathAddLines(localPath,nil, thePoints, thePoints.count)
         CGPathCloseSubpath(localPath)
         return CGPathCreateCopy(localPath)!
     }
+*/
 }
 
 public class SVGPolyline: SVGElement, PathGenerator {
@@ -348,13 +372,27 @@ public class SVGPolyline: SVGElement, PathGenerator {
     }
     
     private func makePath() -> CGPath {
-        let thePoints = self.points
         let localPath = CGPathCreateMutable()
-        CGPathAddLines(localPath,nil, thePoints, thePoints.count)
-        return CGPathCreateCopy(localPath)!
+        CGPathAddLines(localPath, nil, points, points.count)
+        return localPath
     }
 }
 
+public class SVGRect: SVGElement, PathGenerator {
+    public let rect: Rectangle
+    lazy public var cgpath:CGPath = self.rect.cgpath
+    lazy public var mipath:MovingImagesPath = self.makeMIPath()
+    
+    public init(rect: CGRect) {
+        self.rect = Rectangle(frame: rect)
+    }
+
+    private func makeMIPath() -> [NSString : AnyObject] {
+        return makeRectDictionary(rect.frame, makePath: hasFill && hasStroke)
+    }
+}
+
+/*
 public class SVGRect: SVGElement, CGPathable {
     public var rect: CGRect!
     
@@ -371,29 +409,29 @@ public class SVGRect: SVGElement, CGPathable {
         return CGPathCreateCopy(localPath)!
     }
 }
+*/
 
-public class SVGEllipse: SVGElement, CGPathable {
+public class SVGEllipse: SVGElement, PathGenerator {
     public var rect: CGRect!
     
-    lazy public var cgpath:CGPath = self.makePath()
+    lazy public var cgpath:CGPath = CGPathCreateWithEllipseInRect(self.rect, nil)
+    lazy public var mipath:MovingImagesPath = self.makeMIPath()
     
     public init(rect: CGRect) {
         self.rect = rect
     }
     
-    private func makePath() -> CGPath {
-        let localPath = CGPathCreateMutable()
-        CGPathAddEllipseInRect(localPath, nil, self.rect)
-        CGPathCloseSubpath(localPath)
-        return CGPathCreateCopy(localPath)!
+    private func makeMIPath() -> [NSString : AnyObject] {
+        return makeRectDictionary(rect, makePath: hasFill && hasStroke)
     }
 }
 
-public class SVGCircle: SVGElement, CGPathable {
+public class SVGCircle: SVGElement, PathGenerator {
     public var center: CGPoint!
     public var radius: CGFloat!
 
-    lazy public var cgpath:CGPath = self.makePath()
+    lazy public var cgpath:CGPath = CGPathCreateWithEllipseInRect(self.rect, nil)
+    lazy public var mipath:MovingImagesPath = self.makeMIPath()
     
     public var rect: CGRect {
         let rectSize = CGSize(width: 2.0 * radius, height: 2.0 * radius)
@@ -405,11 +443,8 @@ public class SVGCircle: SVGElement, CGPathable {
         self.center = center
         self.radius = radius
     }
-    
-    private func makePath() -> CGPath {
-        let localPath = CGPathCreateMutable()
-        CGPathAddEllipseInRect(localPath, nil, self.rect)
-        CGPathCloseSubpath(localPath)
-        return CGPathCreateCopy(localPath)!
+
+    private func makeMIPath() -> [NSString : AnyObject] {
+        return makeRectDictionary(rect, makePath: hasFill && hasStroke)
     }
 }

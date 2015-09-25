@@ -64,13 +64,13 @@ public class SVGRenderer {
                 try renderDocument(svgDocument, renderer: renderer)
             case let svgGroup as SVGGroup:
                 try renderGroup(svgGroup, renderer: renderer)
-            case let pathable as CGPathable:
+            case let pathable as PathGenerator:
                 // svgElement.printSelfAndParents()
                 let hasStroke = svgElement.hasStroke
                 let hasFill = svgElement.hasFill
                 if (hasStroke || hasFill) {
                     let mode = CGPathDrawingMode(hasStroke: hasStroke, hasFill: hasFill)
-                    renderer.addPath(pathable.cgpath, miPath: svgElement.movingImages)
+                    renderer.addPath(pathable)
                     renderer.drawPath(mode)
                 }
             default:

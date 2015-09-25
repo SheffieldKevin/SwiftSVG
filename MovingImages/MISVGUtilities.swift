@@ -83,6 +83,25 @@ internal func makeRectDictionary(rectangle: CGRect) -> [NSString : AnyObject] {
     ]
 }
 
+internal func makeRectDictionary(rectangle: CGRect, makePath: Bool) -> [NSString : AnyObject] {
+    if makePath {
+        return [
+            MIJSONKeyStartPoint : makePointDictionary(),
+            MIJSONKeyArrayOfPathElements : [
+                [
+                    MIJSONKeyElementType : MIJSONValuePathRectangle,
+                    MIJSONKeyRect : makeRectDictionary(rectangle)
+                ]
+            ]
+        ]
+    }
+    else {
+        return [
+            MIJSONKeyRect : makeRectDictionary(rectangle)
+        ]
+    }
+}
+
 internal func makePolygonArray(points: [CGPoint]) -> [[NSString : AnyObject]] {
     return points.map() {
         return [

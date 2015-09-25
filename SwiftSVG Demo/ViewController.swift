@@ -90,7 +90,7 @@ class ViewController: NSViewController {
                 let path = try self.svgView.svgRenderer.pathForElement(svgElement)
                 // renderer.strokeColor = CGColor.greenColor()
                 renderer.fillColor = CGColor.greenColor()
-                renderer.addPath(path, miPath: svgElement.movingImages)
+                renderer.addCGPath(path)
                 renderer.fillPath()
                 return false
             }

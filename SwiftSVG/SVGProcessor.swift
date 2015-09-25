@@ -345,7 +345,7 @@ public class SVGProcessor {
 
         let svgElement = SVGRect(rect: CGRect(x: x, y: y, w: width, h: height))
 // MARK: MovingImages start.
-        svgElement.movingImages[MIJSONKeyRect] = makeRectDictionary(svgElement.rect)
+        svgElement.movingImages[MIJSONKeyRect] = makeRectDictionary(svgElement.rect.frame)
 // MARK: MovingImages end.
         return svgElement
     }
