@@ -19,16 +19,7 @@ public protocol Renderer: AnyObject {
     func addCGPath(path: CGPath)
     func drawPath(mode: CGPathDrawingMode)
     func fillPath()
-/*
-    func addRect(rect: CGRect)
-    func drawLine(startPoint: CGPoint, endPoint: CGPoint)
-    func fillCircle(rect: CGRect)
-    func strokeCircle(rect: CGRect)
-    func fillRect(rect: CGRect)
-    func strokeRect(rect: CGRect)
-    func fillPolygon(points: [CGPoint])
-    func strokePolygon(points: [CGPoint])
-*/
+
     var strokeColor:CGColor? { get set }
     var fillColor:CGColor? { get set }
 
@@ -85,49 +76,6 @@ extension CGContext: Renderer {
     public func fillPath() {
         CGContextFillPath(self)
     }
-
-/*
-    public func addRect(rect: CGRect) {
-        CGContextAddRect(self, rect)
-    }
-
-    public func fillCircle(rect: CGRect) {
-        CGContextFillEllipseInRect(self, rect)
-    }
-
-    public func strokeCircle(rect: CGRect) {
-        CGContextStrokeEllipseInRect(self, rect)
-    }
-
-    public func fillRect(rect: CGRect) {
-        CGContextFillRect(self, rect)
-    }
-    
-    public func strokeRect(rect: CGRect) {
-        CGContextStrokeRect(self, rect)
-    }
-
-    public func fillPolygon(points: [CGPoint]) {
-        var thePoints = points
-        CGContextAddLines(self, &thePoints, thePoints.count)
-        CGContextClosePath(self)
-        CGContextFillPath(self)
-    }
-    
-    public func strokePolygon(points: [CGPoint]) {
-        var thePoints = points
-        CGContextAddLines(self, &thePoints, thePoints.count)
-        CGContextClosePath(self)
-        CGContextStrokePath(self)
-    }
-    public func drawLine(startPoint: CGPoint, endPoint: CGPoint) {
-        CGContextBeginPath(self)
-        CGContextMoveToPoint(self, startPoint.x, startPoint.y)
-        CGContextAddLineToPoint(self, endPoint.x, endPoint.y)
-        CGContextClosePath(self)
-        CGContextStrokePath(self)
-    }
-*/
 }
 
 public class MovingImagesRenderer: Renderer {
@@ -138,14 +86,7 @@ public class MovingImagesRenderer: Renderer {
     }
     
     public func concatCTM(transform:CGAffineTransform) {
-        movingImagesJSON[MIJSONKeyAffineTransform] = [
-            MIJSONKeyAffineTransformM11 : transform.a,
-            MIJSONKeyAffineTransformM12 : transform.b,
-            MIJSONKeyAffineTransformM21 : transform.c,
-            MIJSONKeyAffineTransformM22 : transform.d,
-            MIJSONKeyAffineTransformtX : transform.tx,
-            MIJSONKeyAffineTransformtY : transform.ty
-        ]
+        movingImagesJSON[MIJSONKeyAffineTransform] = makeCGAffineTransformDictionary(transform)
     }
 
     public func pushGraphicsState() { }
@@ -158,8 +99,6 @@ public class MovingImagesRenderer: Renderer {
         for (key, value) in path.mipath {
             movingImagesJSON[key] = value
         }
-        // movingImagesJSON[MIJSONKeyArrayOfPathElements] = miPath[MIJSONKeyArrayOfPathElements]
-        // movingImagesJSON[MIJSONKeyStartPoint] = miPath[MIJSONKeyStartPoint]
     }
     
     public func drawPath(mode: CGPathDrawingMode) {
@@ -336,47 +275,7 @@ public class SourceCodeRenderer: Renderer {
     public func fillPath() {
         source += "CGContextFillPath(context)\n"
     }
-/*
-    public func addRect(rect:CGRect) {
-        source += "CGContextAddRect(context, \(rect))\n"
-    }
-    
-    public func drawLine(startPoint: CGPoint, endPoint: CGPoint) {
-        source += "CGContextBeginPath(context)\n" +
-                  "CGContextMoveToPoint(context, TODO)\n" +
-                  "CGContextAddLineToPoint(context, TODO, TODO)\n" +
-                  "CGContextClosePath(context)\n" +
-                  "CGContextStrokePath(context)\n"
-    }
 
-    public func fillCircle(rect: CGRect) {
-        source += "CGContextFillEllipseInRect(context, TODO)\n"
-    }
-    
-    public func strokeCircle(rect: CGRect) {
-        source += "CGContextStrokeEllipseInRect(context, TODO)\n"
-    }
-
-    public func fillRect(rect: CGRect) {
-        source += "CGContextFillRect(context, TODO)\n"
-    }
-    
-    public func strokeRect(rect: CGRect) {
-        source += "CGContextStrokeRect(context, TODO)\n"
-    }
-
-    public func fillPolygon(points: [CGPoint]) {
-        source += "CGContextAddLines(self, TODO)\n" +
-                  "CGContextClosePath(self)\n" +
-                  "CGContextFillPath(self)\n"
-    }
-    
-    public func strokePolygon(points: [CGPoint]) {
-        source += "CGContextAddLines(self, TODO)\n" +
-                  "CGContextClosePath(self)\n" +
-                  "CGContextStrokePath(self)\n"
-    }
-*/
     public var strokeColor:CGColor? {
         get {
             return style.strokeColor

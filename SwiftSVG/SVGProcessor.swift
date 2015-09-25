@@ -170,15 +170,7 @@ public class SVGProcessor {
             }
 // MARK: MovingImages start.
             if let theTransform = svgElement.transform?.toCGAffineTransform() {
-                let transformDict = [
-                    MIJSONKeyAffineTransformM11 : theTransform.a,
-                    MIJSONKeyAffineTransformM12 : theTransform.b,
-                    MIJSONKeyAffineTransformM21 : theTransform.c,
-                    MIJSONKeyAffineTransformM22 : theTransform.d,
-                    MIJSONKeyAffineTransformtX : theTransform.tx,
-                    MIJSONKeyAffineTransformtY : theTransform.ty
-                ]
-                svgElement.movingImages[MIJSONKeyAffineTransform] = transformDict
+                svgElement.movingImages[MIJSONKeyAffineTransform] = makeCGAffineTransformDictionary(theTransform)
             }
             if let id = svgElement.id {
                 svgElement.movingImages[MIJSONKeyElementDebugName] = id

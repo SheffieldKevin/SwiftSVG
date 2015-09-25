@@ -127,6 +127,17 @@ internal func makePolylineDictionary(points: [CGPoint]) -> [NSString : AnyObject
     ]
 }
 
+internal func makeCGAffineTransformDictionary(transform: CGAffineTransform) -> [NSString : AnyObject] {
+    return [
+        MIJSONKeyAffineTransformM11 : transform.a,
+        MIJSONKeyAffineTransformM12 : transform.b,
+        MIJSONKeyAffineTransformM21 : transform.c,
+        MIJSONKeyAffineTransformM22 : transform.d,
+        MIJSONKeyAffineTransformtX : transform.tx,
+        MIJSONKeyAffineTransformtY : transform.ty
+    ]
+}
+
 private func updateStrokeOrFillType(svgElement: SVGElement,
     strokeElementKey: NSString, fillElementKey: NSString) {
     let hasStroke = !(svgElement.strokeColor == nil)
