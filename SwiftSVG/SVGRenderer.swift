@@ -51,20 +51,6 @@ public class SVGRenderer {
             return
         }
 
-        var hasFill = false
-        let fillColor = svgElement.fillColor
-        if let fillColor = fillColor {
-            renderer.fillColor = fillColor
-            hasFill = true
-        }
-        
-        var hasStroke = false
-        let strokeColor = svgElement.strokeColor
-        if let strokeColor = strokeColor {
-            renderer.strokeColor = strokeColor
-            hasStroke = true
-        }
-
         if let style = try styleForElement(svgElement) {
             renderer.style = style
         }
@@ -80,9 +66,11 @@ public class SVGRenderer {
                 try renderGroup(svgGroup, renderer: renderer)
             case let pathable as CGPathable:
                 // svgElement.printSelfAndParents()
+                let hasStroke = svgElement.hasStroke
+                let hasFill = svgElement.hasFill
                 if (hasStroke || hasFill) {
                     let mode = CGPathDrawingMode(hasStroke: hasStroke, hasFill: hasFill)
-                    renderer.addPath(pathable.cgpath)
+                    renderer.addPath(pathable.cgpath, miPath: svgElement.movingImages)
                     renderer.drawPath(mode)
                 }
             default:
