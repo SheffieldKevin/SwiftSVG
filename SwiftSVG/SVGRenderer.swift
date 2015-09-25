@@ -100,12 +100,21 @@ public class SVGRenderer {
     }
 
     public func renderDocument(svgDocument: SVGDocument, renderer: Renderer) throws {
+        renderer.startGroup()
+        defer {
+            renderer.endGroup()
+        }
+
         for child in svgDocument.children {
             try renderElement(child, renderer: renderer)
         }
     }
 
     public func renderGroup(svgGroup: SVGGroup, renderer: Renderer) throws {
+        renderer.startGroup()
+        defer {
+            renderer.endGroup()
+        }
         for child in svgGroup.children {
             try renderElement(child, renderer: renderer)
         }

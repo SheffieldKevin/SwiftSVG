@@ -282,7 +282,7 @@ public class SVGPath: SVGElement, PathGenerator {
         self.mipath = miPath
     }
     
-    // Returns true on success. False on failure.
+    // Returns true on success. False on failure. Used when combining elements.
     internal func addPath(svgPath: SVGPath) -> Bool {
         let miPath1 = self.mipath[MIJSONKeyArrayOfPathElements] as? [[NSString : AnyObject]]
         let miPath2 = svgPath.mipath[MIJSONKeyArrayOfPathElements] as? [[NSString : AnyObject]]
@@ -296,28 +296,6 @@ public class SVGPath: SVGElement, PathGenerator {
         }
     }
 }
-
-/*
-public class SVGLine: SVGElement, CGPathable {
-    public let startPoint: CGPoint
-    public let endPoint: CGPoint
-    
-    lazy public var cgpath:CGPath = self.makePath()
-    
-    public init(startPoint: CGPoint, endPoint: CGPoint) {
-        self.startPoint = startPoint
-        self.endPoint = endPoint
-    }
-    
-    private func makePath() -> CGPath {
-        let localPath = CGPathCreateMutable()
-        CGPathMoveToPoint(localPath, nil, startPoint.x, startPoint.y)
-        CGPathAddLineToPoint(localPath, nil, endPoint.x, endPoint.y)
-        CGPathCloseSubpath(localPath)
-        return CGPathCreateCopy(localPath)!
-    }
-}
-*/
 
 public class SVGLine: SVGElement, PathGenerator {
     public let startPoint: CGPoint
@@ -349,16 +327,6 @@ public class SVGPolygon: SVGElement, PathGenerator {
     public init(points: [CGPoint]) {
         self.polygon = SwiftGraphics.Polygon(points: points)
     }
-
-/*
-    private func makePath() -> CGPath {
-        let thePoints = self.polygon.points
-        let localPath = CGPathCreateMutable()
-        CGPathAddLines(localPath,nil, thePoints, thePoints.count)
-        CGPathCloseSubpath(localPath)
-        return CGPathCreateCopy(localPath)!
-    }
-*/
 }
 
 public class SVGPolyline: SVGElement, PathGenerator {
@@ -391,25 +359,6 @@ public class SVGRect: SVGElement, PathGenerator {
         return makeRectDictionary(rect.frame, makePath: hasFill && hasStroke)
     }
 }
-
-/*
-public class SVGRect: SVGElement, CGPathable {
-    public var rect: CGRect!
-    
-    lazy public var cgpath:CGPath = self.makePath()
-    
-    public init(rect: CGRect) {
-        self.rect = rect
-    }
-
-    private func makePath() -> CGPath {
-        let localPath = CGPathCreateMutable()
-        CGPathAddRect(localPath, nil, self.rect)
-        CGPathCloseSubpath(localPath)
-        return CGPathCreateCopy(localPath)!
-    }
-}
-*/
 
 public class SVGEllipse: SVGElement, PathGenerator {
     public var rect: CGRect!

@@ -15,6 +15,9 @@ public protocol Renderer: AnyObject {
     func pushGraphicsState()
     func restoreGraphicsState()
 
+    func startGroup()
+    func endGroup()
+    
     func addPath(path:PathGenerator)
     func addCGPath(path: CGPath)
     func drawPath(mode: CGPathDrawingMode)
@@ -39,7 +42,6 @@ extension CGAffineTransform: CustomSourceConvertible {
     }
 }
 
-
 // MARK: -
 
 extension CGContext: Renderer {
@@ -59,6 +61,10 @@ extension CGContext: Renderer {
     public func restoreGraphicsState() {
         CGContextRestoreGState(self)
     }
+
+    public func startGroup() { }
+
+    public func endGroup() { }
 
     public func addCGPath(path: CGPath) {
         CGContextAddPath(self, path)
@@ -94,6 +100,14 @@ public class MovingImagesRenderer: Renderer {
     public func restoreGraphicsState() { }
     
     public func addCGPath(path: CGPath) { }
+    
+    public func startGroup() {
+        
+    }
+    
+    public func endGroup() {
+        
+    }
     
     public func addPath(path:PathGenerator) {
         for (key, value) in path.mipath {
@@ -259,6 +273,10 @@ public class SourceCodeRenderer: Renderer {
     public func restoreGraphicsState() {
         source += "CGContextRestoreGState(self)\n"
     }
+
+    public func startGroup() { }
+    
+    public func endGroup() { }
 
     public func addCGPath(path: CGPath) {
         source += "CGContextAddPath(context, \(path))\n"
