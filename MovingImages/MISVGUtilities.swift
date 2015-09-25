@@ -49,21 +49,28 @@ public func writeMovingImagesJSON(jsonObject: [NSString : AnyObject], sourceFile
     }
 }
 
-public func makePointDictionary(point: CGPoint) -> [NSString : AnyObject] {
+internal func makePointDictionary(point: CGPoint = CGPoint.zero) -> [NSString : AnyObject] {
     return [
         MIJSONKeyX : point.x,
         MIJSONKeyY : point.y
     ]
 }
 
-public func makeLineDictionary(startPoint: CGPoint, endPoint: CGPoint) -> [NSString : AnyObject] {
+internal func makeLineDictionary(startPoint: CGPoint, endPoint: CGPoint) -> [NSString : AnyObject] {
     return [
         MIJSONKeyStartPoint : makePointDictionary(startPoint),
         MIJSONKeyEndPoint : makePointDictionary(endPoint)
     ]
 }
 
-public func makeRectDictionary(rectangle: CGRect) -> [NSString : AnyObject] {
+internal func makePathDictionary(pathElements: NSArray, startPoint: CGPoint = CGPoint.zero) -> [NSString : AnyObject] {
+    return [
+        MIJSONKeyArrayOfPathElements : pathElements,
+        MIJSONKeyStartPoint : makePointDictionary(CGPoint(x: 0.0, y: 0.0))
+    ]
+}
+
+internal func makeRectDictionary(rectangle: CGRect) -> [NSString : AnyObject] {
     return [
         MIJSONKeySize : [
             MIJSONKeyWidth : rectangle.size.width,
@@ -73,6 +80,31 @@ public func makeRectDictionary(rectangle: CGRect) -> [NSString : AnyObject] {
             MIJSONKeyX : rectangle.origin.x,
             MIJSONKeyY : rectangle.origin.y,
         ]
+    ]
+}
+
+internal func makePolygonArray(points: [CGPoint]) -> [[NSString : AnyObject]] {
+    return points.map() {
+        return [
+            MIJSONKeyElementType : MIJSONValuePathLine,
+            MIJSONKeyEndPoint : [ MIJSONKeyX : $0.x, MIJSONKeyY : $0.y ]
+        ]
+    }
+}
+
+internal func makePolygonDictionary(points: [CGPoint]) -> [NSString : AnyObject] {
+    var pathArray = makePolygonArray(Array(points[1..<points.count]))
+    pathArray.append([MIJSONKeyElementType : MIJSONValueCloseSubPath])
+    return [
+        MIJSONKeyStartPoint : makePointDictionary(points[0]),
+        MIJSONKeyArrayOfPathElements : pathArray
+    ]
+}
+
+internal func makePolylineDictionary(points: [CGPoint]) -> [NSString : AnyObject] {
+    return [
+        MIJSONKeyStartPoint : makePointDictionary(points[0]),
+        MIJSONKeyArrayOfPathElements : makePolygonArray(Array(points[1..<points.count]))
     ]
 }
 

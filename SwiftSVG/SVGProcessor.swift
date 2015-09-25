@@ -211,8 +211,8 @@ public class SVGProcessor {
         var pathArray = NSMutableArray(capacity: 0)
         let path = MICGPathFromSVGPath(string, pathArray: &pathArray)
         xmlElement["d"] = nil
-        let svgElement = SVGPath(path: path)
 // MARK: MovingImages start.
+        let svgElement = SVGPath(path: path, miPath: makePathDictionary(pathArray))
         svgElement.movingImages[MIJSONKeyArrayOfPathElements] = pathArray
         svgElement.movingImages[MIJSONKeyStartPoint] = makePointDictionary(CGPoint(x: 0.0, y: 0.0))
 // MARK: MovingImages end.
@@ -250,17 +250,8 @@ public class SVGProcessor {
         let svgElement = SVGPolygon(points: points)
 
 // MARK: MovingImages start.
-        svgElement.movingImages[MIJSONKeyStartPoint] = [
-            MIJSONKeyX : points[0].x,
-            MIJSONKeyY : points[0].y
-        ]
-
-        var pathArray = points[1..<points.count].map() {
-            return [
-                MIJSONKeyElementType : MIJSONValuePathLine,
-                MIJSONKeyEndPoint : [ MIJSONKeyX : $0.x, MIJSONKeyY : $0.y ]
-            ]
-        }
+        svgElement.movingImages[MIJSONKeyStartPoint] = makePointDictionary(points[0])
+        var pathArray = makePolygonArray(Array(points[1..<points.count]))
         pathArray.append([MIJSONKeyElementType : MIJSONValueCloseSubPath])
         svgElement.movingImages[MIJSONKeyArrayOfPathElements] = pathArray
 // MARK: MovingImages end.
@@ -277,18 +268,9 @@ public class SVGProcessor {
         let svgElement = SVGPolyline(points: points)
         
 // MARK: MovingImages start.
-        svgElement.movingImages[MIJSONKeyStartPoint] = [
-            MIJSONKeyX : points[0].x,
-            MIJSONKeyY : points[0].y
-        ]
-        
-        let pathArray = points[1..<points.count].map() {
-            return [
-                MIJSONKeyElementType : MIJSONValuePathLine,
-                MIJSONKeyEndPoint : [ MIJSONKeyX : $0.x, MIJSONKeyY : $0.y ]
-            ]
-        }
-        svgElement.movingImages[MIJSONKeyArrayOfPathElements] = pathArray
+        svgElement.movingImages[MIJSONKeyStartPoint] = makePointDictionary(points[0])
+        let pointsSlice = Array(points[1..<points.count])
+        svgElement.movingImages[MIJSONKeyArrayOfPathElements] = makePolygonArray(pointsSlice)
 // MARK: MovingImages end.
         return svgElement
     }

@@ -84,14 +84,14 @@ public extension SVGContainer {
                         continue
                     }
 
-                    let newPath = lastChild.cgpath + child.cgpath
-                    lastChild.cgpath = newPath
+                    // let newPath = lastChild.cgpath + child.cgpath
+                    // lastChild.cgpath = newPath
 
-                    children.removeAtIndex(index)
-
-                    combinedFlag = true
-                    break
-
+                    if lastChild.addPath(child) {
+                        children.removeAtIndex(index)
+                        combinedFlag = true
+                        break
+                    }
                 }
                 lastChild = child
             }

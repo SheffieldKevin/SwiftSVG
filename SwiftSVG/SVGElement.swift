@@ -265,11 +265,35 @@ public class SVGGroup: SVGContainer {
 
 // MARK: -
 
-public class SVGPath: SVGElement, CGPathable {
-    public internal(set) var cgpath: CGPath
+public typealias MovingImagesPath = [NSString : AnyObject]
 
-    public init(path: CGPath) {
+public protocol PathGenerator: CGPathable {
+    var mipath:MovingImagesPath { get }
+}
+
+// MARK: -
+
+public class SVGPath: SVGElement, PathGenerator {
+    public private(set) var cgpath: CGPath
+    public private(set) var mipath: MovingImagesPath
+
+    public init(path: CGPath, miPath: MovingImagesPath) {
         self.cgpath = path
+        self.mipath = miPath
+    }
+    
+    // Returns true on success. False on failure.
+    internal func addPath(svgPath: SVGPath) -> Bool {
+        self.cgpath = self.cgpath + svgPath.cgpath
+        let miPath1 = self.mipath[MIJSONKeyArrayOfPathElements] as? [[NSString : AnyObject]]
+        let miPath2 = svgPath.mipath[MIJSONKeyArrayOfPathElements] as? [[NSString : AnyObject]]
+        if let miPath1 = miPath1, let miPath2 = miPath2 {
+            self.mipath[MIJSONKeyArrayOfPathElements] = miPath1 + miPath2
+            return true
+        }
+        else {
+            return false
+        }
     }
 }
 
@@ -294,10 +318,11 @@ public class SVGLine: SVGElement, CGPathable {
     }
 }
 
-public class SVGPolygon: SVGElement, CGPathable {
+public class SVGPolygon: SVGElement, PathGenerator {
     public let points: [CGPoint]
     
     lazy public var cgpath:CGPath = self.makePath()
+    lazy public var mipath:MovingImagesPath = makePolygonDictionary(self.points)
     
     public init(points: [CGPoint]) {
         self.points = points
@@ -312,10 +337,11 @@ public class SVGPolygon: SVGElement, CGPathable {
     }
 }
 
-public class SVGPolyline: SVGElement, CGPathable {
+public class SVGPolyline: SVGElement, PathGenerator {
     public let points: [CGPoint]
     
     lazy public var cgpath:CGPath = self.makePath()
+    lazy public var mipath:MovingImagesPath = makePolylineDictionary(self.points)
     
     public init(points: [CGPoint]) {
         self.points = points
