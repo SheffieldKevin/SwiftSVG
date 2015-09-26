@@ -42,6 +42,23 @@ public class SVGRenderer {
             return
         }
 
+        let hasStroke = svgElement.hasStroke
+        let hasFill = svgElement.hasFill
+
+        if let _ = svgElement as? SVGContainer {
+            renderer.startGroup(svgElement.id)
+        }
+        else if !(hasStroke || hasFill) {
+            return
+        }
+        else {
+            renderer.startElement(svgElement.id)
+        }
+
+        defer {
+            renderer.endElement()
+        }
+        
         renderer.pushGraphicsState()
         defer {
             renderer.restoreGraphicsState()
@@ -66,8 +83,6 @@ public class SVGRenderer {
                 try renderGroup(svgGroup, renderer: renderer)
             case let pathable as PathGenerator:
                 // svgElement.printSelfAndParents()
-                let hasStroke = svgElement.hasStroke
-                let hasFill = svgElement.hasFill
                 if (hasStroke || hasFill) {
                     let mode = CGPathDrawingMode(hasStroke: hasStroke, hasFill: hasFill)
                     renderer.addPath(pathable)
@@ -100,10 +115,9 @@ public class SVGRenderer {
     }
 
     public func renderDocument(svgDocument: SVGDocument, renderer: Renderer) throws {
-        renderer.startGroup()
-        defer {
-            renderer.endGroup()
-        }
+        renderer.startDocument(svgDocument.viewBox)
+        renderer.fillColor = try SVGColors.stringToColor("black")
+        renderer.lineWidth = 1.0
 
         for child in svgDocument.children {
             try renderElement(child, renderer: renderer)
@@ -111,10 +125,6 @@ public class SVGRenderer {
     }
 
     public func renderGroup(svgGroup: SVGGroup, renderer: Renderer) throws {
-        renderer.startGroup()
-        defer {
-            renderer.endGroup()
-        }
         for child in svgGroup.children {
             try renderElement(child, renderer: renderer)
         }

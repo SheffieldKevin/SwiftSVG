@@ -134,7 +134,6 @@ public class SVGElement: Node {
         }
         return hasFill ? (hasStroke ? MIJSONValuePathFillAndStrokeElement : MIJSONValuePathFillElement) : MIJSONValuePathStrokeElement
     }
-
 // MARK: MovingImages end.
 }
 
@@ -356,7 +355,7 @@ public class SVGRect: SVGElement, PathGenerator {
     }
 
     private func makeMIPath() -> [NSString : AnyObject] {
-        return makeRectDictionary(rect.frame, makePath: hasFill && hasStroke)
+        return makeRectDictionary(rect.frame, hasFill: hasFill, hasStroke: hasStroke)
     }
 }
 
@@ -371,7 +370,7 @@ public class SVGEllipse: SVGElement, PathGenerator {
     }
     
     private func makeMIPath() -> [NSString : AnyObject] {
-        return makeRectDictionary(rect, makePath: hasFill && hasStroke)
+        return makeOvalDictionary(rect, hasFill: hasFill, hasStroke: hasStroke)
     }
 }
 
@@ -394,6 +393,6 @@ public class SVGCircle: SVGElement, PathGenerator {
     }
 
     private func makeMIPath() -> [NSString : AnyObject] {
-        return makeRectDictionary(rect, makePath: hasFill && hasStroke)
+        return makeOvalDictionary(rect, hasFill: hasFill, hasStroke: hasStroke)
     }
 }

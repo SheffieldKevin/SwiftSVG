@@ -58,8 +58,11 @@ internal func makePointDictionary(point: CGPoint = CGPoint.zero) -> [NSString : 
 
 internal func makeLineDictionary(startPoint: CGPoint, endPoint: CGPoint) -> [NSString : AnyObject] {
     return [
-        MIJSONKeyStartPoint : makePointDictionary(startPoint),
-        MIJSONKeyEndPoint : makePointDictionary(endPoint)
+        MIJSONKeyLine : [
+            MIJSONKeyStartPoint : makePointDictionary(startPoint),
+            MIJSONKeyEndPoint : makePointDictionary(endPoint),
+        ],
+        MIJSONKeyElementType : MIJSONValueLineElement
     ]
 }
 
@@ -100,6 +103,53 @@ internal func makeRectDictionary(rectangle: CGRect, makePath: Bool) -> [NSString
             MIJSONKeyRect : makeRectDictionary(rectangle)
         ]
     }
+}
+
+internal func makeRectDictionary(rectangle: CGRect, hasFill: Bool, hasStroke: Bool) -> [NSString : AnyObject] {
+    var theDict = makeRectDictionary(rectangle, makePath: hasFill && hasStroke)
+    if hasFill && hasStroke {
+        theDict[MIJSONKeyElementType] = MIJSONValuePathFillAndStrokeElement
+    }
+    else if hasFill {
+        theDict[MIJSONKeyElementType] = MIJSONValueRectangleFillElement
+    }
+    else if hasStroke {
+        theDict[MIJSONKeyElementType] = MIJSONValueRectangleStrokeElement
+    }
+    return theDict
+}
+
+internal func makeOvalDictionary(rectangle: CGRect, makePath: Bool) -> [NSString : AnyObject] {
+    if makePath {
+        return [
+            MIJSONKeyStartPoint : makePointDictionary(),
+            MIJSONKeyArrayOfPathElements : [
+                [
+                    MIJSONKeyElementType : MIJSONValuePathOval,
+                    MIJSONKeyRect : makeRectDictionary(rectangle)
+                ]
+            ]
+        ]
+    }
+    else {
+        return [
+            MIJSONKeyRect : makeRectDictionary(rectangle)
+        ]
+    }
+}
+
+internal func makeOvalDictionary(rectangle: CGRect, hasFill: Bool, hasStroke: Bool) -> [NSString : AnyObject] {
+    var theDict = makeOvalDictionary(rectangle, makePath: hasFill && hasStroke)
+    if hasFill && hasStroke {
+        theDict[MIJSONKeyElementType] = MIJSONValuePathFillAndStrokeElement
+    }
+    else if hasFill {
+        theDict[MIJSONKeyElementType] = MIJSONValueOvalFillElement
+    }
+    else if hasStroke {
+        theDict[MIJSONKeyElementType] = MIJSONValueOvalStrokeElement
+    }
+    return theDict
 }
 
 internal func makePolygonArray(points: [CGPoint]) -> [[NSString : AnyObject]] {

@@ -45,11 +45,22 @@ func converter(value:Any) throws -> Any? {
             let y = parameters.count > 1 ? parameters[1] : x
             return Scale(sx: x, sy: y)
         case "rotate":
-            let angle = parameters[0]
-            // TODO
-//            let cx = parameters.get(1, defaultValue: CGFloat(0))
-//            let cy = parameters.get(2, defaultValue: CGFloat(0))
-            return Rotate(angle: angle)
+            // On iOS rotation is in the opposite direction to OS X for CGAffineTransformRotate.
+            // TODO: Confirm that this modification for iOS is correct.
+            #if os(iOS)
+                let angle = -parameters[0] * CGFloat(M_PI / 180.0)
+            #else
+                let angle = parameters[0] * CGFloat(M_PI / 180.0)
+            #endif
+            var t = CGAffineTransformIdentity
+            let tx = (parameters.count > 1 ? parameters[1] : 0.0)
+            let ty = (parameters.count > 2 ? parameters[1] : 0.0)
+
+            t = CGAffineTransformTranslate(t, tx, ty)
+            t = CGAffineTransformRotate(t, angle)
+            t = CGAffineTransformTranslate(t, -tx, -ty)
+
+            return MatrixTransform2D(a: t.a, b: t.b, c: t.c, d: t.d, tx: t.tx, ty: t.ty)
         default:
             return nil
     }

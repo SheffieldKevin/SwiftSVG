@@ -15,16 +15,21 @@ public protocol Renderer: AnyObject {
     func pushGraphicsState()
     func restoreGraphicsState()
 
-    func startGroup()
-    func endGroup()
+    func startDocument(viewBox: CGRect)
+    func startGroup(id: String?)
+    func endElement()
+    func startElement(id: String?)
     
     func addPath(path:PathGenerator)
     func addCGPath(path: CGPath)
     func drawPath(mode: CGPathDrawingMode)
     func fillPath()
+    
+    func render() -> String
 
     var strokeColor:CGColor? { get set }
     var fillColor:CGColor? { get set }
+    var lineWidth:CGFloat? { get set }
 
     var style:Style { get set }
 
@@ -42,7 +47,7 @@ extension CGAffineTransform: CustomSourceConvertible {
     }
 }
 
-// MARK: -
+// MARK: - CGContext renderer
 
 extension CGContext: Renderer {
 
@@ -62,9 +67,13 @@ extension CGContext: Renderer {
         CGContextRestoreGState(self)
     }
 
-    public func startGroup() { }
+    public func startDocument(viewBox: CGRect) { }
+    
+    public func startGroup(id: String?) { }
 
-    public func endGroup() { }
+    public func endElement() { }
+    
+    public func startElement(id: String?) { }
 
     public func addCGPath(path: CGPath) {
         CGContextAddPath(self, path)
@@ -82,17 +91,54 @@ extension CGContext: Renderer {
     public func fillPath() {
         CGContextFillPath(self)
     }
+    
+    public func render() -> String { return "" }
 }
 
+//MARK: - MovingImagesRenderer
+
 public class MovingImagesRenderer: Renderer {
-    public internal(set) var movingImagesJSON = [NSString : AnyObject]()
+    
+    class MIRenderElement: Node {
+        internal typealias ParentType = MIRenderContainer
+        internal weak var parent: MIRenderContainer? = nil
+        
+        internal var movingImages = [NSString : AnyObject]()
+        internal func generateJSONDict() -> [NSString : AnyObject] {
+            return movingImages
+        }
+    }
+    
+    class MIRenderContainer: MIRenderElement, GroupNode {
+        internal var children = [MIRenderElement]()
+        
+        override init() {
+            super.init()
+        }
+        
+        override internal func generateJSONDict() -> [NSString : AnyObject] {
+            self.movingImages[MIJSONKeyElementType] = MIJSONKeyArrayOfElements
+            let arrayOfElements = children.map { $0.generateJSONDict() }
+            self.movingImages[MIJSONKeyArrayOfElements] = arrayOfElements
+            return self.movingImages
+        }
+    }
+
+    public init() {
+        current = rootElement
+    }
+    
+    internal var rootElement = MIRenderContainer()
+    private var current: MIRenderElement
+    
+    // internal var movingImagesJSON: [NSString : AnyObject]
     
     public func concatTransform(transform:CGAffineTransform) {
         concatCTM(transform)
     }
     
     public func concatCTM(transform:CGAffineTransform) {
-        movingImagesJSON[MIJSONKeyAffineTransform] = makeCGAffineTransformDictionary(transform)
+        current.movingImages[MIJSONKeyAffineTransform] = makeCGAffineTransformDictionary(transform)
     }
 
     public func pushGraphicsState() { }
@@ -101,17 +147,63 @@ public class MovingImagesRenderer: Renderer {
     
     public func addCGPath(path: CGPath) { }
     
-    public func startGroup() {
-        
+    // Should this be throws?
+    public func startGroup(id: String?) {
+        if let current = self.current as? MIRenderContainer {
+            let newItem = MIRenderContainer()
+            if let id = id {
+                newItem.movingImages[MIJSONKeyElementDebugName] = id
+            }
+            current.children.append(newItem)
+            newItem.parent = current
+            self.current = newItem
+        }
+        else {
+            preconditionFailure("Cannot start a new render group. Current element is a leaf")
+        }
     }
-    
+
+/*
     public func endGroup() {
-        
+        if let parent = self.current.parent {
+            self.current = parent
+        }
+        else {
+            preconditionFailure("Cannot end a group when there is no parent.")
+        }
     }
-    
+*/
+    public func startElement(id: String?) {
+        if let current = self.current as? MIRenderContainer {
+            let newItem = MIRenderElement()
+            if let id = id {
+                newItem.movingImages[MIJSONKeyElementDebugName] = id
+            }
+            current.children.append(newItem)
+            newItem.parent = current
+            self.current = newItem
+        }
+        else {
+            preconditionFailure("Cannot start a new render element. Current element is a leaf")
+        }
+    }
+
+    public func startDocument(viewBox: CGRect) {
+        current.movingImages["viewBox"] = makeRectDictionary(viewBox)
+    }
+
     public func addPath(path:PathGenerator) {
         for (key, value) in path.mipath {
-            movingImagesJSON[key] = value
+            current.movingImages[key] = value
+        }
+    }
+    
+    public func endElement() {
+        if let parent = self.current.parent {
+            self.current = parent
+        }
+        else {
+            preconditionFailure("Cannot end an element when there is no parent.")
         }
     }
     
@@ -122,7 +214,8 @@ public class MovingImagesRenderer: Renderer {
         switch(mode) {
         case CGPathDrawingMode.Fill:
             miDrawingElement = MIJSONValuePathFillElement
-            evenOdd = "nonwindingrule"
+            evenOdd = Optional.None
+            // evenOdd = "nonwindingrule"
         case CGPathDrawingMode.Stroke:
             miDrawingElement = MIJSONValuePathStrokeElement
             evenOdd = Optional.None
@@ -134,12 +227,28 @@ public class MovingImagesRenderer: Renderer {
             evenOdd = MIJSONValueEvenOddClippingRule
         case CGPathDrawingMode.FillStroke:
             miDrawingElement = MIJSONValuePathFillAndStrokeElement
-            evenOdd = "nonwindingrule"
+            evenOdd = Optional.None
+            // evenOdd = "nonwindingrule"
         }
         if let rule = evenOdd {
-            movingImagesJSON[MIJSONKeyClippingRule] = rule
+            current.movingImages[MIJSONKeyClippingRule] = rule
         }
-        movingImagesJSON[MIJSONKeyClippingRule] = miDrawingElement
+        
+        if current.movingImages[MIJSONKeyElementType] == nil {
+            current.movingImages[MIJSONKeyElementType] = miDrawingElement
+        }
+    }
+
+    // Not part of the Render protocol.
+    public func generateJSONDict() -> [NSString : AnyObject] {
+        return rootElement.generateJSONDict()
+    }
+    
+    public func render() -> String {
+        if let jsonString = jsonObjectToString(self.generateJSONDict()) {
+            return jsonString
+        }
+        return ""
     }
 
     public func fillPath() { }
@@ -161,42 +270,63 @@ public class MovingImagesRenderer: Renderer {
         }
         set {
             style.strokeColor = newValue
-            // TODO:
+            if let color = newValue {
+                current.movingImages[MIJSONKeyStrokeColor] = colorDictFromColor(color)
+            }
+            else {
+                current.movingImages[MIJSONKeyStrokeColor] = nil
+            }
         }
     }
     
     public var fillColor:CGColor? {
-        get {
-            return style.fillColor
-        }
+        get { return style.fillColor }
         set {
             style.fillColor = newValue
-            // TODO:
+            if let color = newValue {
+                current.movingImages[MIJSONKeyFillColor] = colorDictFromColor(color)
+            }
+            else {
+                current.movingImages[MIJSONKeyFillColor] = nil
+            }
+        }
+    }
+
+    public var lineWidth:CGFloat? {
+        get { return style.lineWidth }
+        set {
+            style.lineWidth = newValue
+            if let lineWidth = newValue {
+                current.movingImages[MIJSONKeyLineWidth] = lineWidth
+            }
+            else {
+                current.movingImages[MIJSONKeyFillColor] = nil
+            }
         }
     }
 
     public var style:Style = Style() {
         didSet {
             if let fillColor = style.fillColor {
-                self.movingImagesJSON[MIJSONKeyFillColor] = colorDictFromColor(fillColor)
+                current.movingImages[MIJSONKeyFillColor] = colorDictFromColor(fillColor)
             }
             if let strokeColor = style.strokeColor {
-                self.movingImagesJSON[MIJSONKeyStrokeColor] = colorDictFromColor(strokeColor)
+                current.movingImages[MIJSONKeyStrokeColor] = colorDictFromColor(strokeColor)
             }
             if let lineWidth = style.lineWidth {
-                self.movingImagesJSON[MIJSONKeyLineWidth] = lineWidth
+                current.movingImages[MIJSONKeyLineWidth] = lineWidth
             }
             if let lineCap = style.lineCap {
-                self.movingImagesJSON[MIJSONKeyLineCap] = lineCap.stringValue
+                current.movingImages[MIJSONKeyLineCap] = lineCap.stringValue
             }
             if let lineJoin = style.lineJoin {
-                self.movingImagesJSON[MIJSONKeyLineJoin] = lineJoin.stringValue
+                current.movingImages[MIJSONKeyLineJoin] = lineJoin.stringValue
             }
             if let miterLimit = style.miterLimit {
-                self.movingImagesJSON[MIJSONKeyLineJoin] = miterLimit
+                current.movingImages[MIJSONKeyMiter] = miterLimit
             }
             if let alpha = style.alpha {
-                self.movingImagesJSON[MIJSONKeyAlpha] = alpha
+                current.movingImages[MIJSONKeyAlpha] = alpha
             }
 /*  Not yet implemented in SwiftSVG.
             if let blendMode = newStyle.blendMode {
@@ -274,10 +404,14 @@ public class SourceCodeRenderer: Renderer {
         source += "CGContextRestoreGState(self)\n"
     }
 
-    public func startGroup() { }
+    public func startGroup(id: String?) { }
     
-    public func endGroup() { }
+    public func endElement() { }
+    
+    public func startElement(id: String?) { }
 
+    public func startDocument(viewBox: CGRect) { }
+    
     public func addCGPath(path: CGPath) {
         source += "CGContextAddPath(context, \(path))\n"
     }
@@ -292,6 +426,10 @@ public class SourceCodeRenderer: Renderer {
 
     public func fillPath() {
         source += "CGContextFillPath(context)\n"
+    }
+
+    public func render() -> String {
+        return source
     }
 
     public var strokeColor:CGColor? {
@@ -311,6 +449,16 @@ public class SourceCodeRenderer: Renderer {
         set {
             style.fillColor = newValue
             source += "CGContextSetFillColor(context, TODO)\n"
+        }
+    }
+
+    public var lineWidth:CGFloat? {
+        get {
+            return style.lineWidth
+        }
+        set {
+            style.lineWidth = newValue
+            source += "CGContextSetLineWidth(context, TODO)\n"
         }
     }
 
