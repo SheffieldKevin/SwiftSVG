@@ -48,12 +48,14 @@ public class SVGProcessor {
                 print(event)
             }
         }
+/*
         if let document = document {
 // MARK: MovingImages start.
             document.updateMovingImagesJSON()
 // MARK: MovingImages end.
             // document.printElements()
         }
+*/
         return document
     }
 
@@ -87,24 +89,27 @@ public class SVGProcessor {
             document.viewBox = CGRect(x: x, y: y, width: width, height: height)
 
             xmlElement["viewBox"] = nil
+/*
 // MARK: MovingImages start.
             document.movingImages["viewBox"] = [
                 MIJSONKeySize : [ MIJSONKeyWidth : width, MIJSONKeyHeight : height ],
                 MIJSONKeyOrigin : [ MIJSONKeyX : x, MIJSONKeyY : y ]
             ]
 // MARK: MovingImages end.
+*/
         }
 
         guard let nodes = xmlElement.children else {
             return document
         }
 
+/*
 // MARK: MovingImages start.
         // SVG defaults to a black background drawing color.
         let colorDict = try! SVGColors.stringToColorDictionary("black")!
         document.movingImages[MIJSONKeyFillColor] = SVGColors.colorDictToMIColorDict(colorDict)
 // MARK: MovingImages end.
-
+*/
         for node in nodes where node is NSXMLElement {
             if let svgElement = try self.processSVGElement(node as! NSXMLElement, state: state) {
                 svgElement.parent = document
@@ -168,6 +173,7 @@ public class SVGProcessor {
                 state.events.append(Event(severity: .warning, message: "Unhandled attributes: \(xmlElement))"))
                 svgElement.xmlElement = xmlElement
             }
+/*
 // MARK: MovingImages start.
             if let theTransform = svgElement.transform?.toCGAffineTransform() {
                 svgElement.movingImages[MIJSONKeyAffineTransform] = makeCGAffineTransformDictionary(theTransform)
@@ -176,6 +182,7 @@ public class SVGProcessor {
                 svgElement.movingImages[MIJSONKeyElementDebugName] = id
             }
 // MARK: MovingImages end.
+*/
         }
         return svgElement
     }
@@ -203,11 +210,13 @@ public class SVGProcessor {
         var pathArray = NSMutableArray(capacity: 0)
         let path = MICGPathFromSVGPath(string, pathArray: &pathArray)
         xmlElement["d"] = nil
-// MARK: MovingImages start.
         let svgElement = SVGPath(path: path, miPath: makePathDictionary(pathArray))
+/*
+// MARK: MovingImages start.
         svgElement.movingImages[MIJSONKeyArrayOfPathElements] = pathArray
         svgElement.movingImages[MIJSONKeyStartPoint] = makePointDictionary(CGPoint(x: 0.0, y: 0.0))
 // MARK: MovingImages end.
+*/
         return svgElement
     }
 
@@ -240,13 +249,14 @@ public class SVGProcessor {
         
         xmlElement["points"] = nil
         let svgElement = SVGPolygon(points: points)
-
+/*
 // MARK: MovingImages start.
         svgElement.movingImages[MIJSONKeyStartPoint] = makePointDictionary(points[0])
         var pathArray = makePolygonArray(Array(points[1..<points.count]))
         pathArray.append([MIJSONKeyElementType : MIJSONValueCloseSubPath])
         svgElement.movingImages[MIJSONKeyArrayOfPathElements] = pathArray
 // MARK: MovingImages end.
+*/
         return svgElement
     }
 
@@ -258,12 +268,13 @@ public class SVGProcessor {
         
         xmlElement["points"] = nil
         let svgElement = SVGPolyline(points: points)
-        
+/*
 // MARK: MovingImages start.
         svgElement.movingImages[MIJSONKeyStartPoint] = makePointDictionary(points[0])
         let pointsSlice = Array(points[1..<points.count])
         svgElement.movingImages[MIJSONKeyArrayOfPathElements] = makePolygonArray(pointsSlice)
 // MARK: MovingImages end.
+*/
         return svgElement
     }
 
@@ -282,10 +293,12 @@ public class SVGProcessor {
         let endPoint = CGPoint(x: x2, y: y2)
         
         let svgElement = SVGLine(startPoint: startPoint, endPoint: endPoint)
+/*
 // MARK: MovingImages start.
         svgElement.movingImages[MIJSONKeyLine] = makeLineDictionary(startPoint, endPoint: endPoint)
         svgElement.movingImages[MIJSONKeyElementType] = MIJSONValueLineElement
 // MARK: MovingImages end.
+*/
         return svgElement
     }
 
@@ -299,9 +312,11 @@ public class SVGProcessor {
         xmlElement["r"] = nil
         
         let svgElement = SVGCircle(center: CGPoint(x: cx, y: cy), radius: r)
+/*
 // MARK: MovingImages start.
         svgElement.movingImages[MIJSONKeyRect] = makeRectDictionary(svgElement.rect)
 // MARK: MovingImages end.
+*/
         return svgElement
     }
 
@@ -318,9 +333,11 @@ public class SVGProcessor {
 
         let rect = CGRect(x: cx - rx, y: cy - ry, width: 2 * rx, height: 2 * ry)
         let svgElement = SVGEllipse(rect: rect)
+/*
 // MARK: MovingImages start.
         svgElement.movingImages[MIJSONKeyRect] = makeRectDictionary(svgElement.rect)
 // MARK: MovingImages end.
+*/
         return svgElement
     }
     
@@ -336,9 +353,11 @@ public class SVGProcessor {
         xmlElement["height"] = nil
 
         let svgElement = SVGRect(rect: CGRect(x: x, y: y, w: width, h: height))
+/*
 // MARK: MovingImages start.
         svgElement.movingImages[MIJSONKeyRect] = makeRectDictionary(svgElement.rect.frame)
 // MARK: MovingImages end.
+*/
         return svgElement
     }
     
@@ -359,9 +378,11 @@ public class SVGProcessor {
         if let colorDict = processColorString(colorString),
             let color = SVGColors.colorDictionaryToCGColor(colorDict)
         {
+/*
 // MARK: MovingImages start.
             svgElement.movingImages[MIJSONKeyFillColor] = SVGColors.colorDictToMIColorDict(colorDict)
 // MARK: MovingImages end.
+*/
             return StyleElement.fillColor(color)
         }
         else {
@@ -373,9 +394,11 @@ public class SVGProcessor {
         if let colorDict = processColorString(colorString),
             let color = SVGColors.colorDictionaryToCGColor(colorDict)
         {
+/*
 // MARK: MovingImages start.
             svgElement.movingImages[MIJSONKeyStrokeColor] = SVGColors.colorDictToMIColorDict(colorDict)
 // MARK: MovingImages end.
+*/
             return StyleElement.strokeColor(color)
         }
         else {
@@ -404,18 +427,22 @@ public class SVGProcessor {
                 case "stroke-width":
                     let floatVal = try? SVGProcessor.stringToCGFloat(value)
                     if let strokeValue = floatVal {
+/*
 // MARK: MovingImages start.
                         svgElement.movingImages[MIJSONKeyLineWidth] = strokeValue
 // MARK: MovingImages end.
+*/
                         return StyleElement.lineWidth(strokeValue)
                     }
                     return nil
                 case "stroke-miterlimit":
                     let floatVal = try? SVGProcessor.stringToCGFloat(value)
                     if let miterLimit = floatVal {
+/*
 // MARK: MovingImages start.
                         svgElement.movingImages[MIJSONKeyMiter] = miterLimit
 // MARK: MovingImages end.
+*/
                         return StyleElement.miterLimit(miterLimit)
                     }
                     return nil
@@ -461,18 +488,22 @@ public class SVGProcessor {
 
         let stroke = try? SVGProcessor.stringToCGFloat(xmlElement["stroke-width"]?.stringValue)
         if let strokeValue = stroke {
+/*
 // MARK: MovingImages start.
             svgElement.movingImages[MIJSONKeyLineWidth] = strokeValue
 // MARK: MovingImages start.
+*/
             styleElements.append(StyleElement.lineWidth(strokeValue))
         }
         xmlElement["stroke-width"] = nil
 
         let mitreLimit = try? SVGProcessor.stringToCGFloat(xmlElement["stroke-miterlimit"]?.stringValue)
         if let mitreLimitValue = mitreLimit {
+/*
 // MARK: MovingImages start.
             svgElement.movingImages[MIJSONKeyMiter] = mitreLimitValue
 // MARK: MovingImages start.
+*/
             styleElements.append(StyleElement.miterLimit(mitreLimitValue))
         }
         xmlElement["stroke-miterlimit"] = nil

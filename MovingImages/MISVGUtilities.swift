@@ -188,6 +188,7 @@ internal func makeCGAffineTransformDictionary(transform: CGAffineTransform) -> [
     ]
 }
 
+/*
 private func updateStrokeOrFillType(svgElement: SVGElement,
     strokeElementKey: NSString, fillElementKey: NSString) {
     let hasStroke = !(svgElement.strokeColor == nil)
@@ -233,3 +234,4 @@ func updateMovingImagesElementType(svgElement: SVGElement) {
         }
     }
 }
+*/

@@ -113,6 +113,7 @@ public class SVGElement: Node {
         }
     }
 
+/*
 // MARK: MovingImages start.
     public internal(set) var movingImages = [NSString : AnyObject]()
     
@@ -135,6 +136,7 @@ public class SVGElement: Node {
         return hasFill ? (hasStroke ? MIJSONValuePathFillAndStrokeElement : MIJSONValuePathFillElement) : MIJSONValuePathStrokeElement
     }
 // MARK: MovingImages end.
+*/
 }
 
 extension SVGElement: Equatable {
@@ -185,7 +187,8 @@ public class SVGContainer: SVGElement, GroupNode {
         self.printElement()
         self.children.forEach() { $0.printElements() }
     }
-    
+
+/*
 // MARK: MovingImages start.
     override public func generateMovingImagesJSON() -> [NSString : AnyObject] {
         if self.children.count == 0 {
@@ -232,6 +235,7 @@ public class SVGContainer: SVGElement, GroupNode {
         }
     }
 // MARK: MovingImages end.
+*/
 }
 
 // MARK: -
