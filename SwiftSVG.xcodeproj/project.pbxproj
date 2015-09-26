@@ -50,6 +50,8 @@
 		6E8642DA1BAB685800D6128E /* MIJSONConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E8642D81BAB685800D6128E /* MIJSONConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6E8642DB1BAB685800D6128E /* MIJSONConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8642D91BAB685800D6128E /* MIJSONConstants.m */; settings = {ASSET_TAGS = (); }; };
 		6EABBDC61BAF600C004C5C9F /* SVGStandardColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EABBDC51BAF600C004C5C9F /* SVGStandardColors.swift */; settings = {ASSET_TAGS = (); }; };
+		6EBF1D151BB70E2800C38BDB /* Markers.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D141BB70E2800C38BDB /* Markers.svg */; settings = {ASSET_TAGS = (); }; };
+		6EBF1D171BB70E3600C38BDB /* SimpleBlueRect.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D161BB70E3600C38BDB /* SimpleBlueRect.svg */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +121,8 @@
 		6E8642D91BAB685800D6128E /* MIJSONConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MIJSONConstants.m; path = MovingImages/MIJSONConstants.m; sourceTree = "<group>"; };
 		6EA9E2561BAAD5B600B7468C /* MIPathFromSVGPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MIPathFromSVGPath.m; path = MovingImages/MIPathFromSVGPath.m; sourceTree = "<group>"; };
 		6EABBDC51BAF600C004C5C9F /* SVGStandardColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGStandardColors.swift; sourceTree = "<group>"; };
+		6EBF1D141BB70E2800C38BDB /* Markers.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Markers.svg; sourceTree = "<group>"; };
+		6EBF1D161BB70E3600C38BDB /* SimpleBlueRect.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SimpleBlueRect.svg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,7 +174,9 @@
 			children = (
 				454799841ABF3CEB000B19B8 /* Apple_Swift_Logo.svg */,
 				454799851ABF3CEB000B19B8 /* Ghostscript_Tiger.svg */,
+				6EBF1D141BB70E2800C38BDB /* Markers.svg */,
 				454799861ABF3CEB000B19B8 /* JW_Bezier_1.svg */,
+				6EBF1D161BB70E3600C38BDB /* SimpleBlueRect.svg */,
 				454799871ABF3CEB000B19B8 /* SwiftOutline.svg */,
 			);
 			path = Samples;
@@ -382,11 +388,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EBF1D171BB70E3600C38BDB /* SimpleBlueRect.svg in Resources */,
 				45E6ADB01A9EAB0200386CFE /* Images.xcassets in Resources */,
 				4547998B1ABF3CEB000B19B8 /* SwiftOutline.svg in Resources */,
 				454799891ABF3CEB000B19B8 /* Ghostscript_Tiger.svg in Resources */,
 				454799881ABF3CEB000B19B8 /* Apple_Swift_Logo.svg in Resources */,
 				4547998A1ABF3CEB000B19B8 /* JW_Bezier_1.svg in Resources */,
+				6EBF1D151BB70E2800C38BDB /* Markers.svg in Resources */,
 				45E6ADB31A9EAB0200386CFE /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

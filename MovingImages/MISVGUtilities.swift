@@ -22,6 +22,19 @@ func jsonObjectToString(jsonObject: AnyObject) -> String? {
     return nil
 }
 
+public func writeMovingImagesJSONObject(jsonObject: [NSString : AnyObject], fileURL: NSURL) {
+    guard let jsonString = jsonObjectToString(jsonObject) else {
+        return
+    }
+    
+    do {
+        try jsonString.writeToURL(fileURL, atomically: false, encoding: NSUTF8StringEncoding)
+    }
+    catch {
+        print("Failed to save file: \(fileURL.path!)")
+    }
+}
+
 public func writeMovingImagesJSON(jsonObject: [NSString : AnyObject], sourceFileURL: NSURL) {
     guard let fileName = sourceFileURL.lastPathComponent else {
         return

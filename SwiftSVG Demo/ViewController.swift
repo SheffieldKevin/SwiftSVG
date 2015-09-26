@@ -113,16 +113,6 @@ class ViewController: NSViewController {
 //        let svgRenderer = SVGRenderer()
 //        try svgRenderer.renderDocument(svgDocument!, renderer: renderer)
 //        print(renderer.source)
-
-        guard let fileURL = document.fileURL else {
-            return
-        }
-
-        let renderer = MovingImagesRenderer()
-        let svgRenderer = SVGRenderer()
-        try svgRenderer.renderDocument(self.svgDocument!, renderer: renderer)
-        let jsonObject = renderer.generateJSONDict()
-        writeMovingImagesJSON(jsonObject, sourceFileURL: fileURL)
     }
 
 
@@ -220,5 +210,27 @@ class ViewController: NSViewController {
 
         try! summaryViewController.deepThought()
 
+    }
+
+    @IBAction func export(sender: AnyObject?) {
+        guard let svgDocument = svgDocument else {
+            return
+        }
+        let savePanel = NSSavePanel()
+        savePanel.allowedFileTypes = ["public.json"]
+        savePanel.beginSheetModalForWindow(self.svgView.window!, completionHandler: { result in
+            if result != NSModalResponseOK {
+                return
+            }
+            let renderer = MovingImagesRenderer()
+            let svgRenderer = SVGRenderer()
+            let _ = try? svgRenderer.renderDocument(svgDocument, renderer: renderer)
+            let jsonObject = renderer.generateJSONDict()
+            writeMovingImagesJSONObject(jsonObject, fileURL: savePanel.URL!)
+        })
+    }
+    
+    @IBAction func processFolder(sender: AnyObject?) {
+        
     }
 }

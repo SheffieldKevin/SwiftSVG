@@ -679,19 +679,19 @@
                                     <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="4mw-M6-3nP">
                                         <rect key="frame" x="0.0" y="0.0" width="191.5" height="270"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <clipView key="contentView" ambiguous="YES" id="ca6-rd-iIW">
+                                        <clipView key="contentView" id="ca6-rd-iIW">
                                             <rect key="frame" x="1" y="1" width="189.5" height="268"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <textView ambiguous="YES" importsGraphics="NO" richText="NO" findStyle="panel" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="109-j8-VG5">
+                                                <textView importsGraphics="NO" richText="NO" findStyle="panel" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="109-j8-VG5">
                                                     <rect key="frame" x="0.0" y="0.0" width="189.5" height="268"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <animations/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <size key="minSize" width="189.5" height="268"/>
+                                                    <size key="minSize" width="175" height="268"/>
                                                     <size key="maxSize" width="463" height="10000000"/>
                                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                    <size key="minSize" width="189.5" height="268"/>
+                                                    <size key="minSize" width="175" height="268"/>
                                                     <size key="maxSize" width="463" height="10000000"/>
                                                     <connections>
                                                         <binding destination="5gI-5U-AMq" name="value" keyPath="source" id="yZE-OL-B0d">
@@ -720,7 +720,7 @@
                                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" maxMagnification="16" minMagnification="0.0625" usesPredominantAxisScrolling="NO" id="XZz-Ju-YRp">
                                         <rect key="frame" x="201.5" y="0.0" width="545.5" height="270"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <clipView key="contentView" ambiguous="YES" id="A40-8A-FuR" customClass="CenteringClipView" customModule="SwiftSVG_Demo" customModuleProvider="target">
+                                        <clipView key="contentView" id="A40-8A-FuR" customClass="CenteringClipView" customModule="SwiftSVG_Demo" customModuleProvider="target">
                                             <rect key="frame" x="1" y="1" width="543.5" height="268"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
@@ -769,11 +769,11 @@
                                                         <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0cX-Zc-S2P">
                                                             <rect key="frame" x="0.0" y="0.0" width="248" height="240"/>
                                                             <clipView key="contentView" id="7cK-yb-Vmg">
-                                                                <rect key="frame" x="1" y="0.0" width="246" height="239"/>
+                                                                <rect key="frame" x="1" y="0.0" width="246" height="224"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="48q-sS-nYT" viewBased="YES" indentationPerLevel="16" outlineTableColumn="5Vr-C6-Kh4" id="5eY-Jq-TF9">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="420" height="216"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="420" height="201"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <animations/>
                                                                         <size key="intercellSpacing" width="3" height="2"/>
@@ -1079,7 +1079,7 @@
                                             </tabViewItem>
                                             <tabViewItem label="Statistics" identifier="" id="S2r-aN-Vxy">
                                                 <view key="view" id="JsG-eY-rqF">
-                                                    <rect key="frame" x="10" y="33" width="312" height="240"/>
+                                                    <rect key="frame" x="10" y="33" width="248" height="240"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <containerView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dVt-Ad-cdP">
@@ -1142,7 +1142,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TMQ-Gd-U9t">
-                                <rect key="frame" x="131" y="164" width="48" height="17"/>
+                                <rect key="frame" x="131" y="175" width="48" height="17"/>
                                 <animations/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="&lt;total&gt;" id="SQq-Tz-ZkC">
                                     <font key="font" metaFont="system"/>
@@ -1154,7 +1154,7 @@
                                 </connections>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7sd-5Z-N6P">
-                                <rect key="frame" x="131" y="139" width="48" height="17"/>
+                                <rect key="frame" x="131" y="150" width="48" height="17"/>
                                 <animations/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="&lt;path&gt;" id="bU4-uT-KVG">
                                     <font key="font" metaFont="system"/>
@@ -1166,7 +1166,7 @@
                                 </connections>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ns3-I5-PGk">
-                                <rect key="frame" x="131" y="114" width="57" height="17"/>
+                                <rect key="frame" x="131" y="125" width="57" height="17"/>
                                 <animations/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="&lt;group&gt;" id="9g5-26-Ket">
                                     <font key="font" metaFont="system"/>
@@ -1178,7 +1178,7 @@
                                 </connections>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pj0-aU-b17">
-                                <rect key="frame" x="18" y="164" width="73" height="17"/>
+                                <rect key="frame" x="18" y="175" width="73" height="17"/>
                                 <animations/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="# Elements" id="LND-KL-zvX">
                                     <font key="font" metaFont="system"/>
@@ -1187,7 +1187,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ds6-Co-ssl">
-                                <rect key="frame" x="18" y="114" width="61" height="17"/>
+                                <rect key="frame" x="18" y="125" width="61" height="17"/>
                                 <animations/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="# Groups" id="bnV-4F-h7J">
                                     <font key="font" metaFont="system"/>
@@ -1196,7 +1196,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J9Y-ie-azi">
-                                <rect key="frame" x="18" y="138" width="51" height="17"/>
+                                <rect key="frame" x="18" y="149" width="51" height="17"/>
                                 <animations/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="# Paths" id="MEU-d2-IyJ">
                                     <font key="font" metaFont="system"/>
@@ -1205,7 +1205,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Squ-o5-LDC">
-                                <rect key="frame" x="65" y="13" width="94" height="32"/>
+                                <rect key="frame" x="56" y="89" width="94" height="32"/>
                                 <animations/>
                                 <buttonCell key="cell" type="push" title="Optimise" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pkO-Xw-jj7">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1215,13 +1215,44 @@
                                     </connections>
                                 </buttonCell>
                             </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TNu-7x-qfJ">
+                                <rect key="frame" x="18" y="72" width="105" height="14"/>
+                                <animations/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="MovingImages:" id="Ggr-TL-2Rs">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bjt-4h-zyE">
+                                <rect key="frame" x="49" y="12" width="111" height="28"/>
+                                <animations/>
+                                <buttonCell key="cell" type="push" title="Process folder..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HxX-1q-mbQ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="smallSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="processFolder:" target="5qd-fz-86N" id="dEK-Ww-bEs"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xNk-gh-hOz">
+                                <rect key="frame" x="58" y="40" width="90" height="28"/>
+                                <animations/>
+                                <buttonCell key="cell" type="push" title="Export..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iQd-R4-QgR">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="smallSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="export:" target="5qd-fz-86N" id="PzO-it-AZP"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                     </view>
                 </viewController>
                 <customObject id="5qd-fz-86N" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="748" y="569"/>
+            <point key="canvasLocation" x="748" y="568.5"/>
         </scene>
     </scenes>
 </document>
