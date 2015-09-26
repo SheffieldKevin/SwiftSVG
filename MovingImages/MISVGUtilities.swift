@@ -14,7 +14,6 @@ func jsonObjectToString(jsonObject: AnyObject) -> String? {
     if NSJSONSerialization.isValidJSONObject(jsonObject) {
         let data = try? NSJSONSerialization.dataWithJSONObject(jsonObject,
             options: NSJSONWritingOptions.PrettyPrinted)
-            //            options: NSJSONWritingOptions(rawValue: 0))
         if let data = data,
             let jsonString = NSString(data: data, encoding: NSUTF8StringEncoding) {
                 return jsonString as String
@@ -187,51 +186,3 @@ internal func makeCGAffineTransformDictionary(transform: CGAffineTransform) -> [
         MIJSONKeyAffineTransformtY : transform.ty
     ]
 }
-
-/*
-private func updateStrokeOrFillType(svgElement: SVGElement,
-    strokeElementKey: NSString, fillElementKey: NSString) {
-    let hasStroke = !(svgElement.strokeColor == nil)
-    let hasFill = !(svgElement.fillColor == nil)
-    
-    if hasStroke {
-        if hasFill {
-            var element1 = svgElement.movingImages
-            element1[MIJSONKeyElementType] = fillElementKey
-            var element2 = svgElement.movingImages
-            element2[MIJSONKeyElementType] = strokeElementKey
-            svgElement.movingImages = [
-                MIJSONKeyElementType : MIJSONValueArrayOfElements,
-                MIJSONValueArrayOfElements : [ element1, element2 ]
-            ]
-        }
-        else {
-            svgElement.movingImages[MIJSONKeyElementType] = strokeElementKey
-        }
-    }
-    else if hasFill {
-        svgElement.movingImages[MIJSONKeyElementType] = fillElementKey
-    }
-}
-
-func updateMovingImagesElementType(svgElement: SVGElement) {
-    if svgElement.movingImages[MIJSONKeyElementType] == nil {
-        switch svgElement {
-        case let svgCircle as SVGCircle:
-            updateStrokeOrFillType(svgCircle, strokeElementKey: MIJSONValueOvalStrokeElement, fillElementKey: MIJSONValueOvalFillElement)
-        case let svgPolygon as SVGPolygon:
-            svgPolygon.movingImages[MIJSONKeyElementType] = svgPolygon.getPathElementType()
-        case let svgPolyline as SVGPolyline:
-            svgPolyline.movingImages[MIJSONKeyElementType] = svgPolyline.getPathElementType()
-        case let svgRect as SVGRect:
-            updateStrokeOrFillType(svgRect, strokeElementKey: MIJSONValueRectangleStrokeElement, fillElementKey: MIJSONValueRectangleFillElement)
-        case let svgEllipse as SVGEllipse:
-            updateStrokeOrFillType(svgEllipse, strokeElementKey: MIJSONValueOvalStrokeElement, fillElementKey: MIJSONValueOvalFillElement)
-        case let path as SVGPath:
-            path.movingImages[MIJSONKeyElementType] = path.getPathElementType()
-        default:
-            return
-        }
-    }
-}
-*/

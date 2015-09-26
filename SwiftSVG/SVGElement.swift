@@ -112,31 +112,6 @@ public class SVGElement: Node {
             parent?.printElement()
         }
     }
-
-/*
-// MARK: MovingImages start.
-    public internal(set) var movingImages = [NSString : AnyObject]()
-    
-    func updateMovingImagesJSON() {
-        updateMovingImagesElementType(self)
-    }
-
-    public func generateMovingImagesJSON() -> [NSString : AnyObject] {
-        return self.movingImages
-    }
-
-    // This is on SVGElement and not SVGPath because a group with styles set
-    // might contain children with paths.
-    final func getPathElementType() -> String? {
-        let hasStroke = self.hasStroke
-        let hasFill = self.hasFill
-        guard hasStroke || hasFill else {
-            return nil
-        }
-        return hasFill ? (hasStroke ? MIJSONValuePathFillAndStrokeElement : MIJSONValuePathFillElement) : MIJSONValuePathStrokeElement
-    }
-// MARK: MovingImages end.
-*/
 }
 
 extension SVGElement: Equatable {
@@ -187,55 +162,6 @@ public class SVGContainer: SVGElement, GroupNode {
         self.printElement()
         self.children.forEach() { $0.printElements() }
     }
-
-/*
-// MARK: MovingImages start.
-    override public func generateMovingImagesJSON() -> [NSString : AnyObject] {
-        if self.children.count == 0 {
-            return self.movingImages
-        }
-        
-        var jsonDict = self.movingImages
-        if self.children.count == 1 {
-            if let svgPathElement = self.children[0] as? SVGPath {
-                if svgPathElement.style == Optional.None {
-                    jsonDict[MIJSONKeyArrayOfPathElements] = svgPathElement.movingImages[MIJSONKeyArrayOfPathElements]
-                    jsonDict[MIJSONKeyStartPoint] = svgPathElement.movingImages[MIJSONKeyStartPoint]
-                    if jsonDict[MIJSONKeyElementType] == nil {
-                        jsonDict[MIJSONKeyElementType] = self.getPathElementType()
-                    }
-                    return jsonDict
-                }
-            }
-        }
-        
-        var elementsArray = [AnyObject]()
-        self.children.forEach() {
-            if $0.display {
-                let movingImagesJSON = $0.generateMovingImagesJSON()
-                // only add elements to array of elements if they have a type.
-                if let _ = movingImagesJSON[MIJSONKeyElementType] {
-                    elementsArray.append($0.generateMovingImagesJSON())
-                }
-            }
-        }
-        
-        if elementsArray.count != 0 {
-            jsonDict[MIJSONKeyElementType] = MIJSONValueArrayOfElements
-            jsonDict[MIJSONValueArrayOfElements] = elementsArray
-        }
-        return jsonDict
-    }
-    
-    override func updateMovingImagesJSON() {
-        self.children.forEach() {
-            if $0.display {
-                $0.updateMovingImagesJSON()
-            }
-        }
-    }
-// MARK: MovingImages end.
-*/
 }
 
 // MARK: -
