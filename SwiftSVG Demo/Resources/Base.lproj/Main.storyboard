@@ -599,6 +599,19 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="MovingImages" id="AYz-Pa-aTv">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="MovingImages" id="ngN-eM-P3A">
+                                    <items>
+                                        <menuItem title="Process Folder..." keyEquivalent="p" id="rbi-wi-PYe">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="processFolder:" target="Voe-Tx-rLC" id="eXz-Qs-pPF"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                             <menuItem title="Window" id="aUF-d1-5bR">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Window" systemMenu="window" id="Td7-aD-5lo">
@@ -645,7 +658,7 @@
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="SwiftSVG_Demo" customModuleProvider="target"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="0.0"/>
+            <point key="canvasLocation" x="-157.5" y="-178"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
@@ -1216,31 +1229,20 @@
                                 </buttonCell>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TNu-7x-qfJ">
-                                <rect key="frame" x="18" y="72" width="105" height="14"/>
+                                <rect key="frame" x="18" y="59" width="105" height="17"/>
                                 <animations/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="MovingImages:" id="Ggr-TL-2Rs">
-                                    <font key="font" metaFont="smallSystem"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="MovingImages:" id="Ggr-TL-2Rs">
+                                    <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bjt-4h-zyE">
-                                <rect key="frame" x="49" y="12" width="111" height="28"/>
-                                <animations/>
-                                <buttonCell key="cell" type="push" title="Process folder..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HxX-1q-mbQ">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="processFolder:" target="5qd-fz-86N" id="dEK-Ww-bEs"/>
-                                </connections>
-                            </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xNk-gh-hOz">
-                                <rect key="frame" x="58" y="40" width="90" height="28"/>
+                                <rect key="frame" x="57" y="20" width="92" height="32"/>
                                 <animations/>
-                                <buttonCell key="cell" type="push" title="Export..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iQd-R4-QgR">
+                                <buttonCell key="cell" type="push" title="Export..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iQd-R4-QgR">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="export:" target="5qd-fz-86N" id="PzO-it-AZP"/>
