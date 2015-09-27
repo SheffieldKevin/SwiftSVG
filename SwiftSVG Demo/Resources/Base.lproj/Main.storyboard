@@ -738,7 +738,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <view translatesAutoresizingMaskIntoConstraints="NO" id="JTN-Ar-um0" customClass="SVGView" customModule="SwiftSVG_Demo" customModuleProvider="target">
-                                                    <rect key="frame" x="0.0" y="189" width="166" height="79"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="166" height="79"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="79" id="Lfo-0c-dUQ"/>
                                                         <constraint firstAttribute="width" constant="166" id="ecd-Yf-0tI"/>
@@ -751,7 +751,7 @@
                                                 </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="JTN-Ar-um0" firstAttribute="top" secondItem="A40-8A-FuR" secondAttribute="top" id="cXJ-Cm-6rr"/>
+                                                <constraint firstAttribute="bottom" secondItem="JTN-Ar-um0" secondAttribute="bottom" id="MxJ-IR-gfr"/>
                                                 <constraint firstItem="JTN-Ar-um0" firstAttribute="leading" secondItem="A40-8A-FuR" secondAttribute="leading" id="r5v-Ga-8Uq"/>
                                             </constraints>
                                             <animations/>
