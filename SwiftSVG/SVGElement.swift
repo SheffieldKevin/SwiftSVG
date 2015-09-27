@@ -277,15 +277,54 @@ public class SVGPolyline: SVGElement, PathGenerator {
 
 public class SVGRect: SVGElement, PathGenerator {
     public let rect: Rectangle
-    lazy public var cgpath:CGPath = self.rect.cgpath
+    public let rx: CGFloat?
+    public let ry: CGFloat?
+
+    lazy public var cgpath:CGPath = self.makeCGPath()
     lazy public var mipath:MovingImagesPath = self.makeMIPath()
     
-    public init(rect: CGRect) {
+    // http://www.w3.org/TR/SVG/shapes.html#RectElement
+    public init(rect: CGRect, rx: CGFloat? = Optional.None, ry: CGFloat? = Optional.None) {
         self.rect = Rectangle(frame: rect)
+        if let lrx = rx {
+            self.rx = min(lrx, rect.width * 0.5)
+            if let lry = ry {
+                self.ry = min(lry, rect.height * 0.5)
+            }
+            else {
+                self.ry = min(lrx, rect.height * 0.5) // ry defaults to cx if not defined.
+            }
+        }
+        else if let lry = ry {
+            self.ry = min(lry, rect.height * 0.5)
+            self.rx = min(lry, rect.width * 0.5) // rx defaults to cy if not defined.
+        }
+        else {
+            self.rx = Optional.None
+            self.ry = Optional.None
+        }
     }
 
+    public var notRounded: Bool {
+        get {
+            return self.rx == nil && self.ry == nil
+        }
+    }
+    
+    private func makeCGPath() -> CGPath {
+        if self.notRounded {
+            return self.rect.cgpath
+        }
+        
+        return CGPathCreateWithRoundedRect(self.rect.frame, self.rx!, self.ry!, nil)
+    }
+    
     private func makeMIPath() -> [NSString : AnyObject] {
-        return makeRectDictionary(rect.frame, hasFill: hasFill, hasStroke: hasStroke)
+        if self.notRounded {
+            return makeRectDictionary(rect.frame, hasFill: hasFill, hasStroke: hasStroke)
+        }
+        return makeRoundedRectDictionary(rect.frame, rx: rx!, ry: ry!, hasFill: hasFill, hasStroke: hasStroke)
+        // return makeRectDictionary(rect.frame, hasFill: hasFill, hasStroke: hasStroke)
     }
 }
 

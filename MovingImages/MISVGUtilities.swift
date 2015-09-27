@@ -117,18 +117,93 @@ internal func makeRectDictionary(rectangle: CGRect, makePath: Bool) -> [NSString
     }
 }
 
-internal func makeRectDictionary(rectangle: CGRect, hasFill: Bool, hasStroke: Bool) -> [NSString : AnyObject] {
-    var theDict = makeRectDictionary(rectangle, makePath: hasFill && hasStroke)
+internal func rectElementType(hasFill hasFill: Bool, hasStroke: Bool) -> NSString {
     if hasFill && hasStroke {
-        theDict[MIJSONKeyElementType] = MIJSONValuePathFillAndStrokeElement
+        return MIJSONValuePathFillAndStrokeElement
     }
     else if hasFill {
-        theDict[MIJSONKeyElementType] = MIJSONValueRectangleFillElement
+        return MIJSONValueRectangleFillElement
     }
     else if hasStroke {
-        theDict[MIJSONKeyElementType] = MIJSONValueRectangleStrokeElement
+        return MIJSONValueRectangleStrokeElement
     }
+    else {
+        return NSString(string: "")
+    }
+}
+
+internal func makeRectDictionary(rectangle: CGRect, hasFill: Bool, hasStroke: Bool) -> [NSString : AnyObject] {
+    var theDict = makeRectDictionary(rectangle, makePath: hasFill && hasStroke)
+    theDict[MIJSONKeyElementType] = rectElementType(hasFill: hasFill, hasStroke: hasStroke)
     return theDict
+}
+
+internal func pathElementType(hasFill hasFill: Bool, hasStroke: Bool) -> NSString {
+    if hasFill && hasStroke {
+        return MIJSONValuePathFillAndStrokeElement
+    }
+    else if hasFill {
+        return MIJSONValuePathFillElement
+    }
+    else if hasStroke {
+        return MIJSONValuePathStrokeElement
+    }
+    else {
+        return NSString(string: "")
+    }
+}
+
+internal func makeRoundedRectDictionary(rectangle: CGRect, rx: CGFloat, ry: CGFloat, hasFill: Bool, hasStroke: Bool) -> [NSString : AnyObject] {
+    let x0 = rectangle.origin.x
+    let y0 = rectangle.origin.y
+    let width = rectangle.size.width
+    let height = rectangle.size.height
+    
+    return [
+        MIJSONKeyStartPoint : makePointDictionary(CGPoint(x: x0 + rx, y: y0)),
+        MIJSONKeyElementType : pathElementType(hasFill: hasFill, hasStroke: hasStroke),
+        MIJSONKeyArrayOfPathElements : [
+            [
+                MIJSONKeyElementType : MIJSONValuePathLine,
+                MIJSONKeyEndPoint : makePointDictionary(CGPoint(x: x0 + width - rx, y: y0))
+            ],
+            [
+                MIJSONKeyElementType : MIJSONValuePathQuadraticCurve,
+                MIJSONKeyEndPoint : makePointDictionary(CGPoint(x: x0 + width, y: y0 + ry)),
+                MIJSONKeyControlPoint1 : makePointDictionary(CGPoint(x: x0 + width, y: y0))
+            ],
+            [
+                MIJSONKeyElementType : MIJSONValuePathLine,
+                MIJSONKeyEndPoint : makePointDictionary(CGPoint(x: x0 + width, y: y0 + height - ry))
+            ],
+            [
+                MIJSONKeyElementType : MIJSONValuePathQuadraticCurve,
+                MIJSONKeyEndPoint : makePointDictionary(CGPoint(x: x0 + width - rx, y: y0 + height)),
+                MIJSONKeyControlPoint1 : makePointDictionary(CGPoint(x: x0 + width, y: y0 + height))
+            ],
+            [
+                MIJSONKeyElementType : MIJSONValuePathLine,
+                MIJSONKeyEndPoint : makePointDictionary(CGPoint(x: x0 + rx, y: y0 + height))
+            ],
+            [
+                MIJSONKeyElementType : MIJSONValuePathQuadraticCurve,
+                MIJSONKeyEndPoint : makePointDictionary(CGPoint(x: x0, y: y0 + height - ry)),
+                MIJSONKeyControlPoint1 : makePointDictionary(CGPoint(x: x0, y: y0 + height))
+            ],
+            [
+                MIJSONKeyElementType : MIJSONValuePathLine,
+                MIJSONKeyEndPoint : makePointDictionary(CGPoint(x: x0, y: y0 + ry))
+            ],
+            [
+                MIJSONKeyElementType : MIJSONValuePathQuadraticCurve,
+                MIJSONKeyEndPoint : makePointDictionary(CGPoint(x: x0 + rx, y: y0)),
+                MIJSONKeyControlPoint1 : makePointDictionary(CGPoint(x: x0, y: y0))
+            ],
+            [
+                MIJSONKeyElementType : MIJSONValueCloseSubPath,
+            ]
+        ]
+    ]
 }
 
 internal func makeOvalDictionary(rectangle: CGRect, makePath: Bool) -> [NSString : AnyObject] {

@@ -82,7 +82,19 @@ public class SVGProcessor {
 
             xmlElement["viewBox"] = nil
         }
+        else if let _ = xmlElement["width"]?.stringValue, let _ = xmlElement["height"]?.stringValue {
+            let width = try SVGProcessor.stringToCGFloat(xmlElement["width"]?.stringValue)
+            let height = try SVGProcessor.stringToCGFloat(xmlElement["height"]?.stringValue)
+            let x = try SVGProcessor.stringToCGFloat(xmlElement["x"]?.stringValue, defaultVal: 0.0)
+            let y = try SVGProcessor.stringToCGFloat(xmlElement["y"]?.stringValue, defaultVal: 0.0)
+            document.viewBox = CGRect(x: x, y: y, width: width, height: height)
+        }
 
+        xmlElement["width"] = nil
+        xmlElement["height"] = nil
+        xmlElement["x"] = nil
+        xmlElement["y"] = nil
+        
         guard let nodes = xmlElement.children else {
             return document
         }
@@ -191,6 +203,16 @@ public class SVGProcessor {
         return CGFloat(value)
     }
     
+    private class func stringToOptionalCGFloat(string: String?) throws -> CGFloat? {
+        guard let string = string else {
+            return Optional.None
+        }
+        guard let value = NSNumberFormatter().numberFromString(string)?.doubleValue else {
+            throw Error.corruptXML
+        }
+        return CGFloat(value)
+    }
+    
     private class func stringToCGFloat(string: String?, defaultVal: CGFloat) throws -> CGFloat {
         guard let string = string else {
             return defaultVal
@@ -276,13 +298,17 @@ public class SVGProcessor {
         let y = try SVGProcessor.stringToCGFloat(xmlElement["y"]?.stringValue, defaultVal: 0.0)
         let width = try SVGProcessor.stringToCGFloat(xmlElement["width"]?.stringValue)
         let height = try SVGProcessor.stringToCGFloat(xmlElement["height"]?.stringValue)
+        let rx = try SVGProcessor.stringToOptionalCGFloat(xmlElement["rx"]?.stringValue)
+        let ry = try SVGProcessor.stringToOptionalCGFloat(xmlElement["ry"]?.stringValue)
         
         xmlElement["x"] = nil
         xmlElement["y"] = nil
         xmlElement["width"] = nil
         xmlElement["height"] = nil
+        xmlElement["rx"] = nil
+        xmlElement["ry"] = nil
 
-        let svgElement = SVGRect(rect: CGRect(x: x, y: y, w: width, h: height))
+        let svgElement = SVGRect(rect: CGRect(x: x, y: y, w: width, h: height), rx: rx, ry: ry)
         return svgElement
     }
     

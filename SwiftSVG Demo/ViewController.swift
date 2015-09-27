@@ -218,6 +218,7 @@ class ViewController: NSViewController {
         }
         let savePanel = NSSavePanel()
         savePanel.allowedFileTypes = ["public.json"]
+        savePanel.canSelectHiddenExtension = true
         savePanel.beginSheetModalForWindow(self.svgView.window!, completionHandler: { result in
             guard result == NSModalResponseOK else {
                 return
