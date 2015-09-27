@@ -115,7 +115,9 @@ public class SVGRenderer {
     }
 
     public func renderDocument(svgDocument: SVGDocument, renderer: Renderer) throws {
-        renderer.startDocument(svgDocument.viewBox)
+        if let viewBox = svgDocument.viewBox {
+            renderer.startDocument(viewBox)
+        }
         renderer.fillColor = try SVGColors.stringToColor("black")
         renderer.lineWidth = 1.0
 

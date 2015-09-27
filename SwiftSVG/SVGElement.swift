@@ -181,7 +181,7 @@ public class SVGDocument: SVGContainer {
 
     public var profile: Profile?
     public var version: Version?
-    public var viewBox: CGRect!
+    public var viewBox: CGRect?
     public var title: String?
     public var documentDescription: String?
 }

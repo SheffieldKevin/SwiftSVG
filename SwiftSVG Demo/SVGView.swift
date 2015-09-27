@@ -20,9 +20,9 @@ class SVGView: NSView {
 
     var svgDocument: SVGDocument? = nil {
         didSet {
-            if let svgDocument = svgDocument {
-                horizontalConstraint?.constant = svgDocument.viewBox.width
-                verticalConstraint?.constant = svgDocument.viewBox.width
+            if let svgDocument = svgDocument, let viewBox = svgDocument.viewBox {
+                horizontalConstraint?.constant = viewBox.width
+                verticalConstraint?.constant = viewBox.width
             }
             needsDisplay = true
             needsLayout = true
