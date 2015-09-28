@@ -452,13 +452,13 @@ public class SVGProcessor {
             xmlElement["stroke"] = nil
         }
 
-        let stroke = try? SVGProcessor.stringToCGFloat(xmlElement["stroke-width"]?.stringValue)
+        let stroke = try SVGProcessor.stringToOptionalCGFloat(xmlElement["stroke-width"]?.stringValue)
         if let strokeValue = stroke {
             styleElements.append(StyleElement.lineWidth(strokeValue))
         }
         xmlElement["stroke-width"] = nil
 
-        let mitreLimit = try? SVGProcessor.stringToCGFloat(xmlElement["stroke-miterlimit"]?.stringValue)
+        let mitreLimit = try SVGProcessor.stringToOptionalCGFloat(xmlElement["stroke-miterlimit"]?.stringValue)
         if let mitreLimitValue = mitreLimit {
             styleElements.append(StyleElement.miterLimit(mitreLimitValue))
         }
