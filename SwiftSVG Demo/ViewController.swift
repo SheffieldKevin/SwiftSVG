@@ -87,11 +87,12 @@ class ViewController: NSViewController {
                     renderer.concatCTM(transform.toCGAffineTransform())
                 }
 
-                let path = try self.svgView.svgRenderer.pathForElement(svgElement)
-                // renderer.strokeColor = CGColor.greenColor()
-                renderer.fillColor = CGColor.greenColor()
-                renderer.addCGPath(path)
-                renderer.fillPath()
+                if let path = try self.svgView.svgRenderer.pathForElement(svgElement) {
+                    // renderer.strokeColor = CGColor.greenColor()
+                    renderer.fillColor = CGColor.greenColor()
+                    renderer.addCGPath(path)
+                    renderer.fillPath()
+                }
                 return false
             }
 
@@ -179,6 +180,8 @@ class ViewController: NSViewController {
                     return "Polyline"
                 case is SVGLine:
                     return "Line"
+                case is SVGSimpleText:
+                    return "Text"
                 default:
                     preconditionFailure()
             }

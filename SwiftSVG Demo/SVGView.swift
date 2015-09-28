@@ -40,6 +40,7 @@ class SVGView: NSView {
 
     override func drawRect(dirtyRect: NSRect) {
         let context = NSGraphicsContext.currentContext()!.CGContext
+        CGContextSetTextMatrix(context, CGAffineTransformIdentity)
 
         // Drawing code here.
         let filter = CheckerboardGenerator()
@@ -66,7 +67,9 @@ class SVGView: NSView {
     func tap(gestureRecognizer: NSClickGestureRecognizer) {
         let location = gestureRecognizer.locationInView(self)
         if let element = try? elementForPoint(location) {
-            elementSelected?(svgElement: element!)
+            if let element = element {
+                elementSelected?(svgElement: element)
+            }
         }
     }
 

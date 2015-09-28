@@ -195,9 +195,16 @@ public class SVGGroup: SVGContainer {
 // MARK: -
 
 public typealias MovingImagesPath = [NSString : AnyObject]
+public typealias MovingImagesText = [NSString : AnyObject]
 
 public protocol PathGenerator: CGPathable {
     var mipath:MovingImagesPath { get }
+}
+
+public protocol TextRenderer {
+    var mitext:MovingImagesText { get }
+    var cttext:CFAttributedString { get }
+    var textOrigin:CGPoint { get }
 }
 
 // MARK: -
@@ -344,8 +351,8 @@ public class SVGEllipse: SVGElement, PathGenerator {
 }
 
 public class SVGCircle: SVGElement, PathGenerator {
-    public var center: CGPoint!
-    public var radius: CGFloat!
+    public let center: CGPoint
+    public let radius: CGFloat
 
     lazy public var cgpath:CGPath = CGPathCreateWithEllipseInRect(self.rect, nil)
     lazy public var mipath:MovingImagesPath = self.makeMIPath()
@@ -361,7 +368,90 @@ public class SVGCircle: SVGElement, PathGenerator {
         self.radius = radius
     }
 
-    private func makeMIPath() -> [NSString : AnyObject] {
+    private func makeMIPath() -> MovingImagesPath {
         return makeOvalDictionary(rect, hasFill: hasFill, hasStroke: hasStroke)
+    }
+}
+
+// TODO: There is stuff to be fixed here with the way that font styles are obtained and set.
+public class SVGSimpleText: SVGElement, TextRenderer {
+    public let fontFamily: String
+    public let fontSize: CGFloat
+    public let string: CFString
+
+    public let textOrigin: CGPoint
+
+    lazy public var mitext:MovingImagesText = self.makeMIText()
+    lazy public var cttext:CFAttributedString = self.makeAttributedString()
+    
+    public init(fontFamily: String, fontSize: CGFloat, textOrigin: CGPoint, string: CFString) {
+        self.fontFamily = fontFamily
+        self.fontSize = fontSize
+        self.textOrigin = textOrigin
+        self.string = string
+    }
+    
+    private func makeAttributedString() -> CFAttributedString {
+        
+        var attributes: [NSString : AnyObject] = [
+            kCTFontAttributeName : CTFontCreateWithName(getPostscriptFontName()!, self.fontSize, nil),
+        ]
+        
+        if let fillColor = self.fillColor {
+            attributes[kCTForegroundColorAttributeName] = fillColor
+        }
+        
+        if let style = self.style {
+            if let strokeColor = style.strokeColor {
+                var strokeWidth: CGFloat = 1.0
+                if let width = style.lineWidth {
+                    strokeWidth = width
+                }
+                attributes[kCTStrokeColorAttributeName] = strokeColor
+                attributes[kCTStrokeWidthAttributeName] = self.fillColor == nil ? strokeWidth : -strokeWidth
+            }
+        }
+        return CFAttributedStringCreate(kCFAllocatorDefault, self.string, attributes)
+    }
+    
+    private func getPostscriptFontName() -> NSString? {
+        let attributes: [NSString : AnyObject] = [
+            kCTFontFamilyNameAttribute : self.fontFamily,
+            kCTFontSizeAttribute : self.fontSize,
+        ]
+        let descriptor = CTFontDescriptorCreateWithAttributes(attributes)
+        if let name = CTFontDescriptorCopyAttribute(descriptor, kCTFontNameAttribute) {
+            return name as? NSString
+        }
+        return nil
+    }
+    
+    // TODO: The scaling and translation hard coded here needs to be gone.
+    // probably moved into the text handler.
+    private func makeMIText() -> MovingImagesText {
+        if let theName = self.getPostscriptFontName() {
+            var theDict = [
+                MIJSONKeyStringPostscriptFontName : theName,
+                MIJSONKeyElementType : MIJSONValueBasicStringElement,
+                MIJSONKeyStringText : self.string,
+                MIJSONKeyPoint : makePointDictionary(self.textOrigin),
+                MIJSONKeyStringFontSize : self.fontSize,
+                MIJSONKeyContextTransformation : [
+                    [
+                        MIJSONKeyTransformationType : MIJSONValueTranslate,
+                        MIJSONKeyTranslation : [ MIJSONKeyX : 0.0, MIJSONKeyY : 2.0 * self.textOrigin.y ]
+                    ],
+                    [
+                        MIJSONKeyTransformationType : MIJSONValueScale,
+                        MIJSONKeyScale : [ MIJSONKeyX : 1.0, MIJSONKeyY : -1.0 ]
+                    ]
+                ]
+            ]
+            if let style = self.style, let lineWidth = style.lineWidth {
+                theDict[MIJSONKeyStringStrokeWidth] = -lineWidth
+            }
+            return theDict
+        }
+        preconditionFailure("Cannot create a MovingImages text group")
     }
 }

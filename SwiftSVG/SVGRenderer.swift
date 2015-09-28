@@ -88,12 +88,14 @@ public class SVGRenderer {
                     renderer.addPath(pathable)
                     renderer.drawPath(mode)
                 }
+            case let textGenerator as TextRenderer:
+                renderer.drawText(textGenerator)
             default:
                 assert(false)
         }
     }
 
-    public func pathForElement(svgElement: SVGElement) throws -> CGPath {
+    public func pathForElement(svgElement: SVGElement) throws -> CGPath? {
         switch svgElement {
             case let svgDocument as SVGDocument:
                 let path = CGPathCreateMutable()
@@ -109,6 +111,8 @@ public class SVGRenderer {
                 return path
             case let pathable as CGPathable:
                 return pathable.cgpath
+            case _ as SVGSimpleText:
+                return nil
             default:
                 assert(false)
         }

@@ -23,6 +23,7 @@ public protocol Renderer: AnyObject {
     func addPath(path:PathGenerator)
     func addCGPath(path: CGPath)
     func drawPath(mode: CGPathDrawingMode)
+    func drawText(textRenderer: TextRenderer)
     func fillPath()
     
     func render() -> String
@@ -87,7 +88,17 @@ extension CGContext: Renderer {
     public func drawPath(mode: CGPathDrawingMode) {
         CGContextDrawPath(self, mode)
     }
-
+    
+    public func drawText(textRenderer: TextRenderer) {
+        self.pushGraphicsState()
+        CGContextTranslateCTM(self, 0.0, 2 * textRenderer.textOrigin.y)
+        CGContextScaleCTM(self, 1.0, -1.0)
+        let line = CTLineCreateWithAttributedString(textRenderer.cttext)
+        CGContextSetTextPosition(self, textRenderer.textOrigin.x, textRenderer.textOrigin.y)
+        CTLineDraw(line, self)
+        self.restoreGraphicsState()
+    }
+    
     public func fillPath() {
         CGContextFillPath(self)
     }
@@ -197,7 +208,14 @@ public class MovingImagesRenderer: Renderer {
             current.movingImages[key] = value
         }
     }
-    
+
+    public func drawText(textRenderer: TextRenderer) {
+        for (key, value) in textRenderer.mitext {
+            current.movingImages[key] = value
+        }
+        current.movingImages[MIJSONKeyPoint] = makePointDictionary(textRenderer.textOrigin)
+    }
+
     public func endElement() {
         if let parent = self.current.parent {
             self.current = parent
@@ -424,6 +442,10 @@ public class SourceCodeRenderer: Renderer {
         source += "CGContextDrawPath(context, TODO)\n"
     }
 
+    public func drawText(textRenderer: TextRenderer) {
+        
+    }
+    
     public func fillPath() {
         source += "CGContextFillPath(context)\n"
     }

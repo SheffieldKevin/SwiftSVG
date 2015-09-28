@@ -52,6 +52,11 @@
 		6EABBDC61BAF600C004C5C9F /* SVGStandardColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EABBDC51BAF600C004C5C9F /* SVGStandardColors.swift */; settings = {ASSET_TAGS = (); }; };
 		6EBF1D151BB70E2800C38BDB /* Markers.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D141BB70E2800C38BDB /* Markers.svg */; settings = {ASSET_TAGS = (); }; };
 		6EBF1D171BB70E3600C38BDB /* SimpleBlueRect.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D161BB70E3600C38BDB /* SimpleBlueRect.svg */; settings = {ASSET_TAGS = (); }; };
+		6EBF1D1E1BB8C10A00C38BDB /* Anti-normal.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D191BB8C10A00C38BDB /* Anti-normal.svg */; settings = {ASSET_TAGS = (); }; };
+		6EBF1D1F1BB8C10A00C38BDB /* RPM_NavBall_Overlay.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D1A1BB8C10A00C38BDB /* RPM_NavBall_Overlay.svg */; settings = {ASSET_TAGS = (); }; };
+		6EBF1D201BB8C10A00C38BDB /* test_image.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D1B1BB8C10A00C38BDB /* test_image.svg */; settings = {ASSET_TAGS = (); }; };
+		6EBF1D211BB8C10A00C38BDB /* test_image2.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D1C1BB8C10A00C38BDB /* test_image2.svg */; settings = {ASSET_TAGS = (); }; };
+		6EBF1D221BB8C10A00C38BDB /* TextDrawing.json in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D1D1BB8C10A00C38BDB /* TextDrawing.json */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +128,11 @@
 		6EABBDC51BAF600C004C5C9F /* SVGStandardColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGStandardColors.swift; sourceTree = "<group>"; };
 		6EBF1D141BB70E2800C38BDB /* Markers.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Markers.svg; sourceTree = "<group>"; };
 		6EBF1D161BB70E3600C38BDB /* SimpleBlueRect.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SimpleBlueRect.svg; sourceTree = "<group>"; };
+		6EBF1D191BB8C10A00C38BDB /* Anti-normal.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Anti-normal.svg"; sourceTree = "<group>"; };
+		6EBF1D1A1BB8C10A00C38BDB /* RPM_NavBall_Overlay.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = RPM_NavBall_Overlay.svg; sourceTree = "<group>"; };
+		6EBF1D1B1BB8C10A00C38BDB /* test_image.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = test_image.svg; sourceTree = "<group>"; };
+		6EBF1D1C1BB8C10A00C38BDB /* test_image2.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = test_image2.svg; sourceTree = "<group>"; };
+		6EBF1D1D1BB8C10A00C38BDB /* TextDrawing.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TextDrawing.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +188,11 @@
 				454799861ABF3CEB000B19B8 /* JW_Bezier_1.svg */,
 				6EBF1D161BB70E3600C38BDB /* SimpleBlueRect.svg */,
 				454799871ABF3CEB000B19B8 /* SwiftOutline.svg */,
+				6EBF1D191BB8C10A00C38BDB /* Anti-normal.svg */,
+				6EBF1D1A1BB8C10A00C38BDB /* RPM_NavBall_Overlay.svg */,
+				6EBF1D1B1BB8C10A00C38BDB /* test_image.svg */,
+				6EBF1D1C1BB8C10A00C38BDB /* test_image2.svg */,
+				6EBF1D1D1BB8C10A00C38BDB /* TextDrawing.json */,
 			);
 			path = Samples;
 			sourceTree = "<group>";
@@ -393,9 +408,14 @@
 				4547998B1ABF3CEB000B19B8 /* SwiftOutline.svg in Resources */,
 				454799891ABF3CEB000B19B8 /* Ghostscript_Tiger.svg in Resources */,
 				454799881ABF3CEB000B19B8 /* Apple_Swift_Logo.svg in Resources */,
+				6EBF1D211BB8C10A00C38BDB /* test_image2.svg in Resources */,
 				4547998A1ABF3CEB000B19B8 /* JW_Bezier_1.svg in Resources */,
+				6EBF1D1F1BB8C10A00C38BDB /* RPM_NavBall_Overlay.svg in Resources */,
+				6EBF1D201BB8C10A00C38BDB /* test_image.svg in Resources */,
+				6EBF1D1E1BB8C10A00C38BDB /* Anti-normal.svg in Resources */,
 				6EBF1D151BB70E2800C38BDB /* Markers.svg in Resources */,
 				45E6ADB31A9EAB0200386CFE /* Main.storyboard in Resources */,
+				6EBF1D221BB8C10A00C38BDB /* TextDrawing.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

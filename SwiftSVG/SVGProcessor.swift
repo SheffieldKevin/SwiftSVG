@@ -136,6 +136,8 @@ public class SVGProcessor {
                 svgElement = try processSVGPolygon(xmlElement, state:state)
             case "polyline":
                 svgElement = try processSVGPolyline(xmlElement, state:state)
+            case "text":
+                svgElement = try processSVGText(xmlElement, state:state)
             case "title":
                 state.document!.title = xmlElement.stringValue as String?
             case "desc":
@@ -197,7 +199,9 @@ public class SVGProcessor {
         guard let string = string else {
             throw Error.expectedSVGElementNotFound
         }
-        guard let value = NSNumberFormatter().numberFromString(string)?.doubleValue else {
+        // This is probably a bit reckless. 
+        let string2 = string.stringByTrimmingCharactersInSet(NSCharacterSet.lowercaseLetterCharacterSet())
+        guard let value = NSNumberFormatter().numberFromString(string2)?.doubleValue else {
             throw Error.corruptXML
         }
         return CGFloat(value)
@@ -207,7 +211,8 @@ public class SVGProcessor {
         guard let string = string else {
             return Optional.None
         }
-        guard let value = NSNumberFormatter().numberFromString(string)?.doubleValue else {
+        let string2 = string.stringByTrimmingCharactersInSet(NSCharacterSet.lowercaseLetterCharacterSet())
+        guard let value = NSNumberFormatter().numberFromString(string2)?.doubleValue else {
             throw Error.corruptXML
         }
         return CGFloat(value)
@@ -218,7 +223,8 @@ public class SVGProcessor {
             return defaultVal
         }
 
-        guard let value = NSNumberFormatter().numberFromString(string)?.doubleValue else {
+        let string2 = string.stringByTrimmingCharactersInSet(NSCharacterSet.lowercaseLetterCharacterSet())
+        guard let value = NSNumberFormatter().numberFromString(string2)?.doubleValue else {
             throw Error.corruptXML
         }
         return CGFloat(value)
@@ -309,6 +315,35 @@ public class SVGProcessor {
         xmlElement["ry"] = nil
 
         let svgElement = SVGRect(rect: CGRect(x: x, y: y, w: width, h: height), rx: rx, ry: ry)
+        return svgElement
+    }
+
+    public func processSVGText(xmlElement: NSXMLElement, state: State) throws -> SVGSimpleText? {
+        guard let family = xmlElement["font-family"]?.stringValue else {
+            throw Error.expectedSVGElementNotFound
+        }
+        // I'm not sure if the text drawing style properties like fill color, stroke color and
+        // line width can be inherited from the ancestors.
+        // TODO: Find out what behaviour is expected from SVG.
+        let fontSize = try SVGProcessor.stringToCGFloat(xmlElement["font-size"]?.stringValue)
+        let x = try SVGProcessor.stringToCGFloat(xmlElement["x"]?.stringValue)
+        let y = try SVGProcessor.stringToCGFloat(xmlElement["y"]?.stringValue)
+        xmlElement["x"] = nil
+        xmlElement["y"] = nil
+        
+        // TODO: Look for font family and font size within a "style" presentation attribute.
+        xmlElement["font-family"] = nil
+        xmlElement["font-size"] = nil
+        
+        guard let nodes = xmlElement.children where nodes.count > 0 else {
+            throw Error.expectedSVGElementNotFound
+        }
+        
+        guard let string = nodes[0].stringValue else {
+            throw Error.corruptXML
+        }
+        xmlElement.setChildren(nil)
+        let svgElement = SVGSimpleText(fontFamily: family, fontSize: fontSize, textOrigin: CGPoint(x: x, y: y), string: string)
         return svgElement
     }
     
