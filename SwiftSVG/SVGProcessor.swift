@@ -318,16 +318,47 @@ public class SVGProcessor {
         return svgElement
     }
 
-    public func processSVGText(xmlElement: NSXMLElement, state: State) throws -> SVGSimpleText? {
-        guard let family = xmlElement["font-family"]?.stringValue else {
-            throw Error.expectedSVGElementNotFound
+    private func getAttributeWithKey(xmlElement: NSXMLElement, attribute: String) -> String? {
+        if let name = xmlElement[attribute]?.stringValue {
+            return name
         }
+        
+        // lets see if the font family name is in the style attribute.
+        guard let style = xmlElement["style"]?.stringValue else {
+            return Optional.None
+        }
+        
+        let seperators = NSCharacterSet(charactersInString: ";")
+        let trimChars = NSCharacterSet.whitespaceAndNewlineCharacterSet()
+        let parts = style.componentsSeparatedByCharactersInSet(seperators)
+        let pairSeperator = NSCharacterSet(charactersInString: ":")
+        
+        for part in parts {
+            let pair = part.componentsSeparatedByCharactersInSet(pairSeperator)
+            if pair.count != 2 {
+                continue
+            }
+            let propertyName = pair[0].stringByTrimmingCharactersInSet(trimChars)
+            let value = pair[1].stringByTrimmingCharactersInSet(trimChars)
+            if propertyName == attribute {
+                return value
+            }
+        }
+        return Optional.None
+    }
+    
+    public func processSVGText(xmlElement: NSXMLElement, state: State) throws -> SVGSimpleText? {
+        let family = self.getAttributeWithKey(xmlElement, attribute: "font-family") ?? "Helvetica"
+        // Now strip extraneous quotes etc. from font family name.
+        let familyName = family.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "'"))
+        
         // I'm not sure if the text drawing style properties like fill color, stroke color and
         // line width can be inherited from the ancestors.
         // TODO: Find out what behaviour is expected from SVG.
-        let fontSize = try SVGProcessor.stringToCGFloat(xmlElement["font-size"]?.stringValue)
-        let x = try SVGProcessor.stringToCGFloat(xmlElement["x"]?.stringValue)
-        let y = try SVGProcessor.stringToCGFloat(xmlElement["y"]?.stringValue)
+        let fontSizeString = self.getAttributeWithKey(xmlElement, attribute: "font-size")
+        let fontSize = try SVGProcessor.stringToCGFloat(fontSizeString)
+        let x = try SVGProcessor.stringToCGFloat(xmlElement["x"]?.stringValue, defaultVal: 0.0)
+        let y = try SVGProcessor.stringToCGFloat(xmlElement["y"]?.stringValue, defaultVal: 0.0)
         xmlElement["x"] = nil
         xmlElement["y"] = nil
         
@@ -343,7 +374,7 @@ public class SVGProcessor {
             throw Error.corruptXML
         }
         xmlElement.setChildren(nil)
-        let svgElement = SVGSimpleText(fontFamily: family, fontSize: fontSize, textOrigin: CGPoint(x: x, y: y), string: string)
+        let svgElement = SVGSimpleText(fontFamily: familyName, fontSize: fontSize, textOrigin: CGPoint(x: x, y: y), string: string)
         return svgElement
     }
     

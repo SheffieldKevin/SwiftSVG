@@ -392,9 +392,8 @@ public class SVGSimpleText: SVGElement, TextRenderer {
     }
     
     private func makeAttributedString() -> CFAttributedString {
-        
         var attributes: [NSString : AnyObject] = [
-            kCTFontAttributeName : CTFontCreateWithName(getPostscriptFontName()!, self.fontSize, nil),
+            kCTFontAttributeName : CTFontCreateWithName(self.getPostscriptFontName(), self.fontSize, nil),
         ]
         
         if let fillColor = self.fillColor {
@@ -414,44 +413,52 @@ public class SVGSimpleText: SVGElement, TextRenderer {
         return CFAttributedStringCreate(kCFAllocatorDefault, self.string, attributes)
     }
     
-    private func getPostscriptFontName() -> NSString? {
-        let attributes: [NSString : AnyObject] = [
+    private func getPostscriptFontName() -> NSString {
+        var attributes: [NSString : AnyObject] = [
             kCTFontFamilyNameAttribute : self.fontFamily,
             kCTFontSizeAttribute : self.fontSize,
         ]
         let descriptor = CTFontDescriptorCreateWithAttributes(attributes)
         if let name = CTFontDescriptorCopyAttribute(descriptor, kCTFontNameAttribute) {
-            return name as? NSString
+            return name as! NSString
         }
-        return nil
+        
+        // Default to Helvetica.
+        attributes[kCTFontFamilyNameAttribute] = "Helvetica"
+        let descriptor2 = CTFontDescriptorCreateWithAttributes(attributes)
+        return CTFontDescriptorCopyAttribute(descriptor2, kCTFontNameAttribute)! as! NSString
     }
     
     // TODO: The scaling and translation hard coded here needs to be gone.
     // probably moved into the text handler.
     private func makeMIText() -> MovingImagesText {
-        if let theName = self.getPostscriptFontName() {
-            var theDict = [
-                MIJSONKeyStringPostscriptFontName : theName,
-                MIJSONKeyElementType : MIJSONValueBasicStringElement,
-                MIJSONKeyStringText : self.string,
-                MIJSONKeyPoint : makePointDictionary(self.textOrigin),
-                MIJSONKeyStringFontSize : self.fontSize,
-                MIJSONKeyContextTransformation : [
-                    [
-                        MIJSONKeyTransformationType : MIJSONValueTranslate,
-                        MIJSONKeyTranslation : [ MIJSONKeyX : 0.0, MIJSONKeyY : 2.0 * self.textOrigin.y ]
-                    ],
-                    [
-                        MIJSONKeyTransformationType : MIJSONValueScale,
-                        MIJSONKeyScale : [ MIJSONKeyX : 1.0, MIJSONKeyY : -1.0 ]
-                    ]
+        var theDict = [
+            MIJSONKeyStringPostscriptFontName : self.getPostscriptFontName(),
+            MIJSONKeyElementType : MIJSONValueBasicStringElement,
+            MIJSONKeyStringText : self.string,
+            MIJSONKeyPoint : makePointDictionary(self.textOrigin),
+            MIJSONKeyStringFontSize : self.fontSize,
+            MIJSONKeyContextTransformation : [
+                [
+                    MIJSONKeyTransformationType : MIJSONValueTranslate,
+                    MIJSONKeyTranslation : [ MIJSONKeyX : 0.0, MIJSONKeyY : 2.0 * self.textOrigin.y ]
+                ],
+                [
+                    MIJSONKeyTransformationType : MIJSONValueScale,
+                    MIJSONKeyScale : [ MIJSONKeyX : 1.0, MIJSONKeyY : -1.0 ]
                 ]
             ]
-            if let style = self.style, let lineWidth = style.lineWidth {
-                theDict[MIJSONKeyStringStrokeWidth] = -lineWidth
-            }
-            return theDict
+        ]
+        if let style = self.style, let lineWidth = style.lineWidth {
+            theDict[MIJSONKeyStringStrokeWidth] = -lineWidth
         }
-        preconditionFailure("Cannot create a MovingImages text group")
+        
+        // By having a wrapper dictionary the vertical text flipping can't override
+        // any other transformations that might be applied to the object.
+        let wrapperDict: MovingImagesText = [
+            MIJSONKeyElementType : MIJSONValueArrayOfElements,
+            MIJSONValueArrayOfElements : [ theDict ]
+        ]
+        return wrapperDict
     }
 }
