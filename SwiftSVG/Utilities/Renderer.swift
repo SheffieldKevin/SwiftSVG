@@ -82,7 +82,6 @@ extension CGContext: Renderer {
 
     public func addPath(path:PathGenerator) {
         addCGPath(path.cgpath)
-        CGContextAddPath(self, path.cgpath)
     }
 
     public func drawPath(mode: CGPathDrawingMode) {
