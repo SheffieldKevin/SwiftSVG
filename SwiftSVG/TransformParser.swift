@@ -54,7 +54,7 @@ func converter(value:Any) throws -> Any? {
             #endif
             var t = CGAffineTransformIdentity
             let tx = (parameters.count > 1 ? parameters[1] : 0.0)
-            let ty = (parameters.count > 2 ? parameters[1] : 0.0)
+            let ty = (parameters.count > 2 ? parameters[2] : 0.0)
 
             t = CGAffineTransformTranslate(t, tx, ty)
             t = CGAffineTransformRotate(t, angle)
