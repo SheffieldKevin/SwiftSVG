@@ -32,6 +32,7 @@ public class SVGElement: Node {
     public let uuid = NSUUID() // TODO: This is silly.
     public internal(set) var id: String? = nil
     public internal(set) var xmlElement: NSXMLElement? = nil
+    public internal(set) var textStyle: TextStyle? = nil
     
     public internal(set) var display = true
 
@@ -78,6 +79,34 @@ public class SVGElement: Node {
                 return parent.strokeColor
             }
             return nil
+        }
+    }
+
+    var fontFamily: String {
+        get {
+            if let fontFamily = self.textStyle?.fontFamily {
+                return fontFamily
+            }
+            guard let parent = self.parent else {
+                return "Helvetica"
+            }
+            if parent is SVGGroup {
+                return parent.fontFamily
+            }
+            return "Helvetica"
+        }
+    }
+
+    var fontSize: CGFloat {
+        get {
+            if let fontSize = self.textStyle?.fontSize {
+                return fontSize
+            }
+            guard let parent = self.parent else {
+                return 12
+            }
+            
+            return parent.fontSize
         }
     }
 
@@ -375,8 +404,8 @@ public class SVGCircle: SVGElement, PathGenerator {
 
 // TODO: There is stuff to be fixed here with the way that font styles are obtained and set.
 public class SVGSimpleText: SVGElement, TextRenderer {
-    public let fontFamily: String
-    public let fontSize: CGFloat
+    // public let fontFamily: String
+    // public let fontSize: CGFloat
     public let string: CFString
 
     public let textOrigin: CGPoint
@@ -384,9 +413,7 @@ public class SVGSimpleText: SVGElement, TextRenderer {
     lazy public var mitext:MovingImagesText = self.makeMIText()
     lazy public var cttext:CFAttributedString = self.makeAttributedString()
     
-    public init(fontFamily: String, fontSize: CGFloat, textOrigin: CGPoint, string: CFString) {
-        self.fontFamily = fontFamily
-        self.fontSize = fontSize
+    public init(textOrigin: CGPoint, string: CFString) {
         self.textOrigin = textOrigin
         self.string = string
     }

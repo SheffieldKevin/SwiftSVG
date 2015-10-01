@@ -148,6 +148,7 @@ public class SVGProcessor {
         }
 
         if let svgElement = svgElement {
+            svgElement.textStyle = try processTextStyle(xmlElement, svgElement: svgElement)
             svgElement.style = try processStyle(xmlElement, svgElement: svgElement)
             svgElement.transform = try processTransform(xmlElement)
 
@@ -348,24 +349,19 @@ public class SVGProcessor {
     }
     
     public func processSVGText(xmlElement: NSXMLElement, state: State) throws -> SVGSimpleText? {
+/*
         let family = self.getAttributeWithKey(xmlElement, attribute: "font-family") ?? "Helvetica"
         // Now strip extraneous quotes etc. from font family name.
         let familyName = family.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "'"))
         
-        // I'm not sure if the text drawing style properties like fill color, stroke color and
-        // line width can be inherited from the ancestors.
-        // TODO: Find out what behaviour is expected from SVG.
         let fontSizeString = self.getAttributeWithKey(xmlElement, attribute: "font-size")
         let fontSize = try SVGProcessor.stringToCGFloat(fontSizeString)
+*/
         let x = try SVGProcessor.stringToCGFloat(xmlElement["x"]?.stringValue, defaultVal: 0.0)
         let y = try SVGProcessor.stringToCGFloat(xmlElement["y"]?.stringValue, defaultVal: 0.0)
         xmlElement["x"] = nil
         xmlElement["y"] = nil
-        
-        // TODO: Look for font family and font size within a "style" presentation attribute.
-        xmlElement["font-family"] = nil
-        xmlElement["font-size"] = nil
-        
+
         guard let nodes = xmlElement.children where nodes.count > 0 else {
             throw Error.expectedSVGElementNotFound
         }
@@ -374,7 +370,7 @@ public class SVGProcessor {
             throw Error.corruptXML
         }
         xmlElement.setChildren(nil)
-        let svgElement = SVGSimpleText(fontFamily: familyName, fontSize: fontSize, textOrigin: CGPoint(x: x, y: y), string: string)
+        let svgElement = SVGSimpleText(textOrigin: CGPoint(x: x, y: y), string: string)
         return svgElement
     }
     
@@ -458,6 +454,32 @@ public class SVGProcessor {
                 styleElements.append(theStyle)
             }
         }
+    }
+    
+    public func processTextStyle(xmlElement: NSXMLElement, svgElement: SVGElement) throws -> TextStyle? {
+        // We won't be scrubbing the style element after checking for font family and font size here.
+        var textStyleElements: [TextStyleElement] = []
+        let fontFamily = self.getAttributeWithKey(xmlElement, attribute: "font-family")
+        if let fontFamily = fontFamily {
+            let familyName = fontFamily.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "'"))
+            textStyleElements.append(TextStyleElement.fontFamily(familyName))
+        }
+        xmlElement["font-family"] = nil
+        
+        let fontSizeString = self.getAttributeWithKey(xmlElement, attribute: "font-size")
+        if let fontSizeString = fontSizeString {
+            let fontSize = try SVGProcessor.stringToCGFloat(fontSizeString)
+            textStyleElements.append(TextStyleElement.fontSize(fontSize))
+        }
+        xmlElement["font-size"] = nil
+        if textStyleElements.count > 0 {
+            var textStyle = TextStyle()
+            textStyleElements.forEach {
+                textStyle.add($0)
+            }
+            return textStyle
+        }
+        return nil
     }
     
     public func processStyle(xmlElement: NSXMLElement, svgElement: SVGElement) throws -> SwiftGraphics.Style? {
