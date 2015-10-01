@@ -88,8 +88,17 @@ public class SVGRenderer {
                     renderer.addPath(pathable)
                     renderer.drawPath(mode)
                 }
-            case let textGenerator as TextRenderer:
-                renderer.drawText(textGenerator)
+            case let textElement as SVGSimpleText:
+                for textSpan in textElement.spans {
+                    renderer.pushGraphicsState()
+                    defer {
+                        renderer.restoreGraphicsState()
+                    }
+                    if let transform = textSpan.transform {
+                        renderer.concatCTM(transform.toCGAffineTransform())
+                    }
+                    renderer.drawText(textSpan)
+                }
             default:
                 assert(false)
         }

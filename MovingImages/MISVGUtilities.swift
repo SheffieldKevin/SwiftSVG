@@ -274,3 +274,16 @@ internal func makeCGAffineTransformDictionary(transform: CGAffineTransform) -> [
         MIJSONKeyAffineTransformtY : transform.ty
     ]
 }
+
+extension SVGColors {
+    class func makeMIColorDictFromColor(color: CGColor) -> [NSString : AnyObject] {
+        var colorDict = [NSString : AnyObject]()
+        colorDict[MIJSONKeyColorColorProfileName] = "kCGColorSpaceSRGB"
+        let colorComponents = CGColorGetComponents(color)
+        colorDict[MIJSONKeyRed] = colorComponents[0]
+        colorDict[MIJSONKeyGreen] = colorComponents[1]
+        colorDict[MIJSONKeyBlue] = colorComponents[2]
+        colorDict[MIJSONKeyAlpha] = colorComponents[3]
+        return colorDict
+    }
+}

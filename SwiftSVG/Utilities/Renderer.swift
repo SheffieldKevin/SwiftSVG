@@ -90,10 +90,10 @@ extension CGContext: Renderer {
     
     public func drawText(textRenderer: TextRenderer) {
         self.pushGraphicsState()
-        CGContextTranslateCTM(self, 0.0, 2 * textRenderer.textOrigin.y)
+        CGContextTranslateCTM(self, 0.0, textRenderer.textOrigin.y)
         CGContextScaleCTM(self, 1.0, -1.0)
         let line = CTLineCreateWithAttributedString(textRenderer.cttext)
-        CGContextSetTextPosition(self, textRenderer.textOrigin.x, textRenderer.textOrigin.y)
+        CGContextSetTextPosition(self, textRenderer.textOrigin.x, 0.0)
         CTLineDraw(line, self)
         self.restoreGraphicsState()
     }
@@ -212,7 +212,10 @@ public class MovingImagesRenderer: Renderer {
         for (key, value) in textRenderer.mitext {
             current.movingImages[key] = value
         }
-        current.movingImages[MIJSONKeyPoint] = makePointDictionary(textRenderer.textOrigin)
+        // current.movingImages[MIJSONKeyPoint] = makePointDictionary(textRenderer.textOrigin)
+        // The y position is incorporated into inverting the drawing of the text.
+        // let origin = CGPoint(x: textRenderer.textOrigin.x, y: 0.0)
+        // current.movingImages[MIJSONKeyPoint] = makePointDictionary(origin)
     }
 
     public func endElement() {
@@ -270,17 +273,6 @@ public class MovingImagesRenderer: Renderer {
 
     public func fillPath() { }
 
-    private func colorDictFromColor(color: CGColor) -> [NSString : AnyObject] {
-        var colorDict = [NSString : AnyObject]()
-        colorDict[MIJSONKeyColorColorProfileName] = "kCGColorSpaceSRGB"
-        let colorComponents = CGColorGetComponents(color)
-        colorDict[MIJSONKeyRed] = colorComponents[0]
-        colorDict[MIJSONKeyGreen] = colorComponents[1]
-        colorDict[MIJSONKeyBlue] = colorComponents[2]
-        colorDict[MIJSONKeyAlpha] = colorComponents[3]
-        return colorDict
-    }
-
     public var strokeColor:CGColor? {
         get {
             return style.strokeColor
@@ -288,7 +280,7 @@ public class MovingImagesRenderer: Renderer {
         set {
             style.strokeColor = newValue
             if let color = newValue {
-                current.movingImages[MIJSONKeyStrokeColor] = colorDictFromColor(color)
+                current.movingImages[MIJSONKeyStrokeColor] = SVGColors.makeMIColorDictFromColor(color)
             }
             else {
                 current.movingImages[MIJSONKeyStrokeColor] = nil
@@ -301,7 +293,7 @@ public class MovingImagesRenderer: Renderer {
         set {
             style.fillColor = newValue
             if let color = newValue {
-                current.movingImages[MIJSONKeyFillColor] = colorDictFromColor(color)
+                current.movingImages[MIJSONKeyFillColor] = SVGColors.makeMIColorDictFromColor(color)
             }
             else {
                 current.movingImages[MIJSONKeyFillColor] = nil
@@ -325,10 +317,10 @@ public class MovingImagesRenderer: Renderer {
     public var style:Style = Style() {
         didSet {
             if let fillColor = style.fillColor {
-                current.movingImages[MIJSONKeyFillColor] = colorDictFromColor(fillColor)
+                current.movingImages[MIJSONKeyFillColor] = SVGColors.makeMIColorDictFromColor(fillColor)
             }
             if let strokeColor = style.strokeColor {
-                current.movingImages[MIJSONKeyStrokeColor] = colorDictFromColor(strokeColor)
+                current.movingImages[MIJSONKeyStrokeColor] = SVGColors.makeMIColorDictFromColor(strokeColor)
             }
             if let lineWidth = style.lineWidth {
                 current.movingImages[MIJSONKeyLineWidth] = lineWidth

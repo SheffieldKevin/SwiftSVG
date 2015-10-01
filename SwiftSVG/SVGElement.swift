@@ -360,7 +360,6 @@ public class SVGRect: SVGElement, PathGenerator {
             return makeRectDictionary(rect.frame, hasFill: hasFill, hasStroke: hasStroke)
         }
         return makeRoundedRectDictionary(rect.frame, rx: rx!, ry: ry!, hasFill: hasFill, hasStroke: hasStroke)
-        // return makeRectDictionary(rect.frame, hasFill: hasFill, hasStroke: hasStroke)
     }
 }
 
@@ -402,20 +401,142 @@ public class SVGCircle: SVGElement, PathGenerator {
     }
 }
 
-// TODO: There is stuff to be fixed here with the way that font styles are obtained and set.
-public class SVGSimpleText: SVGElement, TextRenderer {
-    // public let fontFamily: String
-    // public let fontSize: CGFloat
-    public let string: CFString
+public class SVGTextSpan: TextRenderer {
+    private(set) var textElement: SVGSimpleText!
+    let string: CFString
 
-    public let textOrigin: CGPoint
-
-    lazy public var mitext:MovingImagesText = self.makeMIText()
-    lazy public var cttext:CFAttributedString = self.makeAttributedString()
+    internal(set) var style: SwiftGraphics.Style? = nil
+    internal(set) var transform: Transform2D? = nil
+    internal(set) var textStyle: TextStyle? = nil
     
-    public init(textOrigin: CGPoint, string: CFString) {
-        self.textOrigin = textOrigin
+    public lazy var mitext:MovingImagesText = self.makeMIText()
+    public lazy var cttext:CFAttributedString = self.makeAttributedString()
+    
+    public let textOrigin: CGPoint
+    
+    init(string: String, textOrigin: CGPoint) {
         self.string = string
+        self.textOrigin = textOrigin
+    }
+    
+    internal var fillColor: CGColor? {
+        get {
+            if let style = self.style, let fillColor = style.fillColor {
+                return fillColor
+            }
+            return textElement.fillColor
+        }
+    }
+    
+    internal var strokeColor: CGColor? {
+        get {
+            if let style = self.style, let strokeColor = style.strokeColor {
+                return strokeColor
+            }
+            return textElement.strokeColor
+        }
+    }
+    
+    internal var hasStroke: Bool { return self.strokeColor == nil ? false : true }
+    
+    internal var strokeWidth: CGFloat? {
+        get {
+            guard let _ = self.strokeColor else {
+                return nil
+            }
+            
+            let strokeWidth: CGFloat
+            if let style = self.style, let lineWidth = style.lineWidth {
+                strokeWidth = lineWidth
+            }
+            else if let style = textElement.style, let lineWidth = style.lineWidth {
+                strokeWidth = lineWidth
+            }
+            else {
+                strokeWidth = 1.0
+            }
+            if let _ = self.fillColor {
+                return -strokeWidth
+            }
+            return strokeWidth
+        }
+    }
+
+    internal var fontFamily: String {
+        get {
+            if let textStyle = self.textStyle, let fontFamily = textStyle.fontFamily {
+                return fontFamily
+            }
+            return textElement.fontFamily
+        }
+    }
+    
+    internal var fontSize: CGFloat {
+        get {
+            if let textStyle = self.textStyle, let fontSize = textStyle.fontSize {
+                return fontSize
+            }
+            if let textStyle = textElement.textStyle, let fontSize = textStyle.fontSize {
+                return fontSize
+            }
+            return 12.0
+        }
+    }
+
+    private func makeMIText() -> MovingImagesText {
+        var theDict = [
+            MIJSONKeyStringPostscriptFontName : self.getPostscriptFontName(),
+            MIJSONKeyElementType : MIJSONValueBasicStringElement,
+            MIJSONKeyStringText : self.string,
+            MIJSONKeyPoint : makePointDictionary(CGPoint(x:self.textOrigin.x, y: 0.0)),
+            MIJSONKeyStringFontSize : self.fontSize,
+            MIJSONKeyContextTransformation : [
+                [
+                    MIJSONKeyTransformationType : MIJSONValueTranslate,
+                    MIJSONKeyTranslation : [ MIJSONKeyX : 0.0, MIJSONKeyY : self.textOrigin.y ]
+                ],
+                [
+                    MIJSONKeyTransformationType : MIJSONValueScale,
+                    MIJSONKeyScale : [ MIJSONKeyX : 1.0, MIJSONKeyY : -1.0 ]
+                ]
+            ]
+        ]
+
+        if let fillColor = self.fillColor {
+            theDict[MIJSONKeyFillColor] = SVGColors.makeMIColorDictFromColor(fillColor)
+        }
+        
+        if let strokeColor = self.strokeColor {
+            theDict[MIJSONKeyStrokeColor] = SVGColors.makeMIColorDictFromColor(strokeColor)
+        }
+    
+        if let strokeWidth = self.strokeWidth {
+            theDict[MIJSONKeyLineWidth] = strokeWidth
+        }
+
+        // By having a wrapper dictionary the vertical text flipping can't override
+        // any other transformations that might be applied to the object.
+        let wrapperDict: MovingImagesText = [
+            MIJSONKeyElementType : MIJSONValueArrayOfElements,
+            MIJSONValueArrayOfElements : [ theDict ]
+        ]
+        return wrapperDict
+    }
+    
+    private func getPostscriptFontName() -> NSString {
+        var attributes: [NSString : AnyObject] = [
+            kCTFontFamilyNameAttribute : self.fontFamily,
+            kCTFontSizeAttribute : self.fontSize,
+        ]
+        let descriptor = CTFontDescriptorCreateWithAttributes(attributes)
+        if let name = CTFontDescriptorCopyAttribute(descriptor, kCTFontNameAttribute) {
+            return name as! NSString
+        }
+        
+        // Default to Helvetica.
+        attributes[kCTFontFamilyNameAttribute] = "Helvetica"
+        let descriptor2 = CTFontDescriptorCreateWithAttributes(attributes)
+        return CTFontDescriptorCopyAttribute(descriptor2, kCTFontNameAttribute)! as! NSString
     }
     
     private func makeAttributedString() -> CFAttributedString {
@@ -439,7 +560,33 @@ public class SVGSimpleText: SVGElement, TextRenderer {
         }
         return CFAttributedStringCreate(kCFAllocatorDefault, self.string, attributes)
     }
+}
+
+// TODO: There is stuff to be fixed here with the way that font styles are obtained and set.
+public class SVGSimpleText: SVGElement {
+/*
+    public let string: CFString
+
+    public let textOrigin: CGPoint
+
+    lazy public var mitext:MovingImagesText = self.makeMIText()
+    lazy public var cttext:CFAttributedString = self.makeAttributedString()
+*/
     
+    internal let spans: [SVGTextSpan]
+    public init(spans: [SVGTextSpan]) {
+        self.spans = spans
+        super.init()
+        self.spans.forEach() { $0.textElement = self }
+    }
+/*
+    public init(textOrigin: CGPoint, string: CFString) {
+        self.textOrigin = textOrigin
+        self.string = string
+    }
+*/
+    
+/*
     private func getPostscriptFontName() -> NSString {
         var attributes: [NSString : AnyObject] = [
             kCTFontFamilyNameAttribute : self.fontFamily,
@@ -454,6 +601,28 @@ public class SVGSimpleText: SVGElement, TextRenderer {
         attributes[kCTFontFamilyNameAttribute] = "Helvetica"
         let descriptor2 = CTFontDescriptorCreateWithAttributes(attributes)
         return CTFontDescriptorCopyAttribute(descriptor2, kCTFontNameAttribute)! as! NSString
+    }
+
+    private func makeAttributedString() -> CFAttributedString {
+        var attributes: [NSString : AnyObject] = [
+            kCTFontAttributeName : CTFontCreateWithName(self.getPostscriptFontName(), self.fontSize, nil),
+        ]
+        
+        if let fillColor = self.fillColor {
+            attributes[kCTForegroundColorAttributeName] = fillColor
+        }
+        
+        if let style = self.style {
+            if let strokeColor = style.strokeColor {
+                var strokeWidth: CGFloat = 1.0
+                if let width = style.lineWidth {
+                    strokeWidth = width
+                }
+                attributes[kCTStrokeColorAttributeName] = strokeColor
+                attributes[kCTStrokeWidthAttributeName] = self.fillColor == nil ? strokeWidth : -strokeWidth
+            }
+        }
+        return CFAttributedStringCreate(kCFAllocatorDefault, self.string, attributes)
     }
     
     // TODO: The scaling and translation hard coded here needs to be gone.
@@ -488,4 +657,5 @@ public class SVGSimpleText: SVGElement, TextRenderer {
         ]
         return wrapperDict
     }
+*/
 }
