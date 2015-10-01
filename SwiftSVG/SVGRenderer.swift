@@ -51,7 +51,14 @@ public class SVGRenderer {
         else if !(hasStroke || hasFill) {
             return
         }
-        else {
+        
+        // Because text has an array of text spans for rendering purposes a
+        // simple text item should be considered a group.
+        if let _ = svgElement as? SVGSimpleText {
+            renderer.startGroup(svgElement.id)
+        }
+            
+        if let _ = svgElement as? PathGenerator {
             renderer.startElement(svgElement.id)
         }
 
@@ -91,8 +98,10 @@ public class SVGRenderer {
             case let textElement as SVGSimpleText:
                 for textSpan in textElement.spans {
                     renderer.pushGraphicsState()
+                    renderer.startElement(nil)
                     defer {
                         renderer.restoreGraphicsState()
+                        renderer.endElement()
                     }
                     if let transform = textSpan.transform {
                         renderer.concatCTM(transform.toCGAffineTransform())
