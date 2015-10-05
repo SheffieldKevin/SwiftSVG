@@ -45,6 +45,10 @@
 		45E6ADB31A9EAB0200386CFE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45E6ADB11A9EAB0200386CFE /* Main.storyboard */; };
 		6E4AFE281BAAF6A40015A1DE /* MIPathFromSVGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA9E2561BAAD5B600B7468C /* MIPathFromSVGPath.m */; settings = {ASSET_TAGS = (); }; };
 		6E57A0B51BBC460600AA0574 /* TextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E57A0B41BBC460600AA0574 /* TextStyle.swift */; settings = {ASSET_TAGS = (); }; };
+		6E57A0BD1BBEEE9500AA0574 /* SwiftSVGTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E57A0BC1BBEEE9500AA0574 /* SwiftSVGTests.swift */; };
+		6E57A0BF1BBEEE9500AA0574 /* SwiftSVG.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C2032F1B8E0E8200966AC6 /* SwiftSVG.framework */; settings = {ASSET_TAGS = (); }; };
+		6E57A0C61BBEF0F100AA0574 /* TextDrawing.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6E57A0C51BBEF0F100AA0574 /* TextDrawing.svg */; settings = {ASSET_TAGS = (); }; };
+		6E57A0C71BBEF11500AA0574 /* TextDrawing.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6E57A0C51BBEF0F100AA0574 /* TextDrawing.svg */; settings = {ASSET_TAGS = (); }; };
 		6E6BABEE1BB01CE00025D14A /* MISVGUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BABED1BB01CE00025D14A /* MISVGUtilities.swift */; settings = {ASSET_TAGS = (); }; };
 		6E8642D51BAB07DB00D6128E /* MIPathFromSVGPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E8642D41BAB07DB00D6128E /* MIPathFromSVGPath.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6E8642D71BAB10F100D6128E /* MIPathFromSwiftSVGPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8642D61BAB10F100D6128E /* MIPathFromSwiftSVGPath.swift */; settings = {ASSET_TAGS = (); }; };
@@ -62,6 +66,13 @@
 
 /* Begin PBXContainerItemProxy section */
 		45C203341B8E0E8200966AC6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 45E6AD9C1A9EAB0200386CFE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 45C2032E1B8E0E8200966AC6;
+			remoteInfo = SwiftSVG;
+		};
+		6E57A0C01BBEEE9500AA0574 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 45E6AD9C1A9EAB0200386CFE /* Project object */;
 			proxyType = 1;
@@ -121,6 +132,10 @@
 		45E6ADB21A9EAB0200386CFE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		45E6ADE61A9EABA700386CFE /* SVGElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGElement.swift; sourceTree = "<group>"; };
 		6E57A0B41BBC460600AA0574 /* TextStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextStyle.swift; sourceTree = "<group>"; };
+		6E57A0BA1BBEEE9500AA0574 /* SwiftSVGTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftSVGTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E57A0BC1BBEEE9500AA0574 /* SwiftSVGTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSVGTests.swift; sourceTree = "<group>"; };
+		6E57A0BE1BBEEE9500AA0574 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E57A0C51BBEF0F100AA0574 /* TextDrawing.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = TextDrawing.svg; sourceTree = "<group>"; };
 		6E6BABED1BB01CE00025D14A /* MISVGUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MISVGUtilities.swift; path = MovingImages/MISVGUtilities.swift; sourceTree = "<group>"; };
 		6E8642D41BAB07DB00D6128E /* MIPathFromSVGPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MIPathFromSVGPath.h; path = MovingImages/MIPathFromSVGPath.h; sourceTree = "<group>"; };
 		6E8642D61BAB10F100D6128E /* MIPathFromSwiftSVGPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MIPathFromSwiftSVGPath.swift; path = MovingImages/MIPathFromSwiftSVGPath.swift; sourceTree = SOURCE_ROOT; };
@@ -159,6 +174,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6E57A0B71BBEEE9500AA0574 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E57A0BF1BBEEE9500AA0574 /* SwiftSVG.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -194,6 +217,7 @@
 				6EBF1D1A1BB8C10A00C38BDB /* RPM_NavBall_Overlay.svg */,
 				6EBF1D1B1BB8C10A00C38BDB /* test_image.svg */,
 				6EBF1D1C1BB8C10A00C38BDB /* test_image2.svg */,
+				6E57A0C51BBEF0F100AA0574 /* TextDrawing.svg */,
 				6EBF1D1D1BB8C10A00C38BDB /* TextDrawing.json */,
 			);
 			path = Samples;
@@ -252,6 +276,7 @@
 				6EA9E2551BAAD52000B7468C /* MovingImages */,
 				45E6ADA61A9EAB0200386CFE /* SwiftSVG Demo */,
 				45C203301B8E0E8200966AC6 /* SwiftSVG */,
+				6E57A0BB1BBEEE9500AA0574 /* SwiftSVGTests */,
 				451958171AC22BDA00659E64 /* Frameworks */,
 				45E6ADA51A9EAB0200386CFE /* Products */,
 			);
@@ -262,6 +287,7 @@
 			children = (
 				45E6ADA41A9EAB0200386CFE /* SwiftSVG Demo.app */,
 				45C2032F1B8E0E8200966AC6 /* SwiftSVG.framework */,
+				6E57A0BA1BBEEE9500AA0574 /* SwiftSVGTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -288,6 +314,15 @@
 				45E6ADA81A9EAB0200386CFE /* Info.plist */,
 			);
 			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6E57A0BB1BBEEE9500AA0574 /* SwiftSVGTests */ = {
+			isa = PBXGroup;
+			children = (
+				6E57A0BC1BBEEE9500AA0574 /* SwiftSVGTests.swift */,
+				6E57A0BE1BBEEE9500AA0574 /* Info.plist */,
+			);
+			path = SwiftSVGTests;
 			sourceTree = "<group>";
 		};
 		6EA9E2551BAAD52000B7468C /* MovingImages */ = {
@@ -356,6 +391,24 @@
 			productReference = 45E6ADA41A9EAB0200386CFE /* SwiftSVG Demo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		6E57A0B91BBEEE9500AA0574 /* SwiftSVGTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E57A0C21BBEEE9500AA0574 /* Build configuration list for PBXNativeTarget "SwiftSVGTests" */;
+			buildPhases = (
+				6E57A0B61BBEEE9500AA0574 /* Sources */,
+				6E57A0B71BBEEE9500AA0574 /* Frameworks */,
+				6E57A0B81BBEEE9500AA0574 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6E57A0C11BBEEE9500AA0574 /* PBXTargetDependency */,
+			);
+			name = SwiftSVGTests;
+			productName = SwiftSVGTests;
+			productReference = 6E57A0BA1BBEEE9500AA0574 /* SwiftSVGTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -372,6 +425,9 @@
 					};
 					45E6ADA31A9EAB0200386CFE = {
 						CreatedOnToolsVersion = 6.3;
+					};
+					6E57A0B91BBEEE9500AA0574 = {
+						CreatedOnToolsVersion = 7.0;
 					};
 				};
 			};
@@ -390,6 +446,7 @@
 			targets = (
 				45E6ADA31A9EAB0200386CFE /* SwiftSVG Demo */,
 				45C2032E1B8E0E8200966AC6 /* SwiftSVG */,
+				6E57A0B91BBEEE9500AA0574 /* SwiftSVGTests */,
 			);
 		};
 /* End PBXProject section */
@@ -408,6 +465,7 @@
 			files = (
 				6EBF1D171BB70E3600C38BDB /* SimpleBlueRect.svg in Resources */,
 				45E6ADB01A9EAB0200386CFE /* Images.xcassets in Resources */,
+				6E57A0C61BBEF0F100AA0574 /* TextDrawing.svg in Resources */,
 				4547998B1ABF3CEB000B19B8 /* SwiftOutline.svg in Resources */,
 				454799891ABF3CEB000B19B8 /* Ghostscript_Tiger.svg in Resources */,
 				454799881ABF3CEB000B19B8 /* Apple_Swift_Logo.svg in Resources */,
@@ -419,6 +477,14 @@
 				6EBF1D151BB70E2800C38BDB /* Markers.svg in Resources */,
 				45E6ADB31A9EAB0200386CFE /* Main.storyboard in Resources */,
 				6EBF1D221BB8C10A00C38BDB /* TextDrawing.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E57A0B81BBEEE9500AA0574 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E57A0C71BBEF11500AA0574 /* TextDrawing.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,6 +529,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6E57A0B61BBEEE9500AA0574 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E57A0BD1BBEEE9500AA0574 /* SwiftSVGTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -470,6 +544,11 @@
 			isa = PBXTargetDependency;
 			target = 45C2032E1B8E0E8200966AC6 /* SwiftSVG */;
 			targetProxy = 45C203341B8E0E8200966AC6 /* PBXContainerItemProxy */;
+		};
+		6E57A0C11BBEEE9500AA0574 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 45C2032E1B8E0E8200966AC6 /* SwiftSVG */;
+			targetProxy = 6E57A0C01BBEEE9500AA0574 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -656,6 +735,28 @@
 			};
 			name = Release;
 		};
+		6E57A0C31BBEEE9500AA0574 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = SwiftSVGTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = Zukini.SwiftSVGTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		6E57A0C41BBEEE9500AA0574 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = SwiftSVGTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = Zukini.SwiftSVGTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -685,6 +786,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		6E57A0C21BBEEE9500AA0574 /* Build configuration list for PBXNativeTarget "SwiftSVGTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E57A0C31BBEEE9500AA0574 /* Debug */,
+				6E57A0C41BBEEE9500AA0574 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
