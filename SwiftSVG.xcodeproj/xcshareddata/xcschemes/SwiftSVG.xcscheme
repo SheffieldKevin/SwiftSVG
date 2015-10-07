@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6E57A0B91BBEEE9500AA0574"
+               BuildableName = "SwiftSVGTests.xctest"
+               BlueprintName = "SwiftSVGTests"
+               ReferencedContainer = "container:SwiftSVG.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "45C2032E1B8E0E8200966AC6"
+            BuildableName = "SwiftSVG.framework"
+            BlueprintName = "SwiftSVG"
+            ReferencedContainer = "container:SwiftSVG.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

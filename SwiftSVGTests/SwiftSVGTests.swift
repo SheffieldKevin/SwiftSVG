@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import SwiftSVG
 
 class SwiftSVGTests: XCTestCase {
     

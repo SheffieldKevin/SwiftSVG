@@ -46,7 +46,6 @@
 		6E4AFE281BAAF6A40015A1DE /* MIPathFromSVGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA9E2561BAAD5B600B7468C /* MIPathFromSVGPath.m */; settings = {ASSET_TAGS = (); }; };
 		6E57A0B51BBC460600AA0574 /* TextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E57A0B41BBC460600AA0574 /* TextStyle.swift */; settings = {ASSET_TAGS = (); }; };
 		6E57A0BD1BBEEE9500AA0574 /* SwiftSVGTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E57A0BC1BBEEE9500AA0574 /* SwiftSVGTests.swift */; };
-		6E57A0BF1BBEEE9500AA0574 /* SwiftSVG.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C2032F1B8E0E8200966AC6 /* SwiftSVG.framework */; settings = {ASSET_TAGS = (); }; };
 		6E57A0C61BBEF0F100AA0574 /* TextDrawing.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6E57A0C51BBEF0F100AA0574 /* TextDrawing.svg */; settings = {ASSET_TAGS = (); }; };
 		6E57A0C71BBEF11500AA0574 /* TextDrawing.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6E57A0C51BBEF0F100AA0574 /* TextDrawing.svg */; settings = {ASSET_TAGS = (); }; };
 		6E6BABEE1BB01CE00025D14A /* MISVGUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BABED1BB01CE00025D14A /* MISVGUtilities.swift */; settings = {ASSET_TAGS = (); }; };
@@ -178,7 +177,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E57A0BF1BBEEE9500AA0574 /* SwiftSVG.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -581,7 +579,7 @@
 				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = SwiftSVG/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH = "@rpath";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = io.schwa.SwiftSVG;
@@ -609,7 +607,7 @@
 				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = SwiftSVG/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH = "@rpath";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = io.schwa.SwiftSVG;
@@ -794,6 +792,7 @@
 				6E57A0C41BBEEE9500AA0574 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
