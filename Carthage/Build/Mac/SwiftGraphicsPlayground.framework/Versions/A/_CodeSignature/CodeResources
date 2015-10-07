@@ -6,14 +6,14 @@
 	<dict>
 		<key>Resources/Info.plist</key>
 		<data>
-		d71gNwbnkiL91bu8Vs+Gn+e505A=
+		Ofd3OG46dbuWIlTUR/D1wzepqGs=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
 		<key>Headers/SwiftGraphicsPlayground-Swift.h</key>
 		<data>
-		cTQE9dT31JgegukyL4jW/CccOds=
+		i+xCflbs2I9b1PVeIGto6NrEOFo=
 		</data>
 		<key>Headers/SwiftGraphicsPlayground.h</key>
 		<data>
@@ -25,7 +25,7 @@
 		</data>
 		<key>Modules/SwiftGraphicsPlayground.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		Tg7VQ2iu+VSdFnHULZJyFF5hrC8=
+		hijYHtEXdgxYLug7SJG5A5M7m2U=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -33,7 +33,7 @@
 		</data>
 		<key>Resources/Info.plist</key>
 		<data>
-		d71gNwbnkiL91bu8Vs+Gn+e505A=
+		Ofd3OG46dbuWIlTUR/D1wzepqGs=
 		</data>
 	</dict>
 	<key>rules</key>
