@@ -121,7 +121,7 @@ public class SVGElement: Node {
         return 0
     }
 
-    final func printElement()
+    public final func printElement()
     {
         var description = "================================================================\n"
         description += "Element with numParents: \(numParents) \n"
@@ -132,7 +132,7 @@ public class SVGElement: Node {
         print(description)
     }
     
-    func printElements() {
+    public func printElements() {
         printElement()
     }
     
@@ -187,7 +187,7 @@ public class SVGContainer: SVGElement, GroupNode {
         newElement.parent = self
     }
     
-    override func printElements() {
+    override public func printElements() {
         self.printElement()
         self.children.forEach() { $0.printElements() }
     }

@@ -43,6 +43,10 @@
 		45E6ADAE1A9EAB0200386CFE /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E6ADAD1A9EAB0200386CFE /* Document.swift */; };
 		45E6ADB01A9EAB0200386CFE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45E6ADAF1A9EAB0200386CFE /* Images.xcassets */; };
 		45E6ADB31A9EAB0200386CFE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45E6ADB11A9EAB0200386CFE /* Main.storyboard */; };
+		6E2F00261BC4AC26000EF53F /* SwiftSVG.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 45C2032F1B8E0E8200966AC6 /* SwiftSVG.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E2F00271BC4ACB0000EF53F /* SwiftGraphics.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 451958181AC22BEE00659E64 /* SwiftGraphics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E2F00281BC4ACB0000EF53F /* SwiftParsing.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 451958191AC22BEE00659E64 /* SwiftParsing.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E2F00291BC4ACB0000EF53F /* SwiftUtilities.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4519581A1AC22BEE00659E64 /* SwiftUtilities.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E4AFE281BAAF6A40015A1DE /* MIPathFromSVGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA9E2561BAAD5B600B7468C /* MIPathFromSVGPath.m */; settings = {ASSET_TAGS = (); }; };
 		6E57A0B51BBC460600AA0574 /* TextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E57A0B41BBC460600AA0574 /* TextStyle.swift */; settings = {ASSET_TAGS = (); }; };
 		6E57A0BD1BBEEE9500AA0574 /* SwiftSVGTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E57A0BC1BBEEE9500AA0574 /* SwiftSVGTests.swift */; };
@@ -93,6 +97,19 @@
 				45C203371B8E0E8200966AC6 /* SwiftSVG.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E2F00251BC4AC08000EF53F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6E2F00261BC4AC26000EF53F /* SwiftSVG.framework in CopyFiles */,
+				6E2F00271BC4ACB0000EF53F /* SwiftGraphics.framework in CopyFiles */,
+				6E2F00281BC4ACB0000EF53F /* SwiftParsing.framework in CopyFiles */,
+				6E2F00291BC4ACB0000EF53F /* SwiftUtilities.framework in CopyFiles */,
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -396,6 +413,7 @@
 				6E57A0B61BBEEE9500AA0574 /* Sources */,
 				6E57A0B71BBEEE9500AA0574 /* Frameworks */,
 				6E57A0B81BBEEE9500AA0574 /* Resources */,
+				6E2F00251BC4AC08000EF53F /* CopyFiles */,
 			);
 			buildRules = (
 			);
