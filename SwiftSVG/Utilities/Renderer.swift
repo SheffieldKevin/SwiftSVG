@@ -173,16 +173,6 @@ public class MovingImagesRenderer: Renderer {
         }
     }
 
-/*
-    public func endGroup() {
-        if let parent = self.current.parent {
-            self.current = parent
-        }
-        else {
-            preconditionFailure("Cannot end a group when there is no parent.")
-        }
-    }
-*/
     public func startElement(id: String?) {
         if let current = self.current as? MIRenderContainer {
             let newItem = MIRenderElement()
@@ -212,10 +202,6 @@ public class MovingImagesRenderer: Renderer {
         for (key, value) in textRenderer.mitext {
             current.movingImages[key] = value
         }
-        // current.movingImages[MIJSONKeyPoint] = makePointDictionary(textRenderer.textOrigin)
-        // The y position is incorporated into inverting the drawing of the text.
-        // let origin = CGPoint(x: textRenderer.textOrigin.x, y: 0.0)
-        // current.movingImages[MIJSONKeyPoint] = makePointDictionary(origin)
     }
 
     public func endElement() {
