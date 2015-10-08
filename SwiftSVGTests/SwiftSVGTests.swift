@@ -9,10 +9,36 @@
 import XCTest
 import SwiftSVG
 
-func makeURLFromNamedFile(namedFile: String, fileExtension: String) -> NSURL {
+public enum TestError: ErrorType {
+    case invalidFilePath
+    case noContentInFile(String)
+    case invalidXML
+}
+
+func makeURLFromNamedFile(namedFile: String, fileExtension: String) throws -> NSURL {
     let testBundle = NSBundle(forClass: SwiftSVGTests.self)
-    let url = testBundle.URLForResource(namedFile, withExtension:fileExtension)!
+    guard let url = testBundle.URLForResource(namedFile, withExtension:fileExtension) else {
+        throw TestError.invalidFilePath
+    }
+    
     return url
+}
+
+func svgSourceFromNamedFile(namedFile: String) throws -> String {
+    let textDrawingURL = try makeURLFromNamedFile(namedFile, fileExtension: "svg")
+    var encoding = NSStringEncoding()
+    guard let source = try? String(contentsOfURL: textDrawingURL, usedEncoding: &encoding) else {
+        throw TestError.noContentInFile(textDrawingURL.path!)
+    }
+    return source
+}
+
+func xmlDocumentFromNamedSVGFile(namedFile: String) throws -> NSXMLDocument {
+    let source = try svgSourceFromNamedFile(namedFile)
+    guard let xmlDocument = try? NSXMLDocument(XMLString: source, options: 0) else {
+        throw TestError.invalidXML
+    }
+    return xmlDocument
 }
 
 class SwiftSVGTests: XCTestCase {
@@ -27,30 +53,25 @@ class SwiftSVGTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        let textDrawingURL = makeURLFromNamedFile("TextDrawing", fileExtension: "svg")
-        var encoding = NSStringEncoding()
-        guard let source = try? String(contentsOfURL: textDrawingURL, usedEncoding: &encoding),
-            let xmlDocument = try? NSXMLDocument(XMLString: source, options: 0) else {
-            XCTAssert(false, "Failed to get SVG string from file.")
+    func testSimpleText() {
+        let optionalSVGDocument: SVGDocument?
+        do {
+            let xmlDocument = try xmlDocumentFromNamedSVGFile("TextDrawing")
+            let processor = SVGProcessor()
+            optionalSVGDocument = try processor.processXMLDocument(xmlDocument)
+        }
+        catch let error {
+            print(error)
             return
         }
-        let processor = SVGProcessor()
-        guard let svgDocument = try? processor.processXMLDocument(xmlDocument) else {
-            XCTAssert(false, "Failed to create an svgDocument.")
+
+        guard let svgDocument = optionalSVGDocument else {
+            XCTAssert(false, "optionalSVGDocument should not be .None")
             return
         }
-    
-        if let svgDocument = svgDocument {
-            XCTAssert(svgDocument.children.count == 1, "TextDrawing should have 1 child.")
-            
-            svgDocument.printElements()
-        }
-        else {
-            XCTAssert(false, "Failed to create an svgDocument.")
-        }
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        
+        XCTAssert(svgDocument.children.count == 1, "TextDrawing should have 1 child.")
+        XCTAssert(svgDocument.children[0] is SVGSimpleText, "Only document child element should be a SVGSimpleText")
     }
     
     func testPerformanceExample() {
