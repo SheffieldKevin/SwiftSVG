@@ -511,7 +511,7 @@ public class SVGTextSpan: TextRenderer {
         }
     
         if let strokeWidth = self.strokeWidth {
-            theDict[MIJSONKeyLineWidth] = strokeWidth
+            theDict[MIJSONKeyStringStrokeWidth] = strokeWidth
         }
 
         // By having a wrapper dictionary the vertical text flipping can't override
@@ -548,6 +548,14 @@ public class SVGTextSpan: TextRenderer {
             attributes[kCTForegroundColorAttributeName] = fillColor
         }
         
+        if let strokeColor = self.strokeColor {
+            attributes[kCTStrokeColorAttributeName] = strokeColor
+        }
+        
+        if let strokeWidth = self.strokeWidth {
+            attributes[kCTStrokeWidthAttributeName] = strokeWidth
+        }
+/*
         if let style = self.style {
             if let strokeColor = style.strokeColor {
                 var strokeWidth: CGFloat = 1.0
@@ -555,9 +563,10 @@ public class SVGTextSpan: TextRenderer {
                     strokeWidth = width
                 }
                 attributes[kCTStrokeColorAttributeName] = strokeColor
-                attributes[kCTStrokeWidthAttributeName] = self.fillColor == nil ? strokeWidth : -strokeWidth
+                attributes[kCTStrokeWidthAttributeName] = strokeWidth
             }
         }
+*/
         return CFAttributedStringCreate(kCFAllocatorDefault, self.string, attributes)
     }
 }

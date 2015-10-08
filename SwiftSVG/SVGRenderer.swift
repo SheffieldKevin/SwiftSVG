@@ -75,8 +75,10 @@ public class SVGRenderer {
             return
         }
 
-        if let style = try styleForElement(svgElement) {
-            renderer.style = style
+        if !(svgElement is SVGSimpleText) {
+            if let style = try styleForElement(svgElement) {
+                renderer.style = style
+            }
         }
 
         if let transform = svgElement.transform {
