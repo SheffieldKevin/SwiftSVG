@@ -70,6 +70,7 @@ class SwiftSVGTests: XCTestCase {
             return
         }
         
+        XCTAssert(svgDocument.id == "Layer_1", "The document should have id Layer_1")
         XCTAssert(svgDocument.children.count == 1, "TextDrawing should have 1 child.")
         XCTAssert(svgDocument.children[0] is SVGSimpleText, "Only document child element should be a SVGSimpleText")
     }
