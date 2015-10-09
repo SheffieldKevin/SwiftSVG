@@ -40,7 +40,7 @@ class MovingImagesSVGTests: XCTestCase {
             originalJSONString = try jsonFromNamedFile("TextDrawing")
         }
         catch let error {
-            print(error)
+            XCTAssert(false, "Failed to create SVGDocument: \(error)")
             return
         }
         
@@ -61,5 +61,36 @@ class MovingImagesSVGTests: XCTestCase {
             "MovingImages JSON Text rendering representation changed")
         // print(jsonString)
         // print(originalJSONString)
+    }
+
+    func testSwiftLogo() {
+        let optionalSVGDocument: SVGDocument?
+        let originalJSONString: String
+        do {
+            let xmlDocument = try xmlDocumentFromNamedSVGFile("Apple_Swift_Logo")
+            let processor = SVGProcessor()
+            optionalSVGDocument = try processor.processXMLDocument(xmlDocument)
+            originalJSONString = try jsonFromNamedFile("Apple_Swift_Logo")
+        }
+        catch let error {
+            XCTAssert(false, "Failed to create SVGDocument: \(error)")
+            return
+        }
+        
+        guard let svgDocument = optionalSVGDocument else {
+            XCTAssert(false, "optionalSVGDocument should not be .None")
+            return
+        }
+        
+        let renderer = MovingImagesRenderer()
+        let svgRenderer = SVGRenderer()
+        let _ = try? svgRenderer.renderDocument(svgDocument, renderer: renderer)
+        let jsonObject = renderer.generateJSONDict()
+        
+        guard let jsonString = jsonObjectToString(jsonObject) else {
+            return
+        }
+        XCTAssert(originalJSONString == jsonString,
+            "MovingImages JSON Text rendering representation changed")
     }
 }

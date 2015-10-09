@@ -49,6 +49,9 @@
 		6E2F00291BC4ACB0000EF53F /* SwiftUtilities.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4519581A1AC22BEE00659E64 /* SwiftUtilities.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E2F002B1BC693D2000EF53F /* MovingImagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2F002A1BC693D2000EF53F /* MovingImagesTests.swift */; settings = {ASSET_TAGS = (); }; };
 		6E2F002D1BC6985D000EF53F /* TextDrawing.json in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D1D1BB8C10A00C38BDB /* TextDrawing.json */; settings = {ASSET_TAGS = (); }; };
+		6E2F002E1BC86873000EF53F /* Apple_Swift_Logo.svg in Resources */ = {isa = PBXBuildFile; fileRef = 454799841ABF3CEB000B19B8 /* Apple_Swift_Logo.svg */; settings = {ASSET_TAGS = (); }; };
+		6E2F00301BC86929000EF53F /* Apple_Swift_Logo.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F002F1BC86929000EF53F /* Apple_Swift_Logo.json */; settings = {ASSET_TAGS = (); }; };
+		6E2F00311BC874D4000EF53F /* RPM_NavBall_Overlay.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D1A1BB8C10A00C38BDB /* RPM_NavBall_Overlay.svg */; settings = {ASSET_TAGS = (); }; };
 		6E4AFE281BAAF6A40015A1DE /* MIPathFromSVGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA9E2561BAAD5B600B7468C /* MIPathFromSVGPath.m */; settings = {ASSET_TAGS = (); }; };
 		6E57A0B51BBC460600AA0574 /* TextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E57A0B41BBC460600AA0574 /* TextStyle.swift */; settings = {ASSET_TAGS = (); }; };
 		6E57A0BD1BBEEE9500AA0574 /* SwiftSVGTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E57A0BC1BBEEE9500AA0574 /* SwiftSVGTests.swift */; };
@@ -149,6 +152,7 @@
 		45E6ADB21A9EAB0200386CFE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		45E6ADE61A9EABA700386CFE /* SVGElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGElement.swift; sourceTree = "<group>"; };
 		6E2F002A1BC693D2000EF53F /* MovingImagesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MovingImagesTests.swift; path = MovingImagesTests/MovingImagesTests.swift; sourceTree = "<group>"; };
+		6E2F002F1BC86929000EF53F /* Apple_Swift_Logo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Apple_Swift_Logo.json; path = "SwiftSVG Demo/Samples/Apple_Swift_Logo.json"; sourceTree = "<group>"; };
 		6E57A0B41BBC460600AA0574 /* TextStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextStyle.swift; sourceTree = "<group>"; };
 		6E57A0BA1BBEEE9500AA0574 /* SwiftSVGTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftSVGTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E57A0BC1BBEEE9500AA0574 /* SwiftSVGTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSVGTests.swift; sourceTree = "<group>"; };
@@ -336,6 +340,7 @@
 			isa = PBXGroup;
 			children = (
 				6E2F002A1BC693D2000EF53F /* MovingImagesTests.swift */,
+				6E2F002F1BC86929000EF53F /* Apple_Swift_Logo.json */,
 				6EBF1D1D1BB8C10A00C38BDB /* TextDrawing.json */,
 			);
 			name = MITests;
@@ -511,7 +516,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E57A0C71BBEF11500AA0574 /* TextDrawing.svg in Resources */,
+				6E2F00311BC874D4000EF53F /* RPM_NavBall_Overlay.svg in Resources */,
 				6E2F002D1BC6985D000EF53F /* TextDrawing.json in Resources */,
+				6E2F002E1BC86873000EF53F /* Apple_Swift_Logo.svg in Resources */,
+				6E2F00301BC86929000EF53F /* Apple_Swift_Logo.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
