@@ -555,18 +555,7 @@ public class SVGTextSpan: TextRenderer {
         if let strokeWidth = self.strokeWidth {
             attributes[kCTStrokeWidthAttributeName] = strokeWidth
         }
-/*
-        if let style = self.style {
-            if let strokeColor = style.strokeColor {
-                var strokeWidth: CGFloat = 1.0
-                if let width = style.lineWidth {
-                    strokeWidth = width
-                }
-                attributes[kCTStrokeColorAttributeName] = strokeColor
-                attributes[kCTStrokeWidthAttributeName] = strokeWidth
-            }
-        }
-*/
+
         return CFAttributedStringCreate(kCFAllocatorDefault, self.string, attributes)
     }
 }
