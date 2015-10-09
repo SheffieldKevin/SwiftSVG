@@ -59,7 +59,7 @@ class MovingImagesSVGTests: XCTestCase {
         }
         XCTAssert(originalJSONString == jsonString,
             "MovingImages JSON Text rendering representation changed")
-        print(jsonString)
-        print(originalJSONString)
+        // print(jsonString)
+        // print(originalJSONString)
     }
 }

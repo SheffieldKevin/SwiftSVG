@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import SwiftSVG
+@testable import SwiftSVG
 
 public enum TestError: ErrorType {
     case invalidFilePath
@@ -71,15 +71,39 @@ class SwiftSVGTests: XCTestCase {
         }
         
         XCTAssert(svgDocument.id == "Layer_1", "The document should have id Layer_1")
+        XCTAssert(svgDocument.viewBox! == CGRect(x: 0, y: 0, width: 300, height: 200), "viewBox should be 300x200 at 0,0")
+        XCTAssert(svgDocument.version!.majorVersion == 1, "SVG majorVersion should be 1")
+        XCTAssert(svgDocument.version!.minorVersion == 1, "SVG minorVersion should be 1")
+        XCTAssert(svgDocument.drawFill == true, "Draw fill should be true")
+        XCTAssert(svgDocument.display == true, "Display should be true")
         XCTAssert(svgDocument.children.count == 1, "TextDrawing should have 1 child.")
         XCTAssert(svgDocument.children[0] is SVGSimpleText, "Only document child element should be a SVGSimpleText")
+        
+        guard svgDocument.children.count == 1, let simpleText = svgDocument.children[0] as? SVGSimpleText else {
+            return
+        }
+        XCTAssert(simpleText.style!.lineWidth == 4, "Text stroke width should be 4")
+        XCTAssert(simpleText.fontFamily == "Arial", "Font family should be Arial")
+        XCTAssert(simpleText.fontSize == 40, "Font size should be 40")
+        XCTAssert(simpleText.spans.count == 1, "Number of text spans should be 1")
+        
+        guard simpleText.spans.count == 1 else {
+            return
+        }
+        let span = simpleText.spans[0]
+        XCTAssert(span.string == "Fill and stroke", "Text drawn should be Fill and stroke and is: \(span.string)")
+        XCTAssert(span.textOrigin == CGPoint(x: 20, y: 200), "Text origin should be 0,0")
+        let attributedString: CFAttributedString = span.cttext
+        XCTAssert(CFAttributedStringGetString(attributedString) == "Fill and stroke", "Text in attributed string should be Fill and stroke")
+        XCTAssert(span.strokeWidth == -4, "Span stroke width should return -4")
     }
-    
+
+/*
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measureBlock {
             // Put the code you want to measure the time of here.
         }
     }
-    
+*/
 }
