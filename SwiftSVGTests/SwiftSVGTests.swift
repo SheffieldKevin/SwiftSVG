@@ -13,6 +13,8 @@ public enum TestError: ErrorType {
     case invalidFilePath
     case noContentInFile(String)
     case invalidXML
+    case invalidSVG
+    case invalidJSONObject
 }
 
 func makeURLFromNamedFile(namedFile: String, fileExtension: String) throws -> NSURL {
@@ -166,29 +168,8 @@ class SwiftSVGTests: XCTestCase {
             return
         }
         
-        XCTAssert(group0.children.count == 2, "SVGGroup0 object should have 2 child.")
-        XCTAssert(group1.children.count == 24, "SVGGroup1 object should have 24 child.")
+        XCTAssert(group0.children.count == 2, "SVGGroup0 object should have 2 children.")
+        XCTAssert(group1.children.count == 24, "SVGGroup1 object should have 24 children.")
         
-
-
-/*
-        guard svgDocument.children.count == 1, let simpleText = svgDocument.children[0] as? SVGSimpleText else {
-            return
-        }
-        XCTAssert(simpleText.style!.lineWidth == 4, "Text stroke width should be 4")
-        XCTAssert(simpleText.fontFamily == "Arial", "Font family should be Arial")
-        XCTAssert(simpleText.fontSize == 40, "Font size should be 40")
-        XCTAssert(simpleText.spans.count == 1, "Number of text spans should be 1")
-        
-        guard simpleText.spans.count == 1 else {
-            return
-        }
-        let span = simpleText.spans[0]
-        XCTAssert(span.string == "Fill and stroke", "Text drawn should be Fill and stroke and is: \(span.string)")
-        XCTAssert(span.textOrigin == CGPoint(x: 20, y: 200), "Text origin should be 0,0")
-        let attributedString: CFAttributedString = span.cttext
-        XCTAssert(CFAttributedStringGetString(attributedString) == "Fill and stroke", "Text in attributed string should be Fill and stroke")
-        XCTAssert(span.strokeWidth == -4, "Span stroke width should return -4")
-*/
     }
 }

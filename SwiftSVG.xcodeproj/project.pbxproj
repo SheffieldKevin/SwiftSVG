@@ -52,6 +52,23 @@
 		6E2F002E1BC86873000EF53F /* Apple_Swift_Logo.svg in Resources */ = {isa = PBXBuildFile; fileRef = 454799841ABF3CEB000B19B8 /* Apple_Swift_Logo.svg */; settings = {ASSET_TAGS = (); }; };
 		6E2F00301BC86929000EF53F /* Apple_Swift_Logo.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F002F1BC86929000EF53F /* Apple_Swift_Logo.json */; settings = {ASSET_TAGS = (); }; };
 		6E2F00311BC874D4000EF53F /* RPM_NavBall_Overlay.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D1A1BB8C10A00C38BDB /* RPM_NavBall_Overlay.svg */; settings = {ASSET_TAGS = (); }; };
+		6E2F00331BC89861000EF53F /* RPM_NavBall_Overlay.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F00321BC89861000EF53F /* RPM_NavBall_Overlay.json */; settings = {ASSET_TAGS = (); }; };
+		6E2F00351BC93DA1000EF53F /* Ghostscript_Tiger_Optimized.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F00341BC93DA1000EF53F /* Ghostscript_Tiger_Optimized.json */; settings = {ASSET_TAGS = (); }; };
+		6E2F00371BC93DAA000EF53F /* Ghostscript_Tiger.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F00361BC93DAA000EF53F /* Ghostscript_Tiger.json */; settings = {ASSET_TAGS = (); }; };
+		6E2F00391BC93DDB000EF53F /* Anti-normal.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F00381BC93DDB000EF53F /* Anti-normal.json */; settings = {ASSET_TAGS = (); }; };
+		6E2F003B1BC93EFC000EF53F /* JW_Bezier_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F003A1BC93EFC000EF53F /* JW_Bezier_1.json */; settings = {ASSET_TAGS = (); }; };
+		6E2F003D1BC949EE000EF53F /* Markers.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F003C1BC949EE000EF53F /* Markers.json */; settings = {ASSET_TAGS = (); }; };
+		6E2F003F1BC9553B000EF53F /* SwiftOutline.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F003E1BC9553B000EF53F /* SwiftOutline.json */; settings = {ASSET_TAGS = (); }; };
+		6E2F00411BC9556B000EF53F /* test_image2.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F00401BC9556B000EF53F /* test_image2.json */; settings = {ASSET_TAGS = (); }; };
+		6E2F00421BC955F1000EF53F /* Anti-normal.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D191BB8C10A00C38BDB /* Anti-normal.svg */; settings = {ASSET_TAGS = (); }; };
+		6E2F00431BC955F7000EF53F /* Ghostscript_Tiger.svg in Resources */ = {isa = PBXBuildFile; fileRef = 454799851ABF3CEB000B19B8 /* Ghostscript_Tiger.svg */; settings = {ASSET_TAGS = (); }; };
+		6E2F00441BC95602000EF53F /* Markers.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D141BB70E2800C38BDB /* Markers.svg */; settings = {ASSET_TAGS = (); }; };
+		6E2F00451BC95606000EF53F /* JW_Bezier_1.svg in Resources */ = {isa = PBXBuildFile; fileRef = 454799861ABF3CEB000B19B8 /* JW_Bezier_1.svg */; settings = {ASSET_TAGS = (); }; };
+		6E2F00461BC9560B000EF53F /* SwiftOutline.svg in Resources */ = {isa = PBXBuildFile; fileRef = 454799871ABF3CEB000B19B8 /* SwiftOutline.svg */; settings = {ASSET_TAGS = (); }; };
+		6E2F00471BC95617000EF53F /* test_image2.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF1D1C1BB8C10A00C38BDB /* test_image2.svg */; settings = {ASSET_TAGS = (); }; };
+		6E2F00491BC96BA7000EF53F /* 6th-day.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F00481BC96BA7000EF53F /* 6th-day.svg */; settings = {ASSET_TAGS = (); }; };
+		6E2F004A1BC96BA7000EF53F /* 6th-day.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F00481BC96BA7000EF53F /* 6th-day.svg */; settings = {ASSET_TAGS = (); }; };
+		6E2F004C1BC96BCB000EF53F /* 6th-day.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F004B1BC96BCB000EF53F /* 6th-day.json */; settings = {ASSET_TAGS = (); }; };
 		6E4AFE281BAAF6A40015A1DE /* MIPathFromSVGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA9E2561BAAD5B600B7468C /* MIPathFromSVGPath.m */; settings = {ASSET_TAGS = (); }; };
 		6E57A0B51BBC460600AA0574 /* TextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E57A0B41BBC460600AA0574 /* TextStyle.swift */; settings = {ASSET_TAGS = (); }; };
 		6E57A0BD1BBEEE9500AA0574 /* SwiftSVGTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E57A0BC1BBEEE9500AA0574 /* SwiftSVGTests.swift */; };
@@ -153,6 +170,16 @@
 		45E6ADE61A9EABA700386CFE /* SVGElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGElement.swift; sourceTree = "<group>"; };
 		6E2F002A1BC693D2000EF53F /* MovingImagesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MovingImagesTests.swift; path = MovingImagesTests/MovingImagesTests.swift; sourceTree = "<group>"; };
 		6E2F002F1BC86929000EF53F /* Apple_Swift_Logo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Apple_Swift_Logo.json; path = "SwiftSVG Demo/Samples/Apple_Swift_Logo.json"; sourceTree = "<group>"; };
+		6E2F00321BC89861000EF53F /* RPM_NavBall_Overlay.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = RPM_NavBall_Overlay.json; path = "SwiftSVG Demo/Samples/RPM_NavBall_Overlay.json"; sourceTree = "<group>"; };
+		6E2F00341BC93DA1000EF53F /* Ghostscript_Tiger_Optimized.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Ghostscript_Tiger_Optimized.json; path = "SwiftSVG Demo/Samples/Ghostscript_Tiger_Optimized.json"; sourceTree = "<group>"; };
+		6E2F00361BC93DAA000EF53F /* Ghostscript_Tiger.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Ghostscript_Tiger.json; path = "SwiftSVG Demo/Samples/Ghostscript_Tiger.json"; sourceTree = "<group>"; };
+		6E2F00381BC93DDB000EF53F /* Anti-normal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "Anti-normal.json"; path = "SwiftSVG Demo/Samples/Anti-normal.json"; sourceTree = "<group>"; };
+		6E2F003A1BC93EFC000EF53F /* JW_Bezier_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = JW_Bezier_1.json; path = "SwiftSVG Demo/Samples/JW_Bezier_1.json"; sourceTree = "<group>"; };
+		6E2F003C1BC949EE000EF53F /* Markers.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Markers.json; path = "SwiftSVG Demo/Samples/Markers.json"; sourceTree = "<group>"; };
+		6E2F003E1BC9553B000EF53F /* SwiftOutline.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = SwiftOutline.json; path = "SwiftSVG Demo/Samples/SwiftOutline.json"; sourceTree = "<group>"; };
+		6E2F00401BC9556B000EF53F /* test_image2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = test_image2.json; path = "SwiftSVG Demo/Samples/test_image2.json"; sourceTree = "<group>"; };
+		6E2F00481BC96BA7000EF53F /* 6th-day.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "6th-day.svg"; sourceTree = "<group>"; };
+		6E2F004B1BC96BCB000EF53F /* 6th-day.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "6th-day.json"; path = "SwiftSVG Demo/Samples/6th-day.json"; sourceTree = "<group>"; };
 		6E57A0B41BBC460600AA0574 /* TextStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextStyle.swift; sourceTree = "<group>"; };
 		6E57A0BA1BBEEE9500AA0574 /* SwiftSVGTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftSVGTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E57A0BC1BBEEE9500AA0574 /* SwiftSVGTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSVGTests.swift; sourceTree = "<group>"; };
@@ -228,6 +255,7 @@
 		454799831ABF3CEB000B19B8 /* Samples */ = {
 			isa = PBXGroup;
 			children = (
+				6E2F00481BC96BA7000EF53F /* 6th-day.svg */,
 				454799841ABF3CEB000B19B8 /* Apple_Swift_Logo.svg */,
 				454799851ABF3CEB000B19B8 /* Ghostscript_Tiger.svg */,
 				6EBF1D141BB70E2800C38BDB /* Markers.svg */,
@@ -340,7 +368,16 @@
 			isa = PBXGroup;
 			children = (
 				6E2F002A1BC693D2000EF53F /* MovingImagesTests.swift */,
+				6E2F004B1BC96BCB000EF53F /* 6th-day.json */,
+				6E2F00381BC93DDB000EF53F /* Anti-normal.json */,
 				6E2F002F1BC86929000EF53F /* Apple_Swift_Logo.json */,
+				6E2F00361BC93DAA000EF53F /* Ghostscript_Tiger.json */,
+				6E2F00341BC93DA1000EF53F /* Ghostscript_Tiger_Optimized.json */,
+				6E2F003A1BC93EFC000EF53F /* JW_Bezier_1.json */,
+				6E2F003C1BC949EE000EF53F /* Markers.json */,
+				6E2F00321BC89861000EF53F /* RPM_NavBall_Overlay.json */,
+				6E2F003E1BC9553B000EF53F /* SwiftOutline.json */,
+				6E2F00401BC9556B000EF53F /* test_image2.json */,
 				6EBF1D1D1BB8C10A00C38BDB /* TextDrawing.json */,
 			);
 			name = MITests;
@@ -501,6 +538,7 @@
 				4547998B1ABF3CEB000B19B8 /* SwiftOutline.svg in Resources */,
 				454799891ABF3CEB000B19B8 /* Ghostscript_Tiger.svg in Resources */,
 				454799881ABF3CEB000B19B8 /* Apple_Swift_Logo.svg in Resources */,
+				6E2F00491BC96BA7000EF53F /* 6th-day.svg in Resources */,
 				6EBF1D211BB8C10A00C38BDB /* test_image2.svg in Resources */,
 				4547998A1ABF3CEB000B19B8 /* JW_Bezier_1.svg in Resources */,
 				6EBF1D1F1BB8C10A00C38BDB /* RPM_NavBall_Overlay.svg in Resources */,
@@ -516,10 +554,26 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E57A0C71BBEF11500AA0574 /* TextDrawing.svg in Resources */,
+				6E2F00421BC955F1000EF53F /* Anti-normal.svg in Resources */,
+				6E2F004A1BC96BA7000EF53F /* 6th-day.svg in Resources */,
+				6E2F00411BC9556B000EF53F /* test_image2.json in Resources */,
+				6E2F00461BC9560B000EF53F /* SwiftOutline.svg in Resources */,
+				6E2F003B1BC93EFC000EF53F /* JW_Bezier_1.json in Resources */,
 				6E2F00311BC874D4000EF53F /* RPM_NavBall_Overlay.svg in Resources */,
+				6E2F00371BC93DAA000EF53F /* Ghostscript_Tiger.json in Resources */,
 				6E2F002D1BC6985D000EF53F /* TextDrawing.json in Resources */,
+				6E2F00391BC93DDB000EF53F /* Anti-normal.json in Resources */,
+				6E2F003F1BC9553B000EF53F /* SwiftOutline.json in Resources */,
 				6E2F002E1BC86873000EF53F /* Apple_Swift_Logo.svg in Resources */,
+				6E2F00451BC95606000EF53F /* JW_Bezier_1.svg in Resources */,
+				6E2F00471BC95617000EF53F /* test_image2.svg in Resources */,
+				6E2F00351BC93DA1000EF53F /* Ghostscript_Tiger_Optimized.json in Resources */,
+				6E2F003D1BC949EE000EF53F /* Markers.json in Resources */,
+				6E2F00431BC955F7000EF53F /* Ghostscript_Tiger.svg in Resources */,
+				6E2F004C1BC96BCB000EF53F /* 6th-day.json in Resources */,
 				6E2F00301BC86929000EF53F /* Apple_Swift_Logo.json in Resources */,
+				6E2F00441BC95602000EF53F /* Markers.svg in Resources */,
+				6E2F00331BC89861000EF53F /* RPM_NavBall_Overlay.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

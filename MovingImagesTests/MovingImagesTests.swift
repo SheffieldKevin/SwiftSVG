@@ -30,67 +30,181 @@ class MovingImagesSVGTests: XCTestCase {
         super.tearDown()
     }
 
-    func testTextDrawing() {
+    func convertSVGToJSON(baseFileName: String) throws -> String {
         let optionalSVGDocument: SVGDocument?
-        let originalJSONString: String
         do {
-            let xmlDocument = try xmlDocumentFromNamedSVGFile("TextDrawing")
+            let xmlDocument = try xmlDocumentFromNamedSVGFile(baseFileName)
             let processor = SVGProcessor()
             optionalSVGDocument = try processor.processXMLDocument(xmlDocument)
-            originalJSONString = try jsonFromNamedFile("TextDrawing")
         }
         catch let error {
             XCTAssert(false, "Failed to create SVGDocument: \(error)")
-            return
+            throw error
         }
         
         guard let svgDocument = optionalSVGDocument else {
             XCTAssert(false, "optionalSVGDocument should not be .None")
-            return
+            throw TestError.invalidXML
         }
         
         let renderer = MovingImagesRenderer()
         let svgRenderer = SVGRenderer()
         let _ = try? svgRenderer.renderDocument(svgDocument, renderer: renderer)
         let jsonObject = renderer.generateJSONDict()
-
+        
         guard let jsonString = jsonObjectToString(jsonObject) else {
-            return
+            throw TestError.invalidJSONObject
         }
-        XCTAssert(originalJSONString == jsonString,
-            "MovingImages JSON Text rendering representation changed")
-        // print(jsonString)
-        // print(originalJSONString)
+        return jsonString
     }
 
-    func testSwiftLogo() {
+    func convertOptimisedSVGToJSON(baseFileName: String) throws -> String {
         let optionalSVGDocument: SVGDocument?
-        let originalJSONString: String
         do {
-            let xmlDocument = try xmlDocumentFromNamedSVGFile("Apple_Swift_Logo")
+            let xmlDocument = try xmlDocumentFromNamedSVGFile(baseFileName)
             let processor = SVGProcessor()
             optionalSVGDocument = try processor.processXMLDocument(xmlDocument)
-            originalJSONString = try jsonFromNamedFile("Apple_Swift_Logo")
         }
         catch let error {
             XCTAssert(false, "Failed to create SVGDocument: \(error)")
-            return
+            throw error
         }
         
         guard let svgDocument = optionalSVGDocument else {
             XCTAssert(false, "optionalSVGDocument should not be .None")
-            return
+            throw TestError.invalidXML
         }
         
+        svgDocument.optimise()
         let renderer = MovingImagesRenderer()
         let svgRenderer = SVGRenderer()
         let _ = try? svgRenderer.renderDocument(svgDocument, renderer: renderer)
         let jsonObject = renderer.generateJSONDict()
         
         guard let jsonString = jsonObjectToString(jsonObject) else {
-            return
+            throw TestError.invalidJSONObject
         }
-        XCTAssert(originalJSONString == jsonString,
-            "MovingImages JSON Text rendering representation changed")
+        return jsonString
+    }
+
+    func test6th_Day() {
+        let jsonString: String
+        let originalJSONString: String
+        do {
+            jsonString = try convertSVGToJSON("6th-day")
+            originalJSONString = try jsonFromNamedFile("6th-day")
+            XCTAssert(originalJSONString == jsonString,
+                "MovingImages JSON Text rendering representation changed")
+        } catch { }
+    }
+
+    func testAnti_Normal() {
+        let jsonString: String
+        let originalJSONString: String
+        do {
+            jsonString = try convertSVGToJSON("Anti-normal")
+            originalJSONString = try jsonFromNamedFile("Anti-normal")
+            XCTAssert(originalJSONString == jsonString,
+                "MovingImages JSON Text rendering representation changed")
+        } catch { }
+    }
+
+    func testAppleSwiftLogo() {
+        let jsonString: String
+        let originalJSONString: String
+        do {
+            jsonString = try convertSVGToJSON("Apple_Swift_Logo")
+            originalJSONString = try jsonFromNamedFile("Apple_Swift_Logo")
+            XCTAssert(originalJSONString == jsonString,
+                "MovingImages JSON Text rendering representation changed")
+        } catch { }
+    }
+
+    func testGhostscriptTiger() {
+        let jsonString: String
+        let originalJSONString: String
+        do {
+            jsonString = try convertSVGToJSON("Ghostscript_Tiger")
+            originalJSONString = try jsonFromNamedFile("Ghostscript_Tiger")
+            XCTAssert(originalJSONString == jsonString,
+                "MovingImages JSON Text rendering representation changed")
+        } catch { }
+    }
+
+    func testGhostscriptTiger_optimized() {
+        let jsonString: String
+        let originalJSONString: String
+        do {
+            jsonString = try convertOptimisedSVGToJSON("Ghostscript_Tiger")
+            originalJSONString = try jsonFromNamedFile("Ghostscript_Tiger_optimized")
+            XCTAssert(originalJSONString == jsonString,
+                "MovingImages JSON Text rendering representation changed")
+        } catch { }
+    }
+
+    func testJWBezier() {
+        let jsonString: String
+        let originalJSONString: String
+        do {
+            jsonString = try convertSVGToJSON("JW_Bezier_1")
+            originalJSONString = try jsonFromNamedFile("JW_Bezier_1")
+            XCTAssert(originalJSONString == jsonString,
+                "MovingImages JSON Text rendering representation changed")
+        } catch { }
+    }
+
+    func testMarker() {
+        let jsonString: String
+        let originalJSONString: String
+        do {
+            jsonString = try convertSVGToJSON("Markers")
+            originalJSONString = try jsonFromNamedFile("Markers")
+            XCTAssert(originalJSONString == jsonString,
+                "MovingImages JSON Text rendering representation changed")
+        } catch { }
+    }
+    
+    func testRPM_NavBall_Overlay() {
+        let jsonString: String
+        let originalJSONString: String
+        do {
+            jsonString = try convertSVGToJSON("RPM_NavBall_Overlay")
+            originalJSONString = try jsonFromNamedFile("RPM_NavBall_Overlay")
+            XCTAssert(originalJSONString == jsonString,
+                "MovingImages JSON Text rendering representation changed")
+        } catch { }
+    }
+
+    func testSwiftOutline() {
+        let jsonString: String
+        let originalJSONString: String
+        do {
+            jsonString = try convertSVGToJSON("SwiftOutline")
+            originalJSONString = try jsonFromNamedFile("SwiftOutline")
+            XCTAssert(originalJSONString == jsonString,
+                "MovingImages JSON Text rendering representation changed")
+        } catch { }
+    }
+
+    func testImage2() {
+        let jsonString: String
+        let originalJSONString: String
+        do {
+            jsonString = try convertSVGToJSON("test_image2")
+            originalJSONString = try jsonFromNamedFile("test_image2")
+            XCTAssert(originalJSONString == jsonString,
+                "MovingImages JSON Text rendering representation changed")
+        } catch { }
+    }
+    
+    func testTextDrawing() {
+        let jsonString: String
+        let originalJSONString: String
+        do {
+            jsonString = try convertSVGToJSON("TextDrawing")
+            originalJSONString = try jsonFromNamedFile("TextDrawing")
+            XCTAssert(originalJSONString == jsonString,
+                "MovingImages JSON Text rendering representation changed")
+        } catch { }
     }
 }
