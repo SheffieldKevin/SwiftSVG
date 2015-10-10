@@ -83,22 +83,16 @@ public extension SVGContainer {
                     guard child.transform?.toCGAffineTransform() == lastChild.transform?.toCGAffineTransform() else {
                         continue
                     }
-
-                    // let newPath = lastChild.cgpath + child.cgpath
-                    // lastChild.cgpath = newPath
-
-                    if lastChild.addPath(child) {
-                        children.removeAtIndex(index)
-                        combinedFlag = true
-                        break
-                    }
+                    
+                    lastChild.addSVGPath(child)
+                    children.removeAtIndex(index)
+                    combinedFlag = true
+                    break
                 }
                 lastChild = child
             }
         }
         while combinedFlag == true
-
-
     }
 }
 

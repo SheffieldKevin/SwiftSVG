@@ -275,6 +275,14 @@ internal func makeCGAffineTransformDictionary(transform: CGAffineTransform) -> [
     ]
 }
 
+internal func addMIPaths(inout miPath1: MovingImagesPath, miPath2: MovingImagesPath) {
+    if let miPathElements1 = miPath1[MIJSONKeyArrayOfPathElements] as? [[NSString : AnyObject]],
+        let miPathElements2 = miPath2[MIJSONKeyArrayOfPathElements] as? [[NSString : AnyObject]]
+    {
+        miPath1[MIJSONKeyArrayOfPathElements] = miPathElements1 + miPathElements2
+    }
+}
+
 extension SVGColors {
     class func makeMIColorDictFromColor(color: CGColor) -> [NSString : AnyObject] {
         var colorDict = [NSString : AnyObject]()

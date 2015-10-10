@@ -246,19 +246,10 @@ public class SVGPath: SVGElement, PathGenerator {
         self.cgpath = path
         self.mipath = miPath
     }
-    
-    // Returns true on success. False on failure. Used when combining elements.
-    internal func addPath(svgPath: SVGPath) -> Bool {
-        let miPath1 = self.mipath[MIJSONKeyArrayOfPathElements] as? [[NSString : AnyObject]]
-        let miPath2 = svgPath.mipath[MIJSONKeyArrayOfPathElements] as? [[NSString : AnyObject]]
-        if let miPath1 = miPath1, let miPath2 = miPath2 {
-            self.cgpath = self.cgpath + svgPath.cgpath
-            self.mipath[MIJSONKeyArrayOfPathElements] = miPath1 + miPath2
-            return true
-        }
-        else {
-            return false
-        }
+
+    internal func addSVGPath(svgPath: SVGPath) {
+        addMIPaths(&self.mipath, miPath2: svgPath.mipath)
+        self.cgpath = self.cgpath + svgPath.cgpath
     }
 }
 
