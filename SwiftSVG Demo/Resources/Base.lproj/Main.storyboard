@@ -609,6 +609,12 @@
                                                 <action selector="processFolder:" target="Voe-Tx-rLC" id="eXz-Qs-pPF"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Export..." id="ljs-4s-pnv">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="export:" target="Ady-hI-5gd" id="mbw-cu-dNO"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
@@ -1227,26 +1233,6 @@
                                         <action selector="flatten:" target="5qd-fz-86N" id="Sy5-bD-cAe"/>
                                     </connections>
                                 </buttonCell>
-                            </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TNu-7x-qfJ">
-                                <rect key="frame" x="18" y="59" width="105" height="17"/>
-                                <animations/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="MovingImages:" id="Ggr-TL-2Rs">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xNk-gh-hOz">
-                                <rect key="frame" x="57" y="20" width="92" height="32"/>
-                                <animations/>
-                                <buttonCell key="cell" type="push" title="Export..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iQd-R4-QgR">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="export:" target="5qd-fz-86N" id="PzO-it-AZP"/>
-                                </connections>
                             </button>
                         </subviews>
                         <animations/>
