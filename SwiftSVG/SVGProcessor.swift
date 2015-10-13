@@ -169,9 +169,11 @@ public class SVGProcessor {
         return svgElement
     }
 
-    public func processSVGGroup(xmlElement: NSXMLElement, state: State) throws -> SVGGroup {
+    public func processSVGGroup(xmlElement: NSXMLElement, state: State) throws -> SVGGroup? {
         // A commented out <!--  --> node comes in as a NSXMLNode which causes crashes here.
-        let nodes = xmlElement.children!
+        guard let nodes = xmlElement.children else {
+            return .None
+        }
         var children = [SVGElement]()
         for node in nodes where node is NSXMLElement {
             if let svgElement = try self.processSVGElement(node as! NSXMLElement, state: state) {
