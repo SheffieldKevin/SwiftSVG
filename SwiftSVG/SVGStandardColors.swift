@@ -94,21 +94,7 @@ private class SVGStandardColors {
 }
 
 class SVGColors {
-    class func colorDictToMIColorDict(colorDict: [NSObject : AnyObject]) -> [NSObject : AnyObject] {
-        let mColorDict = [
-            MIJSONKeyRed : colorDict["red"]!,
-            MIJSONKeyGreen : colorDict["green"]!,
-            MIJSONKeyBlue : colorDict["blue"]!,
-            MIJSONKeyColorColorProfileName : kCGColorSpaceSRGB
-        ]
-        return mColorDict
-    }
-    
     class func stringToColor(string: String) throws -> CGColor? {
-        // if string == "none" {
-        //    return nil
-        // }
-        
         if let colorDictionary = try stringToColorDictionary(string) {
             return colorDictionaryToCGColor(colorDictionary)
         }

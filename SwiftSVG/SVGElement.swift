@@ -223,8 +223,8 @@ public class SVGGroup: SVGContainer {
 
 // MARK: -
 
-public typealias MovingImagesPath = [NSString : AnyObject]
-public typealias MovingImagesText = [NSString : AnyObject]
+public typealias MovingImagesPath = [NSString : NSObject]
+public typealias MovingImagesText = [NSString : NSObject]
 
 public protocol PathGenerator: CGPathable {
     var mipath:MovingImagesPath { get }
@@ -346,7 +346,7 @@ public class SVGRect: SVGElement, PathGenerator {
         return CGPathCreateWithRoundedRect(self.rect.frame, self.rx!, self.ry!, nil)
     }
     
-    private func makeMIPath() -> [NSString : AnyObject] {
+    private func makeMIPath() -> MovingImagesPath {
         if self.notRounded {
             return makeRectDictionary(rect.frame, hasFill: hasFill, hasStroke: hasStroke)
         }
@@ -364,7 +364,7 @@ public class SVGEllipse: SVGElement, PathGenerator {
         self.rect = rect
     }
     
-    private func makeMIPath() -> [NSString : AnyObject] {
+    private func makeMIPath() -> MovingImagesPath {
         return makeOvalDictionary(rect, hasFill: hasFill, hasStroke: hasStroke)
     }
 }
@@ -475,43 +475,13 @@ public class SVGTextSpan: TextRenderer {
     }
 
     private func makeMIText() -> MovingImagesText {
-        var theDict = [
-            MIJSONKeyStringPostscriptFontName : self.getPostscriptFontName(),
-            MIJSONKeyElementType : MIJSONValueBasicStringElement,
-            MIJSONKeyStringText : self.string,
-            MIJSONKeyPoint : makePointDictionary(CGPoint(x:self.textOrigin.x, y: 0.0)),
-            MIJSONKeyStringFontSize : self.fontSize,
-            MIJSONKeyContextTransformation : [
-                [
-                    MIJSONKeyTransformationType : MIJSONValueTranslate,
-                    MIJSONKeyTranslation : [ MIJSONKeyX : 0.0, MIJSONKeyY : self.textOrigin.y ]
-                ],
-                [
-                    MIJSONKeyTransformationType : MIJSONValueScale,
-                    MIJSONKeyScale : [ MIJSONKeyX : 1.0, MIJSONKeyY : -1.0 ]
-                ]
-            ]
-        ]
-
-        if let fillColor = self.fillColor {
-            theDict[MIJSONKeyFillColor] = SVGColors.makeMIColorDictFromColor(fillColor)
-        }
-        
-        if let strokeColor = self.strokeColor {
-            theDict[MIJSONKeyStrokeColor] = SVGColors.makeMIColorDictFromColor(strokeColor)
-        }
-    
-        if let strokeWidth = self.strokeWidth {
-            theDict[MIJSONKeyStringStrokeWidth] = strokeWidth
-        }
-
-        // By having a wrapper dictionary the vertical text flipping can't override
-        // any other transformations that might be applied to the object.
-        let wrapperDict: MovingImagesText = [
-            MIJSONKeyElementType : MIJSONValueArrayOfElements,
-            MIJSONValueArrayOfElements : [ theDict ]
-        ]
-        return wrapperDict
+        return makeMovingImagesText(self.string,
+                          fontSize: self.fontSize,
+                postscriptFontName: self.getPostscriptFontName(),
+                        textOrigin: self.textOrigin,
+                         fillColor: self.fillColor,
+                       strokeWidth: self.strokeWidth,
+                       strokeColor: self.strokeColor)
     }
     
     private func getPostscriptFontName() -> NSString {

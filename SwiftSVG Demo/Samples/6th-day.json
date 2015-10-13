@@ -47,19 +47,6 @@
                 {
                   "arrayofelements" : [
                     {
-                      "fontsize" : 43.5693,
-                      "elementtype" : "drawbasicstring",
-                      "point" : {
-                        "x" : 0,
-                        "y" : 0
-                      },
-                      "fillcolor" : {
-                        "red" : 0.2156862745098039,
-                        "colorcolorprofilename" : "kCGColorSpaceSRGB",
-                        "blue" : 0.207843137254902,
-                        "alpha" : 1,
-                        "green" : 0.2117647058823529
-                      },
                       "contexttransformation" : [
                         {
                           "transformationtype" : "translate",
@@ -76,21 +63,11 @@
                           "transformationtype" : "scale"
                         }
                       ],
-                      "postscriptfontname" : "Helvetica",
-                      "stringtext" : "THE SIXTH"
-                    }
-                  ],
-                  "elementtype" : "arrayofelements"
-                },
-                {
-                  "arrayofelements" : [
-                    {
-                      "fontsize" : 43.5693,
-                      "elementtype" : "drawbasicstring",
                       "point" : {
                         "x" : 0,
                         "y" : 0
                       },
+                      "fontsize" : 43.5693,
                       "fillcolor" : {
                         "red" : 0.2156862745098039,
                         "colorcolorprofilename" : "kCGColorSpaceSRGB",
@@ -98,6 +75,16 @@
                         "alpha" : 1,
                         "green" : 0.2117647058823529
                       },
+                      "elementtype" : "drawbasicstring",
+                      "stringtext" : "THE SIXTH",
+                      "postscriptfontname" : "Helvetica"
+                    }
+                  ],
+                  "elementtype" : "arrayofelements"
+                },
+                {
+                  "arrayofelements" : [
+                    {
                       "contexttransformation" : [
                         {
                           "transformationtype" : "translate",
@@ -114,21 +101,11 @@
                           "transformationtype" : "scale"
                         }
                       ],
-                      "postscriptfontname" : "Helvetica",
-                      "stringtext" : "DAY, GOD"
-                    }
-                  ],
-                  "elementtype" : "arrayofelements"
-                },
-                {
-                  "arrayofelements" : [
-                    {
-                      "fontsize" : 43.5693,
-                      "elementtype" : "drawbasicstring",
                       "point" : {
                         "x" : 0,
                         "y" : 0
                       },
+                      "fontsize" : 43.5693,
                       "fillcolor" : {
                         "red" : 0.2156862745098039,
                         "colorcolorprofilename" : "kCGColorSpaceSRGB",
@@ -136,6 +113,16 @@
                         "alpha" : 1,
                         "green" : 0.2117647058823529
                       },
+                      "elementtype" : "drawbasicstring",
+                      "stringtext" : "DAY, GOD",
+                      "postscriptfontname" : "Helvetica"
+                    }
+                  ],
+                  "elementtype" : "arrayofelements"
+                },
+                {
+                  "arrayofelements" : [
+                    {
                       "contexttransformation" : [
                         {
                           "transformationtype" : "translate",
@@ -152,21 +139,11 @@
                           "transformationtype" : "scale"
                         }
                       ],
-                      "postscriptfontname" : "Helvetica",
-                      "stringtext" : "CREATED"
-                    }
-                  ],
-                  "elementtype" : "arrayofelements"
-                },
-                {
-                  "arrayofelements" : [
-                    {
-                      "fontsize" : 43.5693,
-                      "elementtype" : "drawbasicstring",
                       "point" : {
                         "x" : 0,
                         "y" : 0
                       },
+                      "fontsize" : 43.5693,
                       "fillcolor" : {
                         "red" : 0.2156862745098039,
                         "colorcolorprofilename" : "kCGColorSpaceSRGB",
@@ -174,24 +151,9 @@
                         "alpha" : 1,
                         "green" : 0.2117647058823529
                       },
-                      "contexttransformation" : [
-                        {
-                          "transformationtype" : "translate",
-                          "translation" : {
-                            "y" : 156.8,
-                            "x" : 0
-                          }
-                        },
-                        {
-                          "scale" : {
-                            "y" : -1,
-                            "x" : 1
-                          },
-                          "transformationtype" : "scale"
-                        }
-                      ],
-                      "postscriptfontname" : "Helvetica",
-                      "stringtext" : "MAN"
+                      "elementtype" : "drawbasicstring",
+                      "stringtext" : "CREATED",
+                      "postscriptfontname" : "Helvetica"
                     }
                   ],
                   "elementtype" : "arrayofelements"
@@ -199,19 +161,6 @@
                 {
                   "arrayofelements" : [
                     {
-                      "fontsize" : 21.8524,
-                      "elementtype" : "drawbasicstring",
-                      "point" : {
-                        "x" : 101.2,
-                        "y" : 0
-                      },
-                      "fillcolor" : {
-                        "red" : 0.2156862745098039,
-                        "colorcolorprofilename" : "kCGColorSpaceSRGB",
-                        "blue" : 0.207843137254902,
-                        "alpha" : 1,
-                        "green" : 0.2117647058823529
-                      },
                       "contexttransformation" : [
                         {
                           "transformationtype" : "translate",
@@ -228,8 +177,59 @@
                           "transformationtype" : "scale"
                         }
                       ],
-                      "postscriptfontname" : "Helvetica",
-                      "stringtext" : "CHESTER"
+                      "point" : {
+                        "x" : 0,
+                        "y" : 0
+                      },
+                      "fontsize" : 43.5693,
+                      "fillcolor" : {
+                        "red" : 0.2156862745098039,
+                        "colorcolorprofilename" : "kCGColorSpaceSRGB",
+                        "blue" : 0.207843137254902,
+                        "alpha" : 1,
+                        "green" : 0.2117647058823529
+                      },
+                      "elementtype" : "drawbasicstring",
+                      "stringtext" : "MAN",
+                      "postscriptfontname" : "Helvetica"
+                    }
+                  ],
+                  "elementtype" : "arrayofelements"
+                },
+                {
+                  "arrayofelements" : [
+                    {
+                      "contexttransformation" : [
+                        {
+                          "transformationtype" : "translate",
+                          "translation" : {
+                            "y" : 156.8,
+                            "x" : 0
+                          }
+                        },
+                        {
+                          "scale" : {
+                            "y" : -1,
+                            "x" : 1
+                          },
+                          "transformationtype" : "scale"
+                        }
+                      ],
+                      "point" : {
+                        "x" : 101.2,
+                        "y" : 0
+                      },
+                      "fontsize" : 21.8524,
+                      "fillcolor" : {
+                        "red" : 0.2156862745098039,
+                        "colorcolorprofilename" : "kCGColorSpaceSRGB",
+                        "blue" : 0.207843137254902,
+                        "alpha" : 1,
+                        "green" : 0.2117647058823529
+                      },
+                      "elementtype" : "drawbasicstring",
+                      "stringtext" : "CHESTER",
+                      "postscriptfontname" : "Helvetica"
                     }
                   ],
                   "elementtype" : "arrayofelements"
@@ -255,19 +255,6 @@
                 {
                   "arrayofelements" : [
                     {
-                      "fontsize" : 43.5693,
-                      "elementtype" : "drawbasicstring",
-                      "point" : {
-                        "x" : 0,
-                        "y" : 0
-                      },
-                      "fillcolor" : {
-                        "red" : 0.2156862745098039,
-                        "colorcolorprofilename" : "kCGColorSpaceSRGB",
-                        "blue" : 0.207843137254902,
-                        "alpha" : 1,
-                        "green" : 0.2117647058823529
-                      },
                       "contexttransformation" : [
                         {
                           "transformationtype" : "translate",
@@ -284,21 +271,11 @@
                           "transformationtype" : "scale"
                         }
                       ],
-                      "postscriptfontname" : "Helvetica",
-                      "stringtext" : ". . . AND"
-                    }
-                  ],
-                  "elementtype" : "arrayofelements"
-                },
-                {
-                  "arrayofelements" : [
-                    {
-                      "fontsize" : 43.5693,
-                      "elementtype" : "drawbasicstring",
                       "point" : {
-                        "x" : 81.90000000000001,
+                        "x" : 0,
                         "y" : 0
                       },
+                      "fontsize" : 43.5693,
                       "fillcolor" : {
                         "red" : 0.2156862745098039,
                         "colorcolorprofilename" : "kCGColorSpaceSRGB",
@@ -306,6 +283,16 @@
                         "alpha" : 1,
                         "green" : 0.2117647058823529
                       },
+                      "elementtype" : "drawbasicstring",
+                      "stringtext" : ". . . AND",
+                      "postscriptfontname" : "Helvetica"
+                    }
+                  ],
+                  "elementtype" : "arrayofelements"
+                },
+                {
+                  "arrayofelements" : [
+                    {
                       "contexttransformation" : [
                         {
                           "transformationtype" : "translate",
@@ -322,8 +309,21 @@
                           "transformationtype" : "scale"
                         }
                       ],
-                      "postscriptfontname" : "Helvetica",
-                      "stringtext" : "ON"
+                      "point" : {
+                        "x" : 81.90000000000001,
+                        "y" : 0
+                      },
+                      "fontsize" : 43.5693,
+                      "fillcolor" : {
+                        "red" : 0.2156862745098039,
+                        "colorcolorprofilename" : "kCGColorSpaceSRGB",
+                        "blue" : 0.207843137254902,
+                        "alpha" : 1,
+                        "green" : 0.2117647058823529
+                      },
+                      "elementtype" : "drawbasicstring",
+                      "stringtext" : "ON",
+                      "postscriptfontname" : "Helvetica"
                     }
                   ],
                   "elementtype" : "arrayofelements"

@@ -94,7 +94,7 @@ class MovingImagesSVGTests: XCTestCase {
             jsonString = try convertSVGToJSON("6th-day")
             originalJSONString = try jsonFromNamedFile("6th-day")
             XCTAssert(originalJSONString == jsonString,
-                "MovingImages JSON Text rendering representation changed")
+                "MovingImages JSON Text rendering representation changed: \(jsonString)")
         } catch { }
     }
 
@@ -204,7 +204,7 @@ class MovingImagesSVGTests: XCTestCase {
             jsonString = try convertSVGToJSON("TextDrawing")
             originalJSONString = try jsonFromNamedFile("TextDrawing")
             XCTAssert(originalJSONString == jsonString,
-                "MovingImages JSON Text rendering representation changed")
+                "MovingImages JSON Text rendering representation changed: \(jsonString)")
         } catch { }
     }
 }

@@ -61,14 +61,14 @@ public func writeMovingImagesJSON(jsonObject: [NSString : AnyObject], sourceFile
     }
 }
 
-internal func makePointDictionary(point: CGPoint = CGPoint.zero) -> [NSString : AnyObject] {
+internal func makePointDictionary(point: CGPoint = CGPoint.zero) -> MovingImagesPath {
     return [
         MIJSONKeyX : point.x,
         MIJSONKeyY : point.y
     ]
 }
 
-internal func makeLineDictionary(startPoint: CGPoint, endPoint: CGPoint) -> [NSString : AnyObject] {
+internal func makeLineDictionary(startPoint: CGPoint, endPoint: CGPoint) -> MovingImagesPath {
     return [
         MIJSONKeyLine : [
             MIJSONKeyStartPoint : makePointDictionary(startPoint),
@@ -78,7 +78,7 @@ internal func makeLineDictionary(startPoint: CGPoint, endPoint: CGPoint) -> [NSS
     ]
 }
 
-internal func makePathDictionary(pathElements: NSArray, startPoint: CGPoint = CGPoint.zero) -> [NSString : AnyObject] {
+internal func makePathDictionary(pathElements: NSArray, startPoint: CGPoint = CGPoint.zero) -> MovingImagesPath {
     return [
         MIJSONKeyArrayOfPathElements : pathElements,
         MIJSONKeyStartPoint : makePointDictionary(CGPoint(x: 0.0, y: 0.0))
@@ -98,7 +98,7 @@ internal func makeRectDictionary(rectangle: CGRect) -> [NSString : AnyObject] {
     ]
 }
 
-internal func makeRectDictionary(rectangle: CGRect, makePath: Bool) -> [NSString : AnyObject] {
+internal func makeRectDictionary(rectangle: CGRect, makePath: Bool) -> MovingImagesPath {
     if makePath {
         return [
             MIJSONKeyStartPoint : makePointDictionary(),
@@ -132,7 +132,7 @@ internal func rectElementType(hasFill hasFill: Bool, hasStroke: Bool) -> NSStrin
     }
 }
 
-internal func makeRectDictionary(rectangle: CGRect, hasFill: Bool, hasStroke: Bool) -> [NSString : AnyObject] {
+internal func makeRectDictionary(rectangle: CGRect, hasFill: Bool, hasStroke: Bool) -> MovingImagesPath {
     var theDict = makeRectDictionary(rectangle, makePath: hasFill && hasStroke)
     theDict[MIJSONKeyElementType] = rectElementType(hasFill: hasFill, hasStroke: hasStroke)
     return theDict
@@ -153,7 +153,7 @@ internal func pathElementType(hasFill hasFill: Bool, hasStroke: Bool) -> NSStrin
     }
 }
 
-internal func makeRoundedRectDictionary(rectangle: CGRect, rx: CGFloat, ry: CGFloat, hasFill: Bool, hasStroke: Bool) -> [NSString : AnyObject] {
+internal func makeRoundedRectDictionary(rectangle: CGRect, rx: CGFloat, ry: CGFloat, hasFill: Bool, hasStroke: Bool) -> MovingImagesPath {
     let x0 = rectangle.origin.x
     let y0 = rectangle.origin.y
     let width = rectangle.size.width
@@ -206,7 +206,7 @@ internal func makeRoundedRectDictionary(rectangle: CGRect, rx: CGFloat, ry: CGFl
     ]
 }
 
-internal func makeOvalDictionary(rectangle: CGRect, makePath: Bool) -> [NSString : AnyObject] {
+internal func makeOvalDictionary(rectangle: CGRect, makePath: Bool) -> MovingImagesPath {
     if makePath {
         return [
             MIJSONKeyStartPoint : makePointDictionary(),
@@ -225,7 +225,7 @@ internal func makeOvalDictionary(rectangle: CGRect, makePath: Bool) -> [NSString
     }
 }
 
-internal func makeOvalDictionary(rectangle: CGRect, hasFill: Bool, hasStroke: Bool) -> [NSString : AnyObject] {
+internal func makeOvalDictionary(rectangle: CGRect, hasFill: Bool, hasStroke: Bool) -> MovingImagesPath {
     var theDict = makeOvalDictionary(rectangle, makePath: hasFill && hasStroke)
     if hasFill && hasStroke {
         theDict[MIJSONKeyElementType] = MIJSONValuePathFillAndStrokeElement
@@ -248,7 +248,7 @@ internal func makePolygonArray(points: [CGPoint]) -> [[NSString : AnyObject]] {
     }
 }
 
-internal func makePolygonDictionary(points: [CGPoint]) -> [NSString : AnyObject] {
+internal func makePolygonDictionary(points: [CGPoint]) -> MovingImagesPath {
     var pathArray = makePolygonArray(Array(points[1..<points.count]))
     pathArray.append([MIJSONKeyElementType : MIJSONValueCloseSubPath])
     return [
@@ -257,14 +257,14 @@ internal func makePolygonDictionary(points: [CGPoint]) -> [NSString : AnyObject]
     ]
 }
 
-internal func makePolylineDictionary(points: [CGPoint]) -> [NSString : AnyObject] {
+internal func makePolylineDictionary(points: [CGPoint]) -> MovingImagesPath {
     return [
         MIJSONKeyStartPoint : makePointDictionary(points[0]),
         MIJSONKeyArrayOfPathElements : makePolygonArray(Array(points[1..<points.count]))
     ]
 }
 
-internal func makeCGAffineTransformDictionary(transform: CGAffineTransform) -> [NSString : AnyObject] {
+internal func makeCGAffineTransformDictionary(transform: CGAffineTransform) -> [NSString : NSObject] {
     return [
         MIJSONKeyAffineTransformM11 : transform.a,
         MIJSONKeyAffineTransformM12 : transform.b,
@@ -283,6 +283,52 @@ internal func addMIPaths(inout miPath1: MovingImagesPath, miPath2: MovingImagesP
     }
 }
 
+internal func makeMovingImagesText(string: CFString,
+                       fontSize: CGFloat,
+             postscriptFontName: NSString,
+                     textOrigin: CGPoint,
+                      fillColor: CGColor?,
+                    strokeWidth: CGFloat?,
+                    strokeColor: CGColor?) -> MovingImagesText {
+    var theDict:[NSString : NSObject] = [
+        MIJSONKeyStringPostscriptFontName : postscriptFontName,
+        MIJSONKeyElementType : MIJSONValueBasicStringElement,
+        MIJSONKeyStringText : string,
+        MIJSONKeyPoint : makePointDictionary(CGPoint(x:textOrigin.x, y: 0.0)),
+        MIJSONKeyStringFontSize : fontSize,
+        MIJSONKeyContextTransformation : [
+            [
+                MIJSONKeyTransformationType : MIJSONValueTranslate,
+                MIJSONKeyTranslation : [ MIJSONKeyX : 0.0, MIJSONKeyY : textOrigin.y ]
+            ],
+            [
+                MIJSONKeyTransformationType : MIJSONValueScale,
+                MIJSONKeyScale : [ MIJSONKeyX : 1.0, MIJSONKeyY : -1.0 ]
+            ]
+        ]
+    ]
+    
+    if let fillColor = fillColor {
+        theDict[MIJSONKeyFillColor] = SVGColors.makeMIColorDictFromColor(fillColor)
+    }
+    
+    if let strokeColor = strokeColor {
+        theDict[MIJSONKeyStrokeColor] = SVGColors.makeMIColorDictFromColor(strokeColor)
+    }
+    
+    if let strokeWidth = strokeWidth {
+        theDict[MIJSONKeyStringStrokeWidth] = strokeWidth
+    }
+    
+    // By having a wrapper dictionary the vertical text flipping can't override
+    // any other transformations that might be applied to the object.
+    let wrapperDict: MovingImagesText = [
+        MIJSONKeyElementType : MIJSONValueArrayOfElements,
+        MIJSONValueArrayOfElements : [ theDict ]
+    ]
+    return wrapperDict
+}
+
 extension SVGColors {
     class func makeMIColorDictFromColor(color: CGColor) -> [NSString : AnyObject] {
         var colorDict = [NSString : AnyObject]()
@@ -293,5 +339,15 @@ extension SVGColors {
         colorDict[MIJSONKeyBlue] = colorComponents[2]
         colorDict[MIJSONKeyAlpha] = colorComponents[3]
         return colorDict
+    }
+
+    class func colorDictToMIColorDict(colorDict: [NSObject : AnyObject]) -> [NSObject : AnyObject] {
+        let mColorDict = [
+            MIJSONKeyRed : colorDict["red"]!,
+            MIJSONKeyGreen : colorDict["green"]!,
+            MIJSONKeyBlue : colorDict["blue"]!,
+            MIJSONKeyColorColorProfileName : kCGColorSpaceSRGB
+        ]
+        return mColorDict
     }
 }

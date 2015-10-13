@@ -15,26 +15,6 @@
         {
           "arrayofelements" : [
             {
-              "fontsize" : 40,
-              "elementtype" : "drawbasicstring",
-              "point" : {
-                "x" : 20,
-                "y" : 0
-              },
-              "strokecolor" : {
-                "red" : 0,
-                "colorcolorprofilename" : "kCGColorSpaceSRGB",
-                "blue" : 0,
-                "alpha" : 1,
-                "green" : 0
-              },
-              "fillcolor" : {
-                "red" : 1,
-                "colorcolorprofilename" : "kCGColorSpaceSRGB",
-                "blue" : 1,
-                "alpha" : 1,
-                "green" : 1
-              },
               "contexttransformation" : [
                 {
                   "transformationtype" : "translate",
@@ -51,9 +31,29 @@
                   "transformationtype" : "scale"
                 }
               ],
-              "postscriptfontname" : "ArialMT",
+              "strokecolor" : {
+                "red" : 0,
+                "colorcolorprofilename" : "kCGColorSpaceSRGB",
+                "blue" : 0,
+                "alpha" : 1,
+                "green" : 0
+              },
+              "point" : {
+                "x" : 20,
+                "y" : 0
+              },
+              "fontsize" : 40,
+              "fillcolor" : {
+                "red" : 1,
+                "colorcolorprofilename" : "kCGColorSpaceSRGB",
+                "blue" : 1,
+                "alpha" : 1,
+                "green" : 1
+              },
+              "elementtype" : "drawbasicstring",
+              "stringtext" : "Fill and stroke",
               "stringstrokewidth" : -4,
-              "stringtext" : "Fill and stroke"
+              "postscriptfontname" : "ArialMT"
             }
           ],
           "elementtype" : "arrayofelements"
