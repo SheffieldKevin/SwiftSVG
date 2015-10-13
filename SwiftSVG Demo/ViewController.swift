@@ -214,24 +214,4 @@ class ViewController: NSViewController {
         try! summaryViewController.deepThought()
 
     }
-
-    @IBAction func export(sender: AnyObject?) {
-        guard let svgDocument = svgDocument else {
-            return
-        }
-        let savePanel = NSSavePanel()
-        savePanel.allowedFileTypes = ["public.json"]
-        savePanel.canSelectHiddenExtension = true
-        savePanel.beginSheetModalForWindow(self.svgView.window!, completionHandler: { result in
-            guard result == NSModalResponseOK else {
-                return
-            }
-
-            let renderer = MovingImagesRenderer()
-            let svgRenderer = SVGRenderer()
-            let _ = try? svgRenderer.renderDocument(svgDocument, renderer: renderer)
-            let jsonObject = renderer.generateJSONDict()
-            writeMovingImagesJSONObject(jsonObject, fileURL: savePanel.URL!)
-        })
-    }
 }

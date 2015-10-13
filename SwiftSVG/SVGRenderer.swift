@@ -58,7 +58,7 @@ public class SVGRenderer {
             renderer.startGroup(svgElement.id)
         }
             
-        if let _ = svgElement as? PathGenerator {
+        if let _ = svgElement as? CGPathable {
             renderer.startElement(svgElement.id)
         }
 
@@ -90,7 +90,7 @@ public class SVGRenderer {
                 try renderDocument(svgDocument, renderer: renderer)
             case let svgGroup as SVGGroup:
                 try renderGroup(svgGroup, renderer: renderer)
-            case let pathable as PathGenerator:
+            case let pathable as CGPathable:
                 // svgElement.printSelfAndParents()
                 if (hasStroke || hasFill) {
                     let mode = CGPathDrawingMode(hasStroke: hasStroke, hasFill: hasFill)

@@ -223,42 +223,30 @@ public class SVGGroup: SVGContainer {
 
 // MARK: -
 
-public typealias MovingImagesPath = [NSString : AnyObject]
-public typealias MovingImagesText = [NSString : AnyObject]
-
-public protocol PathGenerator: CGPathable {
-    var mipath:MovingImagesPath { get }
-}
-
 public protocol TextRenderer {
-    var mitext:MovingImagesText { get }
     var cttext:CFAttributedString { get }
     var textOrigin:CGPoint { get }
 }
 
 // MARK: -
 
-public class SVGPath: SVGElement, PathGenerator {
+public class SVGPath: SVGElement, CGPathable {
     public private(set) var cgpath: CGPath
-    public private(set) var mipath: MovingImagesPath
 
-    public init(path: CGPath, miPath: MovingImagesPath) {
+    public init(path: CGPath) {
         self.cgpath = path
-        self.mipath = miPath
     }
 
     internal func addSVGPath(svgPath: SVGPath) {
-        addMIPaths(&self.mipath, miPath2: svgPath.mipath)
         self.cgpath = self.cgpath + svgPath.cgpath
     }
 }
 
-public class SVGLine: SVGElement, PathGenerator {
+public class SVGLine: SVGElement, CGPathable {
     public let startPoint: CGPoint
     public let endPoint: CGPoint
 
     lazy public var cgpath: CGPath = self.makePath()
-    lazy public var mipath: MovingImagesPath = makeLineDictionary(self.startPoint, endPoint: self.endPoint)
 
     public init(startPoint: CGPoint, endPoint: CGPoint) {
         self.startPoint = startPoint
@@ -274,22 +262,20 @@ public class SVGLine: SVGElement, PathGenerator {
     }
 }
 
-public class SVGPolygon: SVGElement, PathGenerator {
+public class SVGPolygon: SVGElement, CGPathable {
     public let polygon:SwiftGraphics.Polygon
     
     lazy public var cgpath:CGPath = self.polygon.cgpath
-    lazy public var mipath:MovingImagesPath = makePolygonDictionary(self.polygon.points)
     
     public init(points: [CGPoint]) {
         self.polygon = SwiftGraphics.Polygon(points: points)
     }
 }
 
-public class SVGPolyline: SVGElement, PathGenerator {
+public class SVGPolyline: SVGElement, CGPathable {
     public let points: [CGPoint]
     
     lazy public var cgpath:CGPath = self.makePath()
-    lazy public var mipath:MovingImagesPath = makePolylineDictionary(self.points)
     
     public init(points: [CGPoint]) {
         self.points = points
@@ -302,13 +288,12 @@ public class SVGPolyline: SVGElement, PathGenerator {
     }
 }
 
-public class SVGRect: SVGElement, PathGenerator {
+public class SVGRect: SVGElement, CGPathable {
     public let rect: Rectangle
     public let rx: CGFloat?
     public let ry: CGFloat?
 
     lazy public var cgpath:CGPath = self.makeCGPath()
-    lazy public var mipath:MovingImagesPath = self.makeMIPath()
     
     // http://www.w3.org/TR/SVG/shapes.html#RectElement
     public init(rect: CGRect, rx: CGFloat? = Optional.None, ry: CGFloat? = Optional.None) {
@@ -345,36 +330,23 @@ public class SVGRect: SVGElement, PathGenerator {
         
         return CGPathCreateWithRoundedRect(self.rect.frame, self.rx!, self.ry!, nil)
     }
-    
-    private func makeMIPath() -> [NSString : AnyObject] {
-        if self.notRounded {
-            return makeRectDictionary(rect.frame, hasFill: hasFill, hasStroke: hasStroke)
-        }
-        return makeRoundedRectDictionary(rect.frame, rx: rx!, ry: ry!, hasFill: hasFill, hasStroke: hasStroke)
-    }
 }
 
-public class SVGEllipse: SVGElement, PathGenerator {
+public class SVGEllipse: SVGElement, CGPathable {
     public var rect: CGRect!
     
     lazy public var cgpath:CGPath = CGPathCreateWithEllipseInRect(self.rect, nil)
-    lazy public var mipath:MovingImagesPath = self.makeMIPath()
     
     public init(rect: CGRect) {
         self.rect = rect
     }
-    
-    private func makeMIPath() -> [NSString : AnyObject] {
-        return makeOvalDictionary(rect, hasFill: hasFill, hasStroke: hasStroke)
-    }
 }
 
-public class SVGCircle: SVGElement, PathGenerator {
+public class SVGCircle: SVGElement, CGPathable {
     public let center: CGPoint
     public let radius: CGFloat
 
     lazy public var cgpath:CGPath = CGPathCreateWithEllipseInRect(self.rect, nil)
-    lazy public var mipath:MovingImagesPath = self.makeMIPath()
     
     public var rect: CGRect {
         let rectSize = CGSize(width: 2.0 * radius, height: 2.0 * radius)
@@ -386,10 +358,6 @@ public class SVGCircle: SVGElement, PathGenerator {
         self.center = center
         self.radius = radius
     }
-
-    private func makeMIPath() -> MovingImagesPath {
-        return makeOvalDictionary(rect, hasFill: hasFill, hasStroke: hasStroke)
-    }
 }
 
 public class SVGTextSpan: TextRenderer {
@@ -400,7 +368,6 @@ public class SVGTextSpan: TextRenderer {
     internal(set) var transform: Transform2D? = nil
     internal(set) var textStyle: TextStyle? = nil
     
-    public lazy var mitext:MovingImagesText = self.makeMIText()
     public lazy var cttext:CFAttributedString = self.makeAttributedString()
     
     public let textOrigin: CGPoint
@@ -472,46 +439,6 @@ public class SVGTextSpan: TextRenderer {
             }
             return 12.0
         }
-    }
-
-    private func makeMIText() -> MovingImagesText {
-        var theDict = [
-            MIJSONKeyStringPostscriptFontName : self.getPostscriptFontName(),
-            MIJSONKeyElementType : MIJSONValueBasicStringElement,
-            MIJSONKeyStringText : self.string,
-            MIJSONKeyPoint : makePointDictionary(CGPoint(x:self.textOrigin.x, y: 0.0)),
-            MIJSONKeyStringFontSize : self.fontSize,
-            MIJSONKeyContextTransformation : [
-                [
-                    MIJSONKeyTransformationType : MIJSONValueTranslate,
-                    MIJSONKeyTranslation : [ MIJSONKeyX : 0.0, MIJSONKeyY : self.textOrigin.y ]
-                ],
-                [
-                    MIJSONKeyTransformationType : MIJSONValueScale,
-                    MIJSONKeyScale : [ MIJSONKeyX : 1.0, MIJSONKeyY : -1.0 ]
-                ]
-            ]
-        ]
-
-        if let fillColor = self.fillColor {
-            theDict[MIJSONKeyFillColor] = SVGColors.makeMIColorDictFromColor(fillColor)
-        }
-        
-        if let strokeColor = self.strokeColor {
-            theDict[MIJSONKeyStrokeColor] = SVGColors.makeMIColorDictFromColor(strokeColor)
-        }
-    
-        if let strokeWidth = self.strokeWidth {
-            theDict[MIJSONKeyStringStrokeWidth] = strokeWidth
-        }
-
-        // By having a wrapper dictionary the vertical text flipping can't override
-        // any other transformations that might be applied to the object.
-        let wrapperDict: MovingImagesText = [
-            MIJSONKeyElementType : MIJSONValueArrayOfElements,
-            MIJSONValueArrayOfElements : [ theDict ]
-        ]
-        return wrapperDict
     }
     
     private func getPostscriptFontName() -> NSString {

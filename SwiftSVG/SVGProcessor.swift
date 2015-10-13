@@ -189,10 +189,9 @@ public class SVGProcessor {
             throw Error.expectedSVGElementNotFound
         }
 
-        var pathArray = NSMutableArray(capacity: 0)
-        let path = MICGPathFromSVGPath(string, pathArray: &pathArray)
+        let path = CGPathFromSVGPath(string)
         xmlElement["d"] = nil
-        let svgElement = SVGPath(path: path, miPath: makePathDictionary(pathArray))
+        let svgElement = SVGPath(path: path)
         return svgElement
     }
 

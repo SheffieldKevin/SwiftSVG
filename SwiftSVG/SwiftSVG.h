@@ -15,6 +15,3 @@ FOUNDATION_EXPORT double SwiftSVGVersionNumber;
 FOUNDATION_EXPORT const unsigned char SwiftSVGVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <SwiftSVG/PublicHeader.h>
-
-#import <SwiftSVG/MIPathFromSVGPath.h>
-#import <SwiftSVG/MIJSONConstants.h>

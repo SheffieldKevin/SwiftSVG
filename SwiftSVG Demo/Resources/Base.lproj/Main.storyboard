@@ -599,25 +599,6 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="MovingImages" id="AYz-Pa-aTv">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="MovingImages" id="ngN-eM-P3A">
-                                    <items>
-                                        <menuItem title="Process Folder..." keyEquivalent="p" id="rbi-wi-PYe">
-                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
-                                            <connections>
-                                                <action selector="processFolder:" target="Voe-Tx-rLC" id="eXz-Qs-pPF"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Export..." id="ljs-4s-pnv">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="export:" target="Ady-hI-5gd" id="mbw-cu-dNO"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </menuItem>
                             <menuItem title="Window" id="aUF-d1-5bR">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Window" systemMenu="window" id="Td7-aD-5lo">
