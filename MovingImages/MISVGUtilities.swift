@@ -329,6 +329,10 @@ internal func makeMovingImagesText(string: CFString,
     return wrapperDict
 }
 
+public enum ColorError: ErrorType {
+    case invalidColorDict
+}
+
 extension SVGColors {
     class func makeMIColorDictFromColor(color: CGColor) -> [NSString : AnyObject] {
         var colorDict = [NSString : AnyObject]()
@@ -341,6 +345,32 @@ extension SVGColors {
         return colorDict
     }
 
+    //! Converts a float in the range from 0.0 to 1.0. Will clamp float to range first.
+    class func to255(component: CGFloat) -> Int {
+        let eta:CGFloat = 0.00195686274509804 // 0.499 / 255.0
+        return Int(255 * (max(0.0, min(1.0, component)) + eta))
+    }
+    
+    class func makeHexColor(red red: CGFloat, green: CGFloat, blue: CGFloat) -> String {
+        let hexNum = to255(blue) + 256 * (to255(green) + 256 * to255(red))
+        let string = String(format: "#%06X", arguments: [hexNum])
+        return string
+    }
+
+    class func makeHexColor(color color: CGColor) -> String {
+        let colorC = CGColorGetComponents(color)
+        return makeHexColor(red: colorC[0], green: colorC[1], blue: colorC[2])
+    }
+
+    class func colorDictToHexColor(colorDict: [NSObject : AnyObject]) throws -> String {
+        guard let red = colorDict["red"] as? CGFloat,
+           let green = colorDict["green"] as? CGFloat,
+           let blue = colorDict["blue"] as? CGFloat else {
+            throw ColorError.invalidColorDict
+        }
+        return makeHexColor(red: red, green: green, blue: blue)
+    }
+    
     class func colorDictToMIColorDict(colorDict: [NSObject : AnyObject]) -> [NSObject : AnyObject] {
         let mColorDict = [
             MIJSONKeyRed : colorDict["red"]!,

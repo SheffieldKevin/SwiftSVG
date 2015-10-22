@@ -69,6 +69,7 @@
 		6E2F00491BC96BA7000EF53F /* 6th-day.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F00481BC96BA7000EF53F /* 6th-day.svg */; settings = {ASSET_TAGS = (); }; };
 		6E2F004A1BC96BA7000EF53F /* 6th-day.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F00481BC96BA7000EF53F /* 6th-day.svg */; settings = {ASSET_TAGS = (); }; };
 		6E2F004C1BC96BCB000EF53F /* 6th-day.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E2F004B1BC96BCB000EF53F /* 6th-day.json */; settings = {ASSET_TAGS = (); }; };
+		6E2F00571BD93A97000EF53F /* MISVGColorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2F00561BD93A97000EF53F /* MISVGColorsTests.swift */; settings = {ASSET_TAGS = (); }; };
 		6E4AFE281BAAF6A40015A1DE /* MIPathFromSVGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA9E2561BAAD5B600B7468C /* MIPathFromSVGPath.m */; settings = {ASSET_TAGS = (); }; };
 		6E57A0B51BBC460600AA0574 /* TextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E57A0B41BBC460600AA0574 /* TextStyle.swift */; settings = {ASSET_TAGS = (); }; };
 		6E57A0BD1BBEEE9500AA0574 /* SwiftSVGTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E57A0BC1BBEEE9500AA0574 /* SwiftSVGTests.swift */; };
@@ -180,6 +181,7 @@
 		6E2F00401BC9556B000EF53F /* test_image2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = test_image2.json; path = "SwiftSVG Demo/Samples/test_image2.json"; sourceTree = "<group>"; };
 		6E2F00481BC96BA7000EF53F /* 6th-day.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "6th-day.svg"; sourceTree = "<group>"; };
 		6E2F004B1BC96BCB000EF53F /* 6th-day.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "6th-day.json"; path = "SwiftSVG Demo/Samples/6th-day.json"; sourceTree = "<group>"; };
+		6E2F00561BD93A97000EF53F /* MISVGColorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MISVGColorsTests.swift; path = MovingImagesTests/MISVGColorsTests.swift; sourceTree = "<group>"; };
 		6E57A0B41BBC460600AA0574 /* TextStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextStyle.swift; sourceTree = "<group>"; };
 		6E57A0BA1BBEEE9500AA0574 /* SwiftSVGTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftSVGTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E57A0BC1BBEEE9500AA0574 /* SwiftSVGTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSVGTests.swift; sourceTree = "<group>"; };
@@ -368,6 +370,7 @@
 			isa = PBXGroup;
 			children = (
 				6E2F002A1BC693D2000EF53F /* MovingImagesTests.swift */,
+				6E2F00561BD93A97000EF53F /* MISVGColorsTests.swift */,
 				6E2F004B1BC96BCB000EF53F /* 6th-day.json */,
 				6E2F00381BC93DDB000EF53F /* Anti-normal.json */,
 				6E2F002F1BC86929000EF53F /* Apple_Swift_Logo.json */,
@@ -624,6 +627,7 @@
 			files = (
 				6E57A0BD1BBEEE9500AA0574 /* SwiftSVGTests.swift in Sources */,
 				6E2F002B1BC693D2000EF53F /* MovingImagesTests.swift in Sources */,
+				6E2F00571BD93A97000EF53F /* MISVGColorsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
