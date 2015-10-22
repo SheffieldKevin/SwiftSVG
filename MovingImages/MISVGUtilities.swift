@@ -309,11 +309,13 @@ internal func makeMovingImagesText(string: CFString,
     ]
     
     if let fillColor = fillColor {
-        theDict[MIJSONKeyFillColor] = SVGColors.makeMIColorDictFromColor(fillColor)
+        // theDict[MIJSONKeyFillColor] = SVGColors.makeMIColorDictFromColor(fillColor)
+        theDict[MIJSONKeyFillColor] = SVGColors.makeHexColor(color: fillColor)
     }
     
     if let strokeColor = strokeColor {
-        theDict[MIJSONKeyStrokeColor] = SVGColors.makeMIColorDictFromColor(strokeColor)
+        // theDict[MIJSONKeyStrokeColor] = SVGColors.makeMIColorDictFromColor(strokeColor)
+        theDict[MIJSONKeyStrokeColor] = SVGColors.makeHexColor(color: strokeColor)
     }
     
     if let strokeWidth = strokeWidth {

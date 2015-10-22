@@ -266,7 +266,8 @@ public class MovingImagesRenderer: Renderer {
         set {
             style.strokeColor = newValue
             if let color = newValue {
-                current.movingImages[MIJSONKeyStrokeColor] = SVGColors.makeMIColorDictFromColor(color)
+                // current.movingImages[MIJSONKeyStrokeColor] = SVGColors.makeMIColorDictFromColor(color)
+                current.movingImages[MIJSONKeyStrokeColor] = SVGColors.makeHexColor(color: color)
             }
             else {
                 current.movingImages[MIJSONKeyStrokeColor] = nil
@@ -279,7 +280,8 @@ public class MovingImagesRenderer: Renderer {
         set {
             style.fillColor = newValue
             if let color = newValue {
-                current.movingImages[MIJSONKeyFillColor] = SVGColors.makeMIColorDictFromColor(color)
+                // current.movingImages[MIJSONKeyFillColor] = SVGColors.makeMIColorDictFromColor(color)
+                current.movingImages[MIJSONKeyFillColor] = SVGColors.makeHexColor(color: color)
             }
             else {
                 current.movingImages[MIJSONKeyFillColor] = nil
@@ -303,10 +305,12 @@ public class MovingImagesRenderer: Renderer {
     public var style:Style = Style() {
         didSet {
             if let fillColor = style.fillColor {
-                current.movingImages[MIJSONKeyFillColor] = SVGColors.makeMIColorDictFromColor(fillColor)
+                // current.movingImages[MIJSONKeyFillColor] = SVGColors.makeMIColorDictFromColor(fillColor)
+                current.movingImages[MIJSONKeyFillColor] = SVGColors.makeHexColor(color: fillColor)
             }
             if let strokeColor = style.strokeColor {
-                current.movingImages[MIJSONKeyStrokeColor] = SVGColors.makeMIColorDictFromColor(strokeColor)
+                // current.movingImages[MIJSONKeyStrokeColor] = SVGColors.makeMIColorDictFromColor(strokeColor)
+                current.movingImages[MIJSONKeyStrokeColor] = SVGColors.makeHexColor(color: strokeColor)
             }
             if let lineWidth = style.lineWidth {
                 current.movingImages[MIJSONKeyLineWidth] = lineWidth
