@@ -118,6 +118,8 @@ public class SVGProcessor {
         }
 
         switch name {
+            //            case "defs":
+            //    svgElement = try processDEFS(xmlElement, state: state)
             case "svg":
                 svgElement = try processSVGDocument(xmlElement, state: state)
             case "g":
@@ -169,12 +171,29 @@ public class SVGProcessor {
         return svgElement
     }
 
+    public func processDEFS(xmlElement: NSXMLElement, state: State) throws -> SVGElement? {
+        // A def element can be children of documents and groups.
+        // Any member of def elements should be accessible anywhere within the SVGDocument.
+        guard let nodes = xmlElement.children else {
+            throw Error.corruptXML
+        }
+        
+        // I suspect that we might need a seperate processor for members of the defs element.
+        var defElements = [SVGElement]()
+        for node in nodes where node is NSXMLElement {
+            if let svgElement = try self.processSVGElement(node as! NSXMLElement, state: state) {
+                defElements.append(svgElement)
+            }
+        }
+        return nil
+    }
+
     public func processSVGGroup(xmlElement: NSXMLElement, state: State) throws -> SVGGroup? {
-        // A commented out <!--  --> node comes in as a NSXMLNode which causes crashes here.
         guard let nodes = xmlElement.children else {
             return .None
         }
         var children = [SVGElement]()
+        // A commented out <!--  --> node comes in as a NSXMLNode which causes crashes here.
         for node in nodes where node is NSXMLElement {
             if let svgElement = try self.processSVGElement(node as! NSXMLElement, state: state) {
                 children.append(svgElement)
